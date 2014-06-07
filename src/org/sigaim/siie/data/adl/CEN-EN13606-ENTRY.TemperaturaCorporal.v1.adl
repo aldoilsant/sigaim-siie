@@ -1,0 +1,263 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.TemperaturaCorporal.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"miguel.ramos.naveira@sergas.es">
+        ["organisation"] = <"ATIS-INIBIC">
+        ["name"] = <"Miguel Ramos Naveira">
+        ["date"] = <"20140113">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Registrar la medida de la temperatura de una persona, como un derivado de la temperatura corporal">
+            keywords = <"temperatura","corporal","fiebre","hipotermia","hipertermia">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- temperatura corporal
+        items existence matches {0..1} cardinality matches {1..5; unordered} matches {
+            ELEMENT[at0001] occurrences matches {1..1} matches {  -- Medida de la temperatura corporal
+                value existence matches {0..1} matches {
+                    PQR[at0006] occurrences matches {1..1} matches {  -- PQR
+                        unit existence matches {1..1} matches {
+                            CV[at0007] occurrences matches {1..1} matches {  -- 
+                                code existence matches {0..1} matches {"Cel"}
+                                codeSystemName existence matches {0..1} matches {"UCUM"}
+                            }
+                        }
+                        value existence matches {1..1} matches {*}
+                    }
+                }
+            }
+            ELEMENT[at0002] occurrences matches {0..1} matches {  -- Exposición corporal
+                value existence matches {0..1} matches {
+                    CV[at0008] occurrences matches {1..1} matches {  -- CV
+                        code existence matches {0..1} matches {
+                            [ac0001]
+                            [ac0002]
+                            [ac0003]
+                            [ac0004]
+                        }
+                        displayName existence matches {1..1} matches {
+                        	ST occurrences matches {1..1} matches {
+                            	value existence matches {1..1} matches {*}
+                            }
+                        }
+                        codeSystemName existence matches {0..1} matches {*}
+                        codeSystemVersion existence matches {0..1} matches {*}
+                    }
+                }
+            }
+            ELEMENT[at0003] occurrences matches {0..1} matches {  -- Temperatura ambiental
+                value existence matches {0..1} matches {
+                    PQR[at0013] occurrences matches {1..1} matches {  -- PQ
+                        value existence matches {1..1} matches {*}
+                        unit existence matches {1..1} matches {
+                            CV[at0014] occurrences matches {1..1} matches {  -- 
+                                code existence matches {0..1} matches {"Cel"}
+                                codeSystemName existence matches {0..1} matches {"UCUM"}
+                            }
+                        }
+                    }
+                }
+            }
+            ELEMENT[at0004] occurrences matches {0..1} matches {  -- Lugar de medición
+                value existence matches {0..1} matches {
+                    CV[at0015] occurrences matches {1..1} matches {  -- CV
+                        code existence matches {0..1} matches {
+                            [ac0005]
+                            [ac0006]
+                            [ac0007]
+                            [ac0008]
+                            [ac0009]
+                            [ac0010]
+                            [ac0011]
+                            [ac0012]
+                            [ac0013]
+                            [ac0014]
+                            [ac0015]
+                        }
+                        displayName existence matches {1..1} matches {
+                        	ST occurrences matches {1..1} matches {
+                            	value existence matches {1..1} matches {*}
+                            }
+                        }
+                        codeSystemName existence matches {0..1} matches {*}
+                        codeSystemVersion existence matches {0..1} matches {*}
+                    }
+                }
+            }
+            ELEMENT[at0005] occurrences matches {0..1} matches {  -- Dispositivo de medición
+                value existence matches {0..1} matches {
+                    ST[at0028] occurrences matches {1..1} matches {  -- SIMPLE_TEXT
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"temperatura corporal">
+                    description = <"temperatura corporal">
+                >
+                ["at0001"] = <
+                    text = <"Medida de la temperatura corporal">
+                    description = <"El resultado de la medida de la temperatura corporal">
+                >
+                ["at0002"] = <
+                    text = <"Exposición corporal">
+                    description = <"La situación térmica de la persona a la que se ha medido la temperatura">
+                >
+                ["at0003"] = <
+                    text = <"Temperatura ambiental">
+                    description = <"Temperatura ambiental en el momento de registro de la temperatura">
+                >
+                ["at0004"] = <
+                    text = <"Lugar de medición">
+                    description = <"El sitio anatómico donde se mide la temperatura">
+                >
+                ["at0005"] = <
+                    text = <"Dispositivo de medición">
+                    description = <"Dispositivo usado para medir la temperatura corporal">
+                >
+                ["at0006"] = <
+                    text = <"PQ">
+                    description = <"">
+                >
+                ["at0008"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+                ["at0013"] = <
+                    text = <"PQ">
+                    description = <"">
+                >
+                ["at0014"] = <
+                    text = <"">
+                    description = <"">
+                >
+                ["at0015"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+                ["at0007"] = <
+                    text = <"">
+                    description = <"">
+                >
+                ["at0028"] = <
+                    text = <"SIMPLE_TEXT">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+        ["es"] = <
+            items = <
+                ["ac0001"] = <
+                    text = <"Desnudo">
+                    description = <"Sin ropa, sábanas o coberturas">
+                >
+                ["ac0002"] = <
+                    text = <"Ropa reducida">
+                    description = <"La persona está cubierta por una cantidad menor de ropa o sábanas que lo considerado apropiado para las circunstancias ambientales">
+                >
+                ["ac0003"] = <
+                    text = <"Ropa apropiada">
+                    description = <"La persona está cubierta por una adecuada cantidad de ropa o sábanas que lo considerado apropiado para las circunstancias ambientales">
+                >
+                ["ac0004"] = <
+                    text = <"Ropa aumentada">
+                    description = <"La persona está cubierta por una cantidad superior de ropa o sábanas que lo considerado apropiado para las circunstancias ambientales">
+                >
+                ["ac0005"] = <
+                    text = <"Boca">
+                    description = <"Temperatura bucal">
+                >
+                ["ac0006"] = <
+                    text = <"Canal auditivo">
+                    description = <"La temperatura se mide en el canal auditivo externo">
+                >
+                ["ac0007"] = <
+                    text = <"Axila">
+                    description = <"La temperatura se mide en el hueco axilar con el brazo posicionado al costado del cuerpo">
+                >
+                ["ac0008"] = <
+                    text = <"Recto">
+                    description = <"Temperatura rectal">
+                >
+                ["ac0009"] = <
+                    text = <"Nasofaríngeo">
+                    description = <"La temperatura se mide dentro de la nasofaringe">
+                >
+                ["ac0010"] = <
+                    text = <"Vejiga urinaria">
+                    description = <"La temperatura se mide en la vejiga urinaria">
+                >
+                ["ac0011"] = <
+                    text = <"Intravascular">
+                    description = <"La temperatura se mide dentro del sistema vascular">
+                >
+                ["ac0012"] = <
+                    text = <"Piel">
+                    description = <"La temperatura se mide sobre la piel expuesta">
+                >
+                ["ac0013"] = <
+                    text = <"Vagina">
+                    description = <"Temperatura vaginal">
+                >
+                ["ac0014"] = <
+                    text = <"Esófago">
+                    description = <"La temperatura se mide dentro del esófago">
+                >
+                ["ac0015"] = <
+                    text = <"Pliegue inguinal">
+                    description = <"La temperatura se mide en el pliegue inguinal entre el muslo y la pared abdominal">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0002"] = <[SNOMED-CT::365825002]>
+                ["at0003"] = <[SNOMED-CT::250825003]>
+                ["at0004"] = <[SNOMED-CT::164290003]>
+                ["at0000"] = <[SNOMED-CT::386725007]>
+                ["at0005"] = <[SNOMED-CT::373062004]>
+                ["at0001"] = <[SNOMED-CT::301344003]>
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["ac0003"] = <[SNOMED-CT::248165006]>
+                ["ac0005"] = <[SNOMED-CT::275874003]>
+                ["ac0006"] = <[SNOMED-CT::315632006]>
+                ["ac0007"] = <[SNOMED-CT::164292006]>
+                ["ac0008"] = <[SNOMED-CT::164294007]>
+                ["ac0012"] = <[SNOMED-CT::164296009]>
+                ["ac0013"] = <[SNOMED-CT::289600007]>
+                ["ac0014"] = <[SNOMED-CT::431598003]>
+                ["ac0015"] = <[SNOMED-CT::164293001]>
+                ["ac0001"] = <[SNOMED-CT::248160001]>
+            >
+        >
+    >

@@ -1,0 +1,102 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.PlanTerapeutico.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140514">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar todos los aspectos sobre el plan terapéutico">
+            keywords = <"plan","terapéutico","plan de gestión terapéutica">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {  -- PlanTerapeutico
+        members existence matches {0..1} cardinality matches {1..3; ordered} matches {
+            SECTION[at0001] occurrences matches {0..1} matches {  -- Recomendaciones terapéuticas
+                members existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    allow_archetype ENTRY[at0002] occurrences matches {0..*} matches {  -- Recomendación
+                        include
+                            archetype_id/value matches {/CEN-EN13606-ENTRY.Recomendacion.v1/}
+                    }
+                }
+            }
+            SECTION[at0003] occurrences matches {0..1} matches {  -- Información sobre fármacos
+                members existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    allow_archetype ENTRY[at0004] occurrences matches {0..*} matches {  -- Fármaco
+                        include
+                            archetype_id/value matches {/CEN-EN13606-ENTRY.Medicacion.v1/}
+                    }
+                }
+            }
+            SECTION[at0005] occurrences matches {0..1} matches {  -- Información sobre otras recomendaciones
+                members existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    allow_archetype ENTRY[at0006] occurrences matches {0..*} matches {  -- Otra recomendación
+                        include
+                            archetype_id/value matches {/CEN-EN13606-ENTRY.PlanDeActuacion.v1/}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"PlanTerapeutico">
+                    description = <"PlanTerapeutico">
+                >
+                ["at0001"] = <
+                    text = <"Recomendaciones terapéuticas">
+                    description = <"Se trata de recomendaciones terapéuticas que no incluyen fármacos (oxigenoterapia, dieta, reposo o limitaciones del esfuerzo fÃ­sico, etc.)">
+                >
+                ["at0002"] = <
+                    text = <"Recomendación">
+                    description = <"">
+                >
+                ["at0003"] = <
+                    text = <"Información sobre fármacos">
+                    description = <"Prescripcoines activas al final del perÃ­odo de seguimiento. En la medida en que la implatantación de las aplicaciones informáticas de HCE, que incluyen módulos de prescripción lo permitan, el texto libre, será reemplazado progresivametne por el vocabulario del catáolgo del medicamentos autorizados (nomenclator Oficial/Snomed-CT)">
+                >
+                ["at0004"] = <
+                    text = <"Fármaco">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Información sobre otras recomendaciones">
+                    description = <"Se refiere a los planes de actuación previstos que no son propiamente medidas terapéuticas. Por ejemplo, fecha de la próxima cita, conveniencia de nueva revisión, petición de pruebas, etc. ">
+                >
+                ["at0006"] = <
+                    text = <"Otra recomendación">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::278448002]>
+            >
+        >
+    >
+    constraint_binding = <
+    >

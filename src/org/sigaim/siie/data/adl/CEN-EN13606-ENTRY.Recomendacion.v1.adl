@@ -1,0 +1,70 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.Recomendacion.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["name"] = <"Jesús Barros Castro">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["date"] = <"20140516">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar una sugerencia, consejo o propuesta para la gestión de la asistencia sanitaria actual, o para una acción futura">
+            keywords = <"recomendar","consejo","aconsejar","sugerencia","propuesta">
+            use = <"Usar para registrar una sugerencia, consejo o propuesta para la gestión de la asistencia sanitaria actual, o para una acción futura">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- Recomendacion
+        items existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ELEMENT[at0001] occurrences matches {0..1} matches {  -- Recomendación
+                value existence matches {0..1} matches {
+                    ST[at0002] occurrences matches {0..1} matches {  -- ST
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Recomendacion">
+                    description = <"Recomendacion">
+                >
+                ["at0001"] = <
+                    text = <"Recomendación">
+                    description = <"Texto de la recomendación">
+                >
+                ["at0002"] = <
+                    text = <"ST">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::420227002]>
+            >
+        >
+    >
+    constraint_binding = <
+    >

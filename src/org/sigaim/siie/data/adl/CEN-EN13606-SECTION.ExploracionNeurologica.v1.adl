@@ -1,0 +1,51 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.ExploracionNeurologica.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140515">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar datos relacionados con la exploración neurológica de un paciente">
+            use = <"Usar para registrar datos relacionados con la exploración neurológica de un paciente">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {*}  -- Exploración neurologica
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Exploración neurologica">
+                    description = <"Exploración neurologica">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::84728005]>
+            >
+        >
+    >
+    constraint_binding = <
+    >

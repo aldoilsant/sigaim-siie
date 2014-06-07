@@ -1,0 +1,101 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.ExploracionOtorrinolaringologica.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["name"] = <"Jesús Barros Castro">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["date"] = <"20140521">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar datos relacionados con la exploración otorrinolaringológica de un paciente">
+            use = <"Usar para registrar datos relacionados con la exploración otorrinolaringológica de un paciente">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {  -- ExploracionOtorrinolaringologica
+        members existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ENTRY[at0001] occurrences matches {0..1} matches {  -- Exploración de la cavidad oral y faringe
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0002] occurrences matches {0..1} matches {  -- Evidencia de exudados
+                        value existence matches {0..1} matches {
+                            BL[at0006] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0003] occurrences matches {0..1} matches {  -- Exploración otológica
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {*}
+            }
+            ENTRY[at0004] occurrences matches {0..1} matches {  -- Exploració rinológica
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {*}
+            }
+            ENTRY[at0005] occurrences matches {0..1} matches {  -- Exploración cervicofacial
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {*}
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"ExploracionOtorrinolaringologica">
+                    description = <"ExploracionOtorrinolaringologica">
+                >
+                ["at0001"] = <
+                    text = <"Exploración de la cavidad oral y faringe">
+                    description = <"">
+                >
+                ["at0002"] = <
+                    text = <"Evidencia de exudados">
+                    description = <"">
+                >
+                ["at0003"] = <
+                    text = <"Exploración otológica">
+                    description = <"">
+                >
+                ["at0004"] = <
+                    text = <"Exploració rinológica">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Exploración cervicofacial">
+                    description = <"">
+                >
+                ["at0006"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::113028003]>
+                ["at0001"] = <[SNOMED-CT::164771005]>
+                ["at0002"] = <[SNOMED-CT::394715003]>
+                ["at0003"] = <[SNOMED-CT::363113000]>
+            >
+        >
+    >
+    constraint_binding = <
+    >

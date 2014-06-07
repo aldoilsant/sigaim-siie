@@ -1,0 +1,17 @@
+school_schedule = <
+   locations = <
+            [1] = <"under the big plane tree">
+            [2] = <"under the north arch">
+            [3] = <"in a garden">
+        >
+  subjects = <
+        ["philosophy:plato"] = <
+                name = <"philosophy">
+                teacher = <"plato">
+                topics = <
+                	[1]=<"meta-physics">
+                	[2]=<"natural science">
+                >
+        >
+ 	>
+ >

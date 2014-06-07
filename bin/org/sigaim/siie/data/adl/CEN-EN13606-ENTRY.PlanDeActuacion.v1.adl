@@ -1,0 +1,62 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.PlanDeActuacion.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["name"] = <"Jesús Barros Castro">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["date"] = <"20140516">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar todos los aspectos sobre el plan de actuación. Para los planes de actuación previstos que no son propiamente medidas terapéuticas. Por ejemplo, fecha de la próxima cita, conveniencia de nueva revisión, petición de pruebas, etc.">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- PlanDeActuacion
+        items existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ELEMENT[at0001] occurrences matches {0..1} matches {  -- ELEMENT
+                value existence matches {0..1} matches {
+                    ST[at0002] occurrences matches {0..1} matches {  -- 
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"PlanDeActuacion">
+                    description = <"PlanDeActuacion">
+                >
+                ["at0001"] = <
+                    text = <"ELEMENT">
+                    description = <"">
+                >
+                ["at0002"] = <
+                    text = <"">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+    >
+    constraint_binding = <
+    >

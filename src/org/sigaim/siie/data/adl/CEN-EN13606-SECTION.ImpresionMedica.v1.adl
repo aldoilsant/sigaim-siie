@@ -1,0 +1,63 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.ImpresionMedica.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140514">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar la impresizn diagnóstica que hace el facultativo basándose en el motivo de la consulta y en las exploraciones realizadas.">
+            keywords = <"impresión médica","impresión diagnóstica","sospecha diagnóstica","diagnóstico presuntivo">
+            use = <"usar para registrar la impresión diagnóstica que hace el facultativo basándose en el motivo de la consulta y en las exploraciones realizadas.">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {  -- ImpresionMedica
+        members existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            allow_archetype ENTRY[at0001] occurrences matches {1..*} matches {  -- Lista de diagnósticos
+                include
+                    archetype_id/value matches {/CEN-EN13606-ENTRY.Diagnostico.v1/}
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"ImpresionMedica">
+                    description = <"ImpresionMedica">
+                >
+                ["at0001"] = <
+                    text = <"Lista de diagnósticos">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::60022001]>
+            >
+        >
+    >
+    constraint_binding = <
+    >

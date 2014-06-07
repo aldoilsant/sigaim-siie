@@ -1,0 +1,250 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.Diagnostico.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["organization"] = <"">
+        ["email"] = <"">
+        ["name"] = <"">
+        ["language"] = <"es Spanish (Spain ? Modern)">
+        ["date"] = <"20140326">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para el registro de datos acerca de un asunto u obstáculo que incide sobre el bienestar físico, psíquico o social de un individuo.">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- Diagnóstico
+        items existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ELEMENT[at0001] occurrences matches {0..1} matches {  -- Descripción
+                value existence matches {0..1} matches {
+                    ST[at0002] occurrences matches {0..1} matches {  -- Descripción
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+            ELEMENT[at0003] occurrences matches {1..1} matches {  -- Diagnóstico
+                value existence matches {0..1} matches {
+                    CV[at0004] occurrences matches {1..1} matches {  -- Diagnóstico
+                    	code existence matches {1..1} matches {*}
+                    	displayName existence matches {1..1} matches {
+                            ST occurrences matches {1..1} matches {
+                            	value existence matches {1..1} matches {*}
+                        	}
+                        }
+                    	codeSystem existence matches {0..1} matches {*}
+                        codeSystemName existence matches {0..1} matches {*}
+                    }
+                }
+            }
+            ELEMENT[at0005] occurrences matches {0..1} matches {  -- Localización
+                value existence matches {0..1} matches {
+                    ST[at0006] occurrences matches {0..1} matches {  -- Localización
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+            ELEMENT[at0007] occurrences matches {0..1} matches {  -- Severidad
+                value existence matches {0..1} matches {
+                    ST[at0008] occurrences matches {0..1} matches {  -- Severidad
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+            ELEMENT[at0009] occurrences matches {0..1} matches {  -- Fecha de aparición
+                value existence matches {0..1} matches {
+                    TSDATE[at0010] occurrences matches {0..1} matches {  -- Fecha de aparición
+                        value existence matches {1..1} matches {yyyy-mm-dd}
+                    }
+                }
+            }
+            ELEMENT[at0013] occurrences matches {0..1} matches {  -- Fecha de resolución
+                value existence matches {0..1} matches {
+                    TSDATE[at0014] occurrences matches {0..1} matches {  -- Fecha de resolución
+                        value existence matches {1..1} matches {yyyy-mm-dd}
+                    }
+                }
+            }
+
+            CLUSTER[at0017] occurrences matches {0..1} matches {  -- Problema relacionado
+                parts existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0020] occurrences matches {0..1} matches {  -- Descripción clínica
+                        value existence matches {0..1} matches {
+                            CV[at0023] occurrences matches {0..1} matches {  -- Causado por
+                                code existence matches {1..1} matches {
+                                	[ac0001]
+                                    [ac0002]
+                                }
+                                displayName existence matches {1..1} matches {
+                           			ST occurrences matches {1..1} matches {
+                            			value existence matches {1..1} matches {*}
+                        			}
+                        		}
+                    			codeSystem existence matches {0..1} matches {*}
+                        		codeSystemName existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0022] occurrences matches {0..1} matches {  -- Problema relacionado
+                        value existence matches {0..1} matches {
+                            ST[at0027] occurrences matches {0..1} matches {  -- Problema relacionado
+                                value existence matches {0..1} matches {/.*/}
+                            }
+  --                          URI[at0028] occurrences matches {0..1} matches {  -- URI
+  --                              value existence matches {0..1} matches {/.*/; ""}
+  --                              scheme existence matches {0..1} matches {/.*/; ""}
+  --                          }
+                        }
+                    }
+                }
+                structure_type existence matches {1..1} matches {
+                    STRUCTURE_TYPE[at0025] occurrences matches {1..1} matches {  -- 
+                        value existence matches {0..1} matches {"list"}
+                    }
+                }
+            }
+            ELEMENT[at0021] occurrences matches {0..1} matches {  -- Resuelto
+                value existence matches {0..1} matches {
+                    BL[at0024] occurrences matches {0..1} matches {  -- BL
+                        value existence matches {1..1} matches {true, false}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Diagnóstico">
+                    description = <"diagnóstico">
+                >
+                ["at0001"] = <
+                    text = <"Descripción">
+                    description = <"Decripción de los aspectos clínicos del problema">
+                >
+                ["at0002"] = <
+                    text = <"Descripción">
+                    description = <"">
+                >
+                ["at0003"] = <
+                    text = <"Diagnóstico">
+                    description = <"Identificación del problema ">
+                >
+                ["at0004"] = <
+                    text = <"Diagnóstico">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Localización">
+                    description = <"El sitio del cuerpo afectado">
+                >
+                ["at0006"] = <
+                    text = <"Localización">
+                    description = <"">
+                >
+                ["at0007"] = <
+                    text = <"Severidad">
+                    description = <"La severidad general evaluada para el problema índice.">
+                >
+                ["at0008"] = <
+                    text = <"Severidad">
+                    description = <"">
+                >
+                ["at0009"] = <
+                    text = <"Fecha de aparición">
+                    description = <"La fecha en la cual el problema fue identificado por primera vez por el individuo.">
+                >
+                ["at0010"] = <
+                    text = <"Fecha de aparición">
+                    description = <"">
+                >
+                ["at0013"] = <
+                    text = <"Fecha de resolución">
+                    description = <"La fecha en la cual el problema se resolvió o remitió.">
+                >
+                ["at0014"] = <
+                    text = <"Fecha de resolución">
+                    description = <"">
+                >
+                ["at0017"] = <
+                    text = <"Problema relacionado">
+                    description = <"">
+                >
+                ["at0020"] = <
+                    text = <"Descripción clínica">
+                    description = <"Descripción del problema relacionado.">
+                >
+                ["at0023"] = <
+                    text = <"Causado por">
+                    description = <"">
+                >
+                ["at0022"] = <
+                    text = <"Problema relacionado">
+                    description = <"Identificación del problema relacionado como texto, texto codificado o enlace dentro del Registro Electrónico de Salud.">
+                >
+                ["at0027"] = <
+                    text = <"Problema relacionado">
+                    description = <"">
+                >
+ --               ["at0028"] = <
+ --                   text = <"URI">
+ --                   description = <"">
+ --               >
+                ["at0021"] = <
+                    text = <"Resuelto">
+                    description = <"">
+                >
+                ["at0024"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+        ["es"] = <
+            items = <
+                ["ac0001"] = <
+                    text = <"Causado por">
+                    description = <"Este concepto identifica la causa directa o agente causante del diagnóstico. El concepto incluye la idea de 'complicaciones', 'agente causante' y 'debido a'. Observación: Cuando no se conoce una causalidad o secuancia de eventos, este tipo de relación debe de quedar en blanco.">
+                >
+                ["ac0002"] = <
+                    text = <"Después de">
+                    description = <"Este valor identifica la secuancia de eventos ente los items relacionados, pero no afirma la causalidad. Puede ser usado para secuelas o efectos secundarios. Observación: Cuando no se conoce una causalidad o secuancia de eventos, este tipo de relación debe de quedar en blanco.">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::439401001]>
+                ["at0003"] = <[SNOMED-CT::439401001]>
+                ["at0011"] = <[SNOMED-CT::445518008]>
+                ["at0005"] = <[SNOMED-CT::246267002]>
+                ["at0007"] = <[SNOMED-CT::272141005]>
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["ac0001"] = <[SNOMED-CT::68369002]>
+                ["ac0002"] = <[SNOMED-CT::77569001]>
+            >
+        >
+    >

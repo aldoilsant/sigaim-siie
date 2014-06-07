@@ -1,0 +1,137 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.AuscultacionPulmonar.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["date"] = <"20140312">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Registrar datos encontrados en la examinación por auscultación cardíaca">
+            keywords = <"auscultación","sonidos","pulmón">
+            use = <"Usar para registrar datos encontrados en la examinación por auscultación cardíaca">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- Auscultacion pulmonar
+        items existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ELEMENT[at0001] occurrences matches {0..1} matches {  -- Murmullo vesicular
+                value existence matches {0..1} matches {
+                    CV[at0009] occurrences matches {0..1} matches {  -- CODED_TEXT
+                        code existence matches {1..1} matches {
+                            [ac0003]
+                        }
+                        codeSystemName existence matches {0..1} matches {*}
+                    }
+                    ST[at0002] occurrences matches {0..1} matches {  -- Murmullo vesicular
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+            ELEMENT[at0003] occurrences matches {0..1} matches {  -- Frecuencia respiratoria
+                value existence matches {0..1} matches {
+                    PQR[at0004] occurrences matches {0..1} matches {  -- PQ
+                        unit existence matches {1..1} matches {
+                            CV[at0013] occurrences matches {1..1} matches {  -- 
+                                code existence matches {0..1} matches {"{breath}/min"}
+                                codeSystemName existence matches {0..1} matches {"UCUM"}
+                            }
+                        }
+                        value existence matches {1..1} matches {|>0.0..<200.0|}
+                    }
+                }
+            }
+            ELEMENT[at0005] occurrences matches {0..1} matches {  -- Existencia estertores
+                value existence matches {0..1} matches {
+                    BL[at0011] occurrences matches {0..1} matches {  -- BL
+                        value existence matches {1..1} matches {true, false}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", "ICD10_1998", "ICPC2E_1998", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Auscultacion pulmonar">
+                    description = <"Auscultacion pulmonar">
+                >
+                ["at0001"] = <
+                    text = <"Murmullo vesicular">
+                    description = <"Ruido que se puede percibir durante la auscultación">
+                >
+                ["at0002"] = <
+                    text = <"Murmullo vesicular">
+                    description = <"">
+                >
+                ["at0003"] = <
+                    text = <"Frecuencia respiratoria">
+                    description = <"">
+                >
+                ["at0004"] = <
+                    text = <"PQ">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Existencia estertores">
+                    description = <"Hallazgos de estertores en el examen físico">
+                >
+                ["at0009"] = <
+                    text = <"CODED_TEXT">
+                    description = <"">
+                >
+                ["at0011"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+        ["es"] = <
+            items = <
+                ["ac0003"] = <
+                    text = <"Conservado">
+                    description = <"Murmullo vesicular conservado">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0005"] = <[SNOMED-CT::53541006]>
+                ["at0003"] = <[SNOMED-CT::86290005]>
+                ["at0001"] = <[SNOMED-CT::77047003]>
+                ["at0000"] = <[SNOMED-CT::37931006]>
+            >
+        >
+        ["ICD10_1998"] = <
+            items = <
+            >
+        >
+        ["ICPC2E_1998"] = <
+            items = <
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["ac0003"] = <[SNOMED-CT::301131000]>
+            >
+        >
+    >

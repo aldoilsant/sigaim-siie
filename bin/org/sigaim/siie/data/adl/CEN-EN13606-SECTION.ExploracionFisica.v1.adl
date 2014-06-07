@@ -1,0 +1,126 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.ExploracionFisica.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"JesÃºs Barros Castro">
+        ["date"] = <"20140514">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar datos relacionados con la exploración física de un paciente">
+            use = <"Usar para registrar datos relacionados con la exploración física de un paciente">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {  -- ExploracionFisica
+        members existence matches {0..1} cardinality matches {0..*; ordered} matches {
+            allow_archetype SECTION[at0001] occurrences matches {0..*} matches {  -- Aspecto general
+                include
+                    archetype_id/value matches {/CEN-EN13606-SECTION.ExploracionAspectoGeneral.v1/}
+            }
+            allow_archetype SECTION[at0002] occurrences matches {0..*} matches {  -- Cabeza y cuello
+                include
+                    archetype_id/value matches {/CEN-EN13606-SECTION.ExploracionCabezaYCuello.v1/}
+            }
+            allow_archetype SECTION[at0003] occurrences matches {0..*} matches {  -- Cardiovascular
+                include
+                    archetype_id/value matches {/CEN-EN13606-SECTION.ExploracionCardiovascular.v1/}
+            }
+            allow_archetype SECTION[at0005] occurrences matches {0..*} matches {  -- Abdomen
+                include
+                    archetype_id/value matches {/CEN-EN13606-SECTION.ExploracionAbdominal.v1/}
+            }
+            allow_archetype SECTION[at0006] occurrences matches {0..*} matches {  -- Neurológica
+                include
+                    archetype_id/value matches {/CEN-EN13606-SECTION.ExploracionNeurologica.v1/}
+            }
+            allow_archetype SECTION[at0007] occurrences matches {0..*} matches {  -- Locomotor
+                include
+                    archetype_id/value matches {/CEN-EN13606-SECTION.ExploracionLocomotor.v1/}
+            }
+            allow_archetype SECTION[at0008] occurrences matches {0..*} matches {  -- Oftalmológica
+                include
+                    archetype_id/value matches {/CEN-EN13606-SECTION.ExploracionOftalmologica.v1/}
+            }
+            allow_archetype SECTION[at0009] occurrences matches {0..*} matches {  -- Otorrinolaringológica
+                include
+                    archetype_id/value matches {/CEN-EN13606-SECTION.ExploracionOtorrinolaringologica.v1/}
+            }
+            allow_archetype SECTION[at0010] occurrences matches {0..*} matches {  -- Piel y faneras
+                include
+                    archetype_id/value matches {/CEN-EN13606-SECTION.ExploracionPielYFaneras.v1/}
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"ExploracionFisica">
+                    description = <"ExploracionFisica">
+                >
+                ["at0001"] = <
+                    text = <"Aspecto general">
+                    description = <"Esploración: Aspecto general">
+                >
+                ["at0002"] = <
+                    text = <"Cabeza y cuello">
+                    description = <"Exploración: cabeza y cuello">
+                >
+                ["at0003"] = <
+                    text = <"Cardiovascular">
+                    description = <"Exploración cardiovascular">
+                >
+                ["at0005"] = <
+                    text = <"Abdomen">
+                    description = <"Exploración abdominal">
+                >
+                ["at0006"] = <
+                    text = <"Neurológica">
+                    description = <"Exploración neurológica">
+                >
+                ["at0007"] = <
+                    text = <"Locomotor">
+                    description = <"Exploración del aparato locomotor">
+                >
+                ["at0008"] = <
+                    text = <"Oftalmológica">
+                    description = <"Eploración oftalmológica">
+                >
+                ["at0009"] = <
+                    text = <"Otorrinolaringológica">
+                    description = <"Exploración otorrinolaringológica">
+                >
+                ["at0010"] = <
+                    text = <"Piel y faneras">
+                    description = <"Exploración piel y faneras">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::5880005]>
+            >
+        >
+    >
+    constraint_binding = <
+    >

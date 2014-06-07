@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sc="http://www.ascc.net/xml/schematron" xmlns:dt="uri:iso.org:21090" xmlns:cc="http://www.codesynthesis.com/xmlns/xsstl" xmlns:rc="http://www.iso.org/iso/search.htm?qt=13606" targetNamespace="http://www.iso.org/iso/search.htm?qt=13606" xml:lang="en">
+	<xs:import namespace="uri:iso.org:21090" schemaLocation="./ISO21090_ISCIII_Subset.xsd"/>
+	<xs:import namespace="http://www.codesynthesis.com/xmlns/xsstl" schemaLocation="http://www.codesynthesis.com/projects/xsstl/xsstl/iso3166-country-code.xsd"/>
+	<xs:include schemaLocation="./ISO13606_1_demographic.xsd"/>
+	<xs:include schemaLocation="./ISO13606_3.xsd"/>
+	<xs:include schemaLocation="./ISO13606_4.xsd"/>
+	<!-- CEN/ISO 13606 Electronic Healthcare Record Extract Model -->
+	<!--        (c)2008 CHIME, University College London          -->
+	<!--                Created by Taher Hassan                   -->
+	<!--                Supported by Dipak Kalra                  -->
+	<!--                Supported by Tony Austin                  -->
+	<!--                Supported by Shanghua Sun                 -->
+	<xs:annotation>
+		<xs:documentation>
+       XML Schema equivalent  representation of  the  CEN/ISO 13606 
+       part 1 model  for  Electronic  Healthcare  Record  Exchange. 
+       This  Schema  definition  conforms  to the  13606-1  version
+       published in February 2007, except as noted below.
+       
+       In many places in the standard an  invariant is specified on
+       the "coding_scheme_name" of the CS or  CV data type. This is
+       intended to  ensure that the coding  scheme  used to provide
+       the information is a particular one.  In this implementation
+       the termset enumerations defined in other parts of 13606 are
+       used in place of these types where possible.
+       
+       More generally,  variable naming  conventions are very mixed
+       with  both  underlined_naming  and  camelCase  naming   used
+       throughout. This sometimes occurs within a single class.  In
+       this implementation, camelCase is used consistently.
+    
+       At several points in the standard,  a graphical nomenclature
+       is  adopted where an  "id" in a white box  is attached  to a
+       class definition.  The intent of the  standard is  that this 
+       establish an  association  based on  the  identifier  of the
+       associated  object  (that  is,  the II).  The textual  class
+       descriptions usually  make  it seem  that the  actual object
+       type  should  be  used.  This  has been  corrected  in  this
+       implementation.
+       
+       A profile of certain data  types is included in 13606 part 1
+       so that the  meaning of types used  in the exchange model is
+       clear. However, the included type set would not be enough to
+       model an actual record comprehensively. In this version, the
+       13606 types are removed,  and the script imports the new ISO
+       21090 type set  for general use instead.  This also  impacts
+       the  demographics model  which is  now significantly reduced
+       from the published documentation.
+
+       (c) 2008 CHIME, University College London.
+       Created by Taher Hassan.
+    </xs:documentation>
+	</xs:annotation>
+	<!--                                                          -->
+	<!-- The content of an XML document conforming to this schema -->
+	<!--                                                          -->
+	<xs:element name="ehrExtract" type="rc:EHRExtract"/>
+	<xs:element name="EHRExtract" type="rc:EHRExtract"/>
+	<!--                                                          -->
+	<!--                   EHR Extract Types                      -->
+	<!--                                                          -->
+	<!-- 
+    The Extract package is provided on page 34 of the CEN/ISO 13606
+    part 1 standard.
+  -->
+	<xs:complexType name="EHRExtract">
+		<xs:annotation>
+			<xs:documentation>
+        The root node of an EHR Extract.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="authorisingParty" type="dt:II" minOccurs="0"/>
+			<xs:element name="ehrId" type="dt:II"/>
+			<xs:element name="ehrSystem" type="dt:II"/>
+			<xs:element name="rmId" fixed="EN 13606"/>
+			<xs:element name="subjectOfCare" type="dt:II"/>
+			<xs:element name="timeCreated" type="xs:dateTime"/>
+			<xs:element name="allCompositions" type="rc:Composition" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="criteria" type="rc:ExtractCriteria" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="folders" type="rc:Folder" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="demographicExtract" type="rc:IdentifiedEntity" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ExtractCriteria">
+		<xs:annotation>
+			<xs:documentation>
+        Restrictions or filters on the creation of the EHR Extract.
+        Note  that  maxSensitivity  is of type Sensitivity  (as per
+        part 4) not Integer  as given in part 1.  allVersions is BL
+        type when used in part 4, but Boolean here.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="allVersions" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="archetypeIds" type="dt:II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="maxSensitivity" type="rc:Sensitivity" minOccurs="0"/>
+			<xs:element name="multimediaIncluded" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="otherConstraints" type="xs:string" minOccurs="0"/>
+			<xs:element name="timePeriod" type="dt:IVL_TS" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RecordComponent" abstract="true">
+		<xs:annotation>
+			<xs:documentation>
+        Superclass  of all concrete  aggregator classes in  the EHR
+        hierarchy. archetypeId is changed to type II (from String).
+        Please  note  the  possible   disclosure  implications   of
+        including all policyIds when providing an EHRExtract  (that
+        the  recipient would  then know the policies  governing all
+        other recipients).  sensitivity is  changed to  part 4 type
+        Sensitivity.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="archetypeId" type="dt:II" minOccurs="0"/>
+			<xs:element name="meaning" type="dt:CD.CV" minOccurs="0"/>
+			<xs:element name="name" type="dt:CD.CV"/>
+			<xs:element name="origParentRef" type="dt:II" minOccurs="0"/>
+			<xs:element name="policyIds" type="dt:II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="rcId" type="dt:II"/>
+			<xs:element name="sensitivity" type="rc:Sensitivity" minOccurs="0"/>
+			<xs:element name="synthesised" type="xs:boolean"/>
+			<xs:element name="links" type="rc:Link" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="feederAudit" type="rc:AuditInfo" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Folder">
+		<xs:annotation>
+			<xs:documentation>
+        Organises and groups Compositions within an EHR Extract.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:RecordComponent">
+				<xs:sequence>
+					<xs:element name="subFolders" type="rc:Folder" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="attestations" type="rc:AttestationInfo" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="compositionsRcId" type="dt:II" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Composition">
+		<xs:annotation>
+			<xs:documentation>
+        Key  aggregation  class  representing  the  set  of  Record
+        Components authored and committed during a  single clinical
+        encounter.  Note the  values for  territory  will  indicate
+        the legal  framework under which  the  data was  committed.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:RecordComponent">
+				<xs:sequence>
+					<xs:element name="contributionId" type="dt:II" minOccurs="0"/>
+					<xs:element name="sessionTime" type="dt:IVL_TS" minOccurs="0"/>
+					<xs:element name="territory" type="cc:ISO3166CountyCode" minOccurs="0">
+						<!-- Incorrect spelling of Country matches that of imported doc -->
+					</xs:element>
+					<xs:element name="attestations" type="rc:AttestationInfo" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="otherParticipations" type="rc:FunctionalRole" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="committal" type="rc:AuditInfo"/>
+					<xs:element name="content" type="rc:Content" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="composer" type="rc:FunctionalRole" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Content" abstract="true">
+		<xs:annotation>
+			<xs:documentation>
+        Superclass of Section and Entry that  enables the former to
+        include instances of itself.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:RecordComponent"/>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Section">
+		<xs:annotation>
+			<xs:documentation>
+        Represents  a heading  in the  record  under which  further
+        Entry instances might be found.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:Content">
+				<xs:sequence>
+					<xs:element name="members" type="rc:Content" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Entry">
+		<xs:annotation>
+			<xs:documentation>
+        Represents the information  acquired for a  single clinical
+        activity  or recording.  The  Entry  may be  nilled  if  it 
+        corrects a previous erroneous version. 
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:Content">
+				<xs:sequence>
+					<xs:element name="actId" type="xs:string" minOccurs="0"/>
+					<xs:element name="actStatus" type="rc:ActStatus" minOccurs="0"/>
+					<xs:element name="subjectOfInformationCategory" type="rc:SubjectOfInformationCategory" minOccurs="0"/>
+					<xs:element name="uncertaintyExpressed" type="xs:boolean"/>
+					<xs:element name="items" type="rc:Item" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="infoProvider" type="rc:FunctionalRole" minOccurs="0"/>
+					<xs:element name="otherParticipations" type="rc:FunctionalRole" minOccurs="0" maxOccurs="unbounded"/>
+					<xs:element name="subjectOfInformation" type="rc:RelatedParty" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Item" abstract="true">
+		<xs:annotation>
+			<xs:documentation>
+        Superclass of  Cluster and Element  that enables the former
+        to include instances of itself.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:RecordComponent">
+				<xs:sequence>
+					<xs:element name="emphasis" type="dt:CD.CV" minOccurs="0"/>
+					<xs:element name="itemCategory" type="rc:ItemCategory" minOccurs="0"/>
+					<xs:element name="obsTime" type="dt:IVL_TS" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Cluster">
+		<xs:annotation>
+			<xs:documentation>
+        Represents hierarchical organisation of data values.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:Item">
+				<xs:sequence>
+					<xs:element name="structureType" type="rc:StructureType"/>
+					<xs:element name="parts" type="rc:Item" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="Element">
+		<xs:annotation>
+			<xs:documentation>
+        The Data Value holder in the aggregation structure.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:Item">
+				<xs:sequence>
+					<xs:element name="value" type="dt:ANY" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="AuditInfo">
+		<xs:annotation>
+			<xs:documentation>
+        The  committal  and revision  data for a  Record Component.
+        Note   that  the   invariant  is   incorrectly  stated   as 
+        constraining  "attribute_version_status.coding_scheme_name"
+        in the printed standard.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="committer" type="dt:II"/>
+			<xs:element name="ehrSystem" type="dt:II"/>
+			<xs:element name="previousVersion" type="dt:II" minOccurs="0"/>
+			<xs:element name="reasonForRevision" type="dt:CD.CV" minOccurs="0"/>
+			<xs:element name="timeCommitted" type="xs:dateTime"/>
+			<xs:element name="versionSetId" type="dt:II" minOccurs="0"/>
+			<xs:element name="versionStatus" type="rc:VersionStatus" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AttestationInfo">
+		<xs:annotation>
+			<xs:documentation>
+        Any  attestations  for a Record Component.  The proof field
+        should be a  cryptographic  hash of the RecordComponent  it
+        attests,  but it is recognised that in many implementations
+        the components will change to  point to new components that
+        revise  them.  In  that case,  the  proof  should sign  the
+        unchanging parts of the component only.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="attestedView" type="dt:ED" minOccurs="0"/>
+			<xs:element name="proof" type="dt:ED" minOccurs="0"/>
+			<xs:element name="reasonForAttestation" type="dt:CD.CV"/>
+			<xs:element name="time" type="xs:dateTime"/>
+			<xs:element name="targetRcId" type="dt:II" maxOccurs="unbounded"/>
+			<xs:element name="attester" type="rc:FunctionalRole"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FunctionalRole">
+		<xs:annotation>
+			<xs:documentation>
+        The participation  of an entity in the EHR.  Note that mode
+        refers to "Mode"  (section 5.5)  in part 3 of the standard,
+        not "Functional Role Mode" as stated in part 1.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="function" type="dt:CD.CV" minOccurs="0"/>
+			<xs:element name="healthcareFacility" type="dt:II" minOccurs="0"/>
+			<xs:element name="mode" type="rc:Mode" minOccurs="0"/>
+			<xs:element name="performer" type="dt:II"/>
+			<xs:element name="serviceSetting" type="dt:CD.CV" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RelatedParty">
+		<xs:annotation>
+			<xs:documentation>
+        Identifies the relationship  of a person to the  subject of
+        care. Specifically used in Entry.subjectOfInformation.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="party" type="dt:II" minOccurs="0"/>
+			<xs:element name="relationship" type="dt:CD.CV"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Link">
+		<xs:annotation>
+			<xs:documentation>
+        Creates a  relationship between  two Record Components that
+        is orthogonal  to the common one of containment.  Note that
+        if a recipient is not permitted to see the component linked
+        to,  even revealing the  link constitutes an  inappropriate
+        disclosure.  A new attribute is included in this version of
+        type CD.CV.  A Schematron rule polices  that either this or
+        the LinkRole (defined in part 3)  is used, but not both.  A
+        further rule ensures that if the latter is used, it matches
+        the LinkNature semantically.
+      </xs:documentation>
+			<xs:appinfo>
+				<sc:pattern name="either LinkRole or CD.CV occurs">
+					<sc:rule id="Link-1">
+						<sc:assert test="not(role and roleCV)"/>
+					</sc:rule>
+				</sc:pattern>
+				<sc:pattern name="the LinkNature and LinkRole match">
+					<sc:rule id="Link-2">
+						<sc:assert test="not(role) or (
+              (nature='relatedTo' and            (role='unspecified' or
+                                                  role='suggests' or
+                                                  role='suggestedBy' or
+                                                  role='repeatOf')) or
+              (nature='confirmedBy' and          (role='endorses' or
+                                                  role='disagreesWith' or
+                                                  role='permits' or
+                                                  role='permittedBy' or
+                                                  role='assumesResponsibilityFor' or
+                                                  role='declines' or
+                                                  role='consentsTo' or
+                                                  role='consentedBy')) or
+              (nature='sameProblem' and          (role='cause' or
+                                                  role='causedBy' or
+                                                  role='revisedInterpretation' or
+                                                  role='evidenceFor' or
+                                                  role='justifiedBy' or
+                                                  role='evidenceAgainst' or
+                                                  role='counteredBy' or
+                                                  role='indicatedBy' or
+                                                  role='indicationFor' or
+                                                  role='contraindicatedBy' or
+                                                  role='contraindicationFor' or
+                                                  role='triggerFor' or
+                                                  role='triggeredBy' or
+                                                  role='manifestationOf' or
+                                                  role='manifestedBy' or
+                                                  role='sequel' or
+                                                  role='intended' or
+                                                  role='anticipated' or
+                                                  role='toBeAvoided')) or
+              (nature='samePlan' and             (role='outcome' or
+                                                  role='hasPrecondition' or
+                                                  role='evaluation' or
+                                                  role='contributesTo' or
+                                                  role='revisedState' or
+                                                  role='subtaskOf')) or
+              (nature='relatedDocumentation' and (role='documentedBy' or
+                                                  role='documents' or
+                                                  role='summarises' or
+                                                  role='supplements' or
+                                                  role='excerpts' or
+                                                  role='derivedFrom' or
+                                                  role='hasReferenceRanges' or
+                                                  role='identifiedWithin')))"/>
+					</sc:rule>
+				</sc:pattern>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="followLink" type="xs:boolean"/>
+			<xs:element name="nature" type="rc:LinkNature"/>
+			<xs:element name="role" type="rc:LinkRole" minOccurs="0"/>
+			<xs:element name="roleCV" type="dt:CD.CV" minOccurs="0"/>
+			<xs:element name="targetRcId" type="dt:II" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IdentifiedHealthcareProfessional">
+		<xs:annotation>
+			<xs:documentation>
+        Reference to an identified healthcare professional, derived 
+        from GPIC 2.034.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:Person">
+				<xs:sequence>
+					<xs:element name="role" type="rc:HealthcareProfessionalRole" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="HealthcareProfessionalRole">
+		<xs:annotation>
+			<xs:documentation>
+        Describes the  role of  a  healthcare professional  in  the 
+        record,  based on  the GPICS  class of the  same name. Note
+        that the id instances  should refer to the  same identified
+        individual,   but   might  be   needed  to  establish  that 
+        individual's identity in different working environments.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="id" type="dt:II" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="positionOrGrade" type="dt:CD.CV" minOccurs="0"/>
+			<xs:element name="profession" type="dt:CD.CV" minOccurs="0"/>
+			<xs:element name="specialty" type="dt:CD.CV" minOccurs="0"/>
+			<xs:element name="scopingOrganisationId" type="dt:II" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="SubjectOfCarePersonIdentification">
+		<xs:annotation>
+			<xs:documentation>
+        Identification information about a person  corresponding to
+        GPIC 2.015.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="rc:Person">
+				<xs:sequence>
+					<xs:element name="administrativeGenderCode">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="male"/>
+								<xs:enumeration value="female"/>
+								<xs:enumeration value="intersex"/>
+								<xs:enumeration value="unknown"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:element>
+					<xs:element name="birthOrderNumber" type="xs:int" minOccurs="0"/>
+					<xs:element name="birthTime" type="dt:TS"/>
+					<xs:element name="deceasedTime" type="dt:TS" minOccurs="0"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

@@ -1,0 +1,345 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.ExploracionAbdominal.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140521">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"para registrar datos relacionados con observaciones de la exploración del abdomen">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {  -- ExploracionAbdominal
+        members existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ENTRY[at0001] occurrences matches {0..1} matches {  -- Inspección
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0002] occurrences matches {0..1} matches {  -- Existencia de masas
+                        value existence matches {0..1} matches {
+                            BL[at0003] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0004] occurrences matches {0..1} matches {  -- Existencia de hernias
+                        value existence matches {0..1} matches {
+                            BL[at0005] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                    CLUSTER[at0007] occurrences matches {0..1} matches {  -- Piel
+                        parts existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                            ELEMENT[at0009] occurrences matches {0..1} matches {  -- Color
+                                value existence matches {0..1} matches {
+                                    ST[at0012] occurrences matches {0..1} matches {  -- ST
+                                        value existence matches {0..1} matches {/.*/}
+                                    }
+                                }
+                            }
+                            ELEMENT[at0014] occurrences matches {0..1} matches {  -- Existencia de equimosis
+                                value existence matches {0..1} matches {
+                                    BL[at0016] occurrences matches {0..1} matches {  -- BL
+                                        value existence matches {1..1} matches {true, false}
+                                    }
+                                }
+                            }
+                            ELEMENT[at0018] occurrences matches {0..1} matches {  -- Existencia de cicatrices
+                                value existence matches {0..1} matches {
+                                    BL[at0020] occurrences matches {0..1} matches {  -- BL
+                                        value existence matches {1..1} matches {true, false}
+                                    }
+                                }
+                            }
+                        }
+                        structure_type existence matches {1..1} matches {
+                            STRUCTURE_TYPE[at0030] occurrences matches {1..1} matches {  -- 
+                                value existence matches {0..1} matches {"list"}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0021] occurrences matches {0..1} matches {  -- Auscultación
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    CLUSTER[at0022] occurrences matches {0..1} matches {  -- Ruidos hidroaereos
+                        parts existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                            ELEMENT[at0025] occurrences matches {0..1} matches {  -- Ruidos hidroaereos
+                                value existence matches {0..1} matches {
+                                    CV[at0036] occurrences matches {0..1} matches {  -- CV
+                                        code existence matches {0..1} matches {
+                                            [ac0001]
+                                            [ac0002]
+                                            [ac0003]
+                                        }
+                                        displayName existence matches {1..1} matches {
+                                  			ST occurrences matches {1..1} matches {
+                                				value existence matches {1..1} matches {*}
+                                			}
+                                		}
+                                		codeSystemName existence matches {0..1} matches {*}
+                        				codeSystemVersion existence matches {0..1} matches {*}
+                                    }
+                                }
+                            }
+                        }
+                        structure_type existence matches {1..1} matches {
+                            STRUCTURE_TYPE[at0011] occurrences matches {1..1} matches {  -- 
+                                value existence matches {0..1} matches {"list1"}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0013] occurrences matches {0..1} matches {  -- Percusión
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0031] occurrences matches {0..1} matches {  -- Puñopercusión renal
+                        value existence matches {0..1} matches {
+                            BL[at0032] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0017] occurrences matches {0..1} matches {  -- Palpación
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0023] occurrences matches {0..1} matches {  -- Signo de Murphy
+                        value existence matches {0..1} matches {
+                            CV[at0024] occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0004]
+                                    [ac0005]
+                                }
+                                displayName existence matches {1..1} matches {
+                                  	ST occurrences matches {1..1} matches {
+                                		value existence matches {1..1} matches {*}
+                                	}
+                                }
+                                codeSystemName existence matches {0..1} matches {*}
+                        		codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0027] occurrences matches {0..1} matches {  -- Signo de Bulmberg
+                        value existence matches {0..1} matches {
+                            CV[at0028] occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0006]
+                                    [ac0007]
+                                }
+                                displayName existence matches {1..1} matches {
+                                  	ST occurrences matches {1..1} matches {
+                                		value existence matches {1..1} matches {*}
+                                	}
+                                }
+                                codeSystemName existence matches {0..1} matches {*}
+                        		codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0033] occurrences matches {0..1} matches {  -- Dolor a la palpación
+                        value existence matches {0..1} matches {
+                            BL[at0034] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"ExploracionAbdominal2">
+                    description = <"ExploracionAbdominal2">
+                >
+                ["at0001"] = <
+                    text = <"Inspección">
+                    description = <"">
+                >
+                ["at0002"] = <
+                    text = <"Existencia de masas">
+                    description = <"">
+                >
+                ["at0003"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0004"] = <
+                    text = <"Existencia de hernias">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0007"] = <
+                    text = <"Piel">
+                    description = <"">
+                >
+                ["at0009"] = <
+                    text = <"Color">
+                    description = <"">
+                >
+                ["at0012"] = <
+                    text = <"ST">
+                    description = <"">
+                >
+                ["at0014"] = <
+                    text = <"Existencia de equimosis">
+                    description = <"">
+                >
+                ["at0016"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0018"] = <
+                    text = <"Existencia de cicatrices">
+                    description = <"">
+                >
+                ["at0020"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0021"] = <
+                    text = <"Auscultación">
+                    description = <"">
+                >
+                ["at0022"] = <
+                    text = <"Ruidos hidroaereos">
+                    description = <"">
+                >
+                ["at0025"] = <
+                    text = <"Ruidos hidroaereos">
+                    description = <"">
+                >
+                ["at0036"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+                ["at0013"] = <
+                    text = <"Percusión">
+                    description = <"">
+                >
+                ["at0017"] = <
+                    text = <"Palpación">
+                    description = <"Palpación abdominal">
+                >
+                ["at0023"] = <
+                    text = <"Signo de Murphy">
+                    description = <"Signo de Murphy">
+                >
+                ["at0024"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+                ["at0027"] = <
+                    text = <"Signo de Bulmberg">
+                    description = <"Signo de Bulmberg">
+                >
+                ["at0028"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+                ["at0031"] = <
+                    text = <"Puñopercusión renal">
+                    description = <"">
+                >
+                ["at0032"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0033"] = <
+                    text = <"Dolor a la palpación">
+                    description = <"Dolor a la palpación abdominal">
+                >
+                ["at0034"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+        ["es"] = <
+            items = <
+                ["ac0001"] = <
+                    text = <"Hipoactivos">
+                    description = <"Ruidos intestinales disminuidos">
+                >
+                ["ac0002"] = <
+                    text = <"Conservados">
+                    description = <"Ruidos intestinales conservados">
+                >
+                ["ac0003"] = <
+                    text = <"Hiperactivos">
+                    description = <"Ruidos intestinales hiperactivos">
+                >
+                ["ac0004"] = <
+                    text = <"Positivo">
+                    description = <"Signo de Murphy positivo">
+                >
+                ["ac0005"] = <
+                    text = <"Negativo">
+                    description = <"Signo de Murphy negativo">
+                >
+                ["ac0006"] = <
+                    text = <"Positivo">
+                    description = <"Signo de Blumberg positivo">
+                >
+                ["ac0007"] = <
+                    text = <"Negativo">
+                    description = <"Signo de Blumberg negativo">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0022"] = <[SNOMED-CT::87042004]>
+                ["at0021"] = <[SNOMED-CT::364457004]>
+                ["at0017"] = <[SNOMED-CT::64908006]>
+                ["at0013"] = <[SNOMED-CT::75180006]>
+                ["at0023"] = <[SNOMED-CT::53566005]>
+                ["at0033"] = <[SNOMED-CT::440220007]>
+                ["at0014"] = <[SNOMED-CT::equimosis]>
+                ["at0004"] = <[SNOMED-CT::275959004]>
+                ["at0002"] = <[SNOMED-CT::163278007]>
+                ["at0009"] = <[SNOMED-CT::164423009]>
+                ["at0018"] = <[SNOMED-CT::164399004]>
+                ["at0027"] = <[SNOMED-CT::163236001]>                
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["ac0001"] = <[SNOMED-CT::15280003]>
+                ["ac0002"] = <[SNOMED-CT::61539000]>
+                ["ac0003"] = <[SNOMED-CT::18101008]>
+                ["ac0004"] = <[SNOMED-CT::300353003]>
+                ["ac0006"] = <[SNOMED-CT::163236001]>
+                ["ac0007"] = <[SNOMED-CT::163237005]>
+            >
+        >
+    >

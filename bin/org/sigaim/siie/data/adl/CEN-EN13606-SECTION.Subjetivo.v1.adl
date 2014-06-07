@@ -1,0 +1,115 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.Subjetivo.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140514">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar datos subjetivos (o motivo de la consulta) de un paciente">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {  -- Subjetivo
+        members existence matches {0..1} cardinality matches {0..*; ordered} matches {
+            ENTRY[at0001] occurrences matches {1..1} matches {  -- Resumen subjetivo
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0002] occurrences matches {1..1} matches {  -- ELEMENT
+                        value existence matches {0..1} matches {
+                            ST[at0003] occurrences matches {0..1} matches {  -- SIMPLE_TEXT
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0004] occurrences matches {0..*} matches {  -- Síntoma
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    allow_archetype CLUSTER[at0005] occurrences matches {0..1} matches {  -- Síntoma
+                        include
+                            archetype_id/value matches {/CEN-EN13606-CLUSTER.Sintoma.v1/}
+                    }
+                }
+            }
+            ENTRY[at0006] occurrences matches {0..*} matches {  -- Evento
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0007] occurrences matches {0..*} matches {  -- ELEMENT
+                        value existence matches {0..1} matches {
+                            ST[at0008] occurrences matches {0..1} matches {  -- SIMPLE_TEXT
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Subjetivo">
+                    description = <"Subjetivo">
+                >
+                ["at0001"] = <
+                    text = <"Resumen subjetivo">
+                    description = <"Texto del apartado subjetivo">
+                >
+                ["at0002"] = <
+                    text = <"ELEMENT">
+                    description = <"">
+                >
+                ["at0003"] = <
+                    text = <"SIMPLE_TEXT">
+                    description = <"">
+                >
+                ["at0004"] = <
+                    text = <"Síntoma">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Síntoma">
+                    description = <"">
+                >
+                ["at0006"] = <
+                    text = <"Evento">
+                    description = <"Un evento relevante para la HCE">
+                >
+                ["at0007"] = <
+                    text = <"ELEMENT">
+                    description = <"">
+                >
+                ["at0008"] = <
+                    text = <"SIMPLE_TEXT">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::409586006]>
+            >
+        >
+    >
+    constraint_binding = <
+    >

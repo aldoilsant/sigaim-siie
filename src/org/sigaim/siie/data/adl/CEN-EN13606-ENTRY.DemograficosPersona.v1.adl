@@ -1,0 +1,164 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.DemograficosPersona.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140515">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar datos demográficos básicos de una persona">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- Datos demográficos 
+        items existence matches {0..1} cardinality matches {2..5; unordered} matches {
+            ELEMENT[at0001] occurrences matches {0..1} matches {  -- Fecha de nacimiento
+                value existence matches {0..1} matches {
+                    TSDATE[at0002] occurrences matches {0..1} matches {  -- DATE
+                        value existence matches {1..1} matches {yyyy-mm-dd}
+                    }
+                }
+            }
+            ELEMENT[at0003] occurrences matches {0..1} matches {  -- Nombre
+                value existence matches {0..1} matches {
+                    ST[at0004] occurrences matches {0..1} matches {  -- Nombre
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+            ELEMENT[at0005] occurrences matches {0..1} matches {  -- Primer apellido
+                value existence matches {0..1} matches {
+                    ST[at0006] occurrences matches {0..1} matches {  -- ST
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+            ELEMENT[at0007] occurrences matches {0..1} matches {  -- Segundo apellido
+                value existence matches {0..1} matches {
+                    ST[at0008] occurrences matches {0..1} matches {  -- ST
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+            ELEMENT[at0009] occurrences matches {0..1} matches {  -- Sexo
+                value existence matches {0..1} matches {
+                    CV[at0010] occurrences matches {0..1} matches {  -- CV
+                        code existence matches {0..1} matches {
+                            [ac0001]
+                            [ac0002]
+                            [ac0003]
+                        }
+                        displayName existence matches {1..1} matches {
+                        	ST occurrences matches {1..1} matches { 
+                        		value existence matches {0..1} matches {*}
+                        	}
+                        }
+                        codeSystemName existence matches {0..1} matches {*}
+                        codeSystemVersion existence matches {0..1} matches {*}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Datos demográficos ">
+                    description = <"Datos demograficos de una persona">
+                >
+                ["at0001"] = <
+                    text = <"Fecha de nacimiento">
+                    description = <"">
+                >
+                ["at0002"] = <
+                    text = <"DATE">
+                    description = <"">
+                >
+                ["at0003"] = <
+                    text = <"Nombre">
+                    description = <"">
+                >
+                ["at0004"] = <
+                    text = <"Nombre">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Primer apellido">
+                    description = <"">
+                >
+                ["at0006"] = <
+                    text = <"ST">
+                    description = <"">
+                >
+                ["at0007"] = <
+                    text = <"Segundo apellido">
+                    description = <"">
+                >
+                ["at0008"] = <
+                    text = <"ST">
+                    description = <"">
+                >
+                ["at0009"] = <
+                    text = <"Sexo">
+                    description = <"">
+                >
+                ["at0010"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+        ["es"] = <
+            items = <
+                ["ac0001"] = <
+                    text = <"Hombre">
+                    description = <"HOmbre">
+                >
+                ["ac0002"] = <
+                    text = <"Mujer">
+                    description = <"Mujer">
+                >
+                ["ac0003"] = <
+                    text = <"Desconocido">
+                    description = <"Desconocido">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0003"] = <[SNOMED-CT::408677003]>
+                ["at0007"] = <[SNOMED-CT::397678008]>
+                ["at0005"] = <[SNOMED-CT::397678008]>
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["ac0002"] = <[SNOMED-CT::1086007]>
+                ["ac0003"] = <[SNOMED-CT::394743007]>
+                ["ac0001"] = <[SNOMED-CT::10052007]>
+            >
+        >
+    >

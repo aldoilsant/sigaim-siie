@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rc="http://www.iso.org/iso/search.htm?qt=13606" targetNamespace="http://www.iso.org/iso/search.htm?qt=13606" xml:lang="en">
+	<!--   CEN/ISO 13606 Electronic Healthcare Record Termlists   -->
+	<!--       (c) 2008 CHIME, University College London          -->
+	<!--                 Created by Tony Austin                   -->
+	<!--                Supported by Dipak Kalra                  -->
+	<!--                Supported by Shanghua Sun                 -->
+	<xs:annotation>
+		<xs:documentation>
+      XML Schema  equivalent  representation of  the  CEN/ISO 13606 
+      part  3   Termlist   set  for  Electronic  Healthcare  Record 
+      exchange.  This Schema  definition  conforms  to the  13606-3
+      version   published  July  2007.  It  does  not  address  the
+      informative annexes to the document.
+
+      The codes  and  their  meanings in 13606  part 3 are  defined
+      therein, and do  not relate  to any  definitions  outside the
+      standard.  Since  the  codes do not provide  a human-readable
+      representation,  and are  synonymous  with the meaning,  this
+      implementation  instead  uses the  meaning  (with  whitespace
+      removed  as necessary)  for  the  enumeration  values of  the
+      termlist.  The code is given in an  XML comment alongside the
+      enumeration  entry  for reference.  Note that  some  codesets
+      in part 3 begin with index xx00, and others xx01.
+
+      (c) 2008 CHIME, University College London.
+      Created by Tony Austin.
+    </xs:documentation>
+	</xs:annotation>
+	<!--                                                          -->
+	<!--                     The Termlists                        -->
+	<!--                                                          -->
+	<xs:simpleType name="SubjectOfInformationCategory">
+		<xs:annotation>
+			<xs:documentation>
+        The  person  who is  the subject  of an ENTRY.  The default 
+        value should be the "subjectOfCare".
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="subjectOfCare"/>
+			<xs:enumeration value="relativeSubjectOfCare"/>
+			<xs:enumeration value="foetus"/>
+			<xs:enumeration value="mother"/>
+			<xs:enumeration value="donor"/>
+			<xs:enumeration value="unrelatedPerson"/>
+			<!-- DS00 -->
+			<!-- DS01 -->
+			<!-- DS02 -->
+			<!-- DS03 -->
+			<!-- DS04 -->
+			<!-- DS05 -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ItemCategory">
+		<xs:annotation>
+			<xs:documentation>
+        The category of information for each ELEMENT or CLUSTER. No
+        default value is given in the standard.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="principalValue"/>
+			<xs:enumeration value="supplementaryDetails"/>
+			<xs:enumeration value="patientState"/>
+			<xs:enumeration value="methodDetails"/>
+			<xs:enumeration value="clinicalReasoning"/>
+			<xs:enumeration value="protocol"/>
+			<xs:enumeration value="knowledgeSource"/>
+			<xs:enumeration value="presentation"/>
+			<xs:enumeration value="assertionStatus"/>
+			<!-- IC01 -->
+			<!-- IC02 -->
+			<!-- IC03 -->
+			<!-- IC04 -->
+			<!-- IC05 -->
+			<!-- IC06 -->
+			<!-- IC07 -->
+			<!-- IC08 -->
+			<!-- IC09 -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="VersionStatus">
+		<xs:annotation>
+			<xs:documentation>
+        The status of  a particular version  of a RECORD_COMPONENT.
+        The default value should be "finished".
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="draft"/>
+			<xs:enumeration value="finished"/>
+			<xs:enumeration value="update"/>
+			<xs:enumeration value="correction"/>
+			<xs:enumeration value="deletion"/>
+			<!-- VER00 -->
+			<!-- VER01 -->
+			<!-- VER02 -->
+			<!-- VER03 -->
+			<!-- VER04 -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Mode">
+		<xs:annotation>
+			<xs:documentation>
+        The  physical  or electronic means  by which an  entity has 
+        participated in the recording.  This term list is based  on
+        EN14822 Part 2. The default value should be "faceToFace".
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="electronicData"/>
+			<xs:enumeration value="verbal"/>
+			<xs:enumeration value="dictated"/>
+			<xs:enumeration value="faceToFace"/>
+			<xs:enumeration value="telephone"/>
+			<xs:enumeration value="videoconferencing"/>
+			<xs:enumeration value="written"/>
+			<xs:enumeration value="email"/>
+			<xs:enumeration value="telefax"/>
+			<xs:enumeration value="handwritten"/>
+			<xs:enumeration value="typewritten"/>
+			<xs:enumeration value="physicalPresence"/>
+			<xs:enumeration value="remotePresence"/>
+			<!-- MOD01 -->
+			<!-- MOD02 -->
+			<!-- MOD03 -->
+			<!-- MOD04 -->
+			<!-- MOD05 -->
+			<!-- MOD06 -->
+			<!-- MOD07 -->
+			<!-- MOD08 -->
+			<!-- MOD09 -->
+			<!-- MOD10 -->
+			<!-- MOD11 -->
+			<!-- MOD12 -->
+			<!-- MOD13 -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ActStatus">
+		<xs:annotation>
+			<xs:documentation>
+        The status  of an Act.  This term list is based on EN12967.
+        No default value is given in the standard.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="foreseen"/>
+			<xs:enumeration value="requested"/>
+			<xs:enumeration value="accepted"/>
+			<xs:enumeration value="booked"/>
+			<xs:enumeration value="planned"/>
+			<xs:enumeration value="ready"/>
+			<xs:enumeration value="inProgress"/>
+			<xs:enumeration value="completed"/>
+			<xs:enumeration value="reported"/>
+			<xs:enumeration value="terminated"/>
+			<xs:enumeration value="forwarded"/>
+			<xs:enumeration value="suspended"/>
+			<xs:enumeration value="annulledCancelled"/>
+			<xs:enumeration value="annulledRejected"/>
+			<xs:enumeration value="substituted"/>
+			<!-- ACT01 -->
+			<!-- ACT02 -->
+			<!-- ACT03 -->
+			<!-- ACT04 -->
+			<!-- ACT05 -->
+			<!-- ACT06 -->
+			<!-- ACT07 -->
+			<!-- ACT08 -->
+			<!-- ACT09 -->
+			<!-- ACT10 -->
+			<!-- ACT11 -->
+			<!-- ACT12 -->
+			<!-- ACT13 -->
+			<!-- ACT14 -->
+			<!-- ACT15 -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LinkNature">
+		<xs:annotation>
+			<xs:documentation>
+        The  nature  of  a Link.  An entry  from  this termlist  is
+        mandatory to  include  whenever  a Link exists.  No default
+        value is given in the standard.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="relatedTo"/>
+			<xs:enumeration value="confirmedBy"/>
+			<xs:enumeration value="sameProblem"/>
+			<xs:enumeration value="samePlan"/>
+			<xs:enumeration value="relatedDocumentation"/>
+			<!-- LINK-A0 -->
+			<!-- LINK-B0 -->
+			<!-- LINK-C0 -->
+			<!-- LINK-D0 -->
+			<!-- LINK-E0 -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="LinkRole">
+		<xs:annotation>
+			<xs:documentation>
+        The role  of  a Link.  An entry from  this termlist  is not
+        mandatory  to  include with a Link.  No default  values are
+        given in  the standard,  but each  Role  sub-category  must
+        match the headline category in the LinkNature class.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="unspecified"/>
+			<xs:enumeration value="suggests"/>
+			<xs:enumeration value="suggestedBy"/>
+			<xs:enumeration value="repeatOf"/>
+			<xs:enumeration value="endorses"/>
+			<xs:enumeration value="disagreesWith"/>
+			<xs:enumeration value="permits"/>
+			<xs:enumeration value="permittedBy"/>
+			<xs:enumeration value="assumesResponsibilityFor"/>
+			<xs:enumeration value="declines"/>
+			<xs:enumeration value="consentsTo"/>
+			<xs:enumeration value="consentedBy"/>
+			<xs:enumeration value="cause"/>
+			<xs:enumeration value="causedBy"/>
+			<xs:enumeration value="revisedInterpretation"/>
+			<xs:enumeration value="evidenceFor"/>
+			<xs:enumeration value="justifiedBy"/>
+			<xs:enumeration value="evidenceAgainst"/>
+			<xs:enumeration value="counteredBy"/>
+			<xs:enumeration value="indicatedBy"/>
+			<xs:enumeration value="indicationFor"/>
+			<xs:enumeration value="contraindicatedBy"/>
+			<xs:enumeration value="contraindicationFor"/>
+			<xs:enumeration value="triggerFor"/>
+			<xs:enumeration value="triggeredBy"/>
+			<xs:enumeration value="manifestationOf"/>
+			<xs:enumeration value="manifestedBy"/>
+			<xs:enumeration value="sequel"/>
+			<xs:enumeration value="intended"/>
+			<xs:enumeration value="anticipated"/>
+			<xs:enumeration value="toBeAvoided"/>
+			<xs:enumeration value="outcome"/>
+			<xs:enumeration value="hasPrecondition"/>
+			<xs:enumeration value="evaluation"/>
+			<xs:enumeration value="contributesTo"/>
+			<xs:enumeration value="revisedState"/>
+			<xs:enumeration value="subtaskOf"/>
+			<xs:enumeration value="documentedBy"/>
+			<xs:enumeration value="documents"/>
+			<xs:enumeration value="summarises"/>
+			<xs:enumeration value="supplements"/>
+			<xs:enumeration value="excerpts"/>
+			<xs:enumeration value="derivedFrom"/>
+			<xs:enumeration value="hasReferenceRanges"/>
+			<xs:enumeration value="identifiedWithin"/>
+			<!-- LINK-A1 -->
+			<!-- LINK-A2 -->
+			<!-- LINK-A2i -->
+			<!-- LINK-A3 -->
+			<!-- LINK-B1 -->
+			<!-- LINK-B2 -->
+			<!-- LINK-B3 -->
+			<!-- LINK-B3i -->
+			<!-- LINK-B4 -->
+			<!-- LINK-B5 -->
+			<!-- LINK-B6 -->
+			<!-- LINK-B6i -->
+			<!-- LINK-C1 -->
+			<!-- LINK-C1i -->
+			<!-- LINK-C2 -->
+			<!-- LINK-C3 -->
+			<!-- LINK-C3i -->
+			<!-- LINK-C4 -->
+			<!-- LINK-C4i -->
+			<!-- LINK-C5 -->
+			<!-- LINK-C5i -->
+			<!-- LINK-C6 -->
+			<!-- LINK-C6i -->
+			<!-- LINK-C7 -->
+			<!-- LINK-C7i -->
+			<!-- LINK-C8 -->
+			<!-- LINK-C8i -->
+			<!-- LINK-C9 -->
+			<!-- LINK-C10 -->
+			<!-- LINK-C11 -->
+			<!-- LINK-C12 -->
+			<!-- LINK-D1 -->
+			<!-- LINK-D2 -->
+			<!-- LINK-D3 -->
+			<!-- LINK-D4 -->
+			<!-- LINK-D5 -->
+			<!-- LINK-D6 -->
+			<!-- LINK-E1 -->
+			<!-- LINK-E1i -->
+			<!-- LINK-E2 -->
+			<!-- LINK-E3 -->
+			<!-- LINK-E4 -->
+			<!-- LINK-E5 -->
+			<!-- LINK-E6 -->
+			<!-- LINK-E7 -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="StructureType">
+		<xs:annotation>
+			<xs:documentation>
+        The structural organisation  of a CLUSTER and its contained
+        ITEMs.  A tree  of ITEMS can  be represented  with  "list",
+        since a tree  is equivalent to lists  of lists.  No default
+        value is given in the standard.
+      </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="list"/>
+			<xs:enumeration value="table"/>
+			<!-- STRC01 -->
+			<!-- STRC02 -->
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

@@ -1,0 +1,135 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.ExploracionPielYFaneras.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140515">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar datos relacionados con la exploración de la piel y de las faneras de un paciente">
+            use = <"Usar para registrar datos relacionados con la exploración de la piel y de las faneras de un paciente">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {  -- ExploracionPielYFaneras
+        members existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ENTRY[at0001] occurrences matches {0..1} matches {  -- Piel
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0003] occurrences matches {0..1} matches {  -- Existencia de exantemas
+                        value existence matches {0..1} matches {
+                            BL[at0004] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0005] occurrences matches {0..1} matches {  -- Presencia de petequias
+                        value existence matches {0..1} matches {
+                            BL[at0006] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0007] occurrences matches {0..1} matches {  -- Presencia de cianosis
+                        value existence matches {0..1} matches {
+                            BL[at0008] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0009] occurrences matches {0..1} matches {  -- Existencia de eccemas
+                        value existence matches {0..1} matches {
+                            BL[at0010] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0002] occurrences matches {0..1} matches {  -- Faneras
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {*}
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"ExploracionPielYFaneras">
+                    description = <"ExploracionPielYFaneras">
+                >
+                ["at0001"] = <
+                    text = <"Piel">
+                    description = <"Observaciones en la piel">
+                >
+                ["at0002"] = <
+                    text = <"Faneras">
+                    description = <"Observaciones en las faneras: Uñas y pelos">
+                >
+                ["at0003"] = <
+                    text = <"Existencia de exantemas">
+                    description = <"Existencia de exantemas">
+                >
+                ["at0004"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Presencia de petequias">
+                    description = <"Presencia de petequias">
+                >
+                ["at0006"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0007"] = <
+                    text = <"Presencia de cianosis">
+                    description = <"Presencia de cianosis">
+                >
+                ["at0008"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0009"] = <
+                    text = <"Existencia de eccemas">
+                    description = <"">
+                >
+                ["at0010"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::271303006]>
+                ["at0001"] = <[SNOMED-CT::364528001]>
+                ["at0002"] = <[SNOMED-CT::7748002]>
+                ["at0003"] = <[SNOMED-CT::164623002]>
+                ["at0005"] = <[SNOMED-CT::164331003]>
+                ["at0007"] = <[SNOMED-CT::3415004]>
+                ["at0009"] = <[SNOMED-CT::43116000]>        
+            >
+        >
+    >
+    constraint_binding = <
+    >

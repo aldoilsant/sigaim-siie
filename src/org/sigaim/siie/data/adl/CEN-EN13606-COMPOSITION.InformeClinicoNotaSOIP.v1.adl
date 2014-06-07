@@ -1,0 +1,143 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140514">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para la comunicación y registro del tipo de informe clínico Nota SOIP de Atención Primaria.">
+            use = <"Usar para la comunicación y registro del tipo de informe clínico Nota SOIP de Atención Primaria.">
+        >
+    >
+
+definition
+    COMPOSITION[at0000] occurrences matches {1..1} matches {  -- Informe Clinico Nota SOIP
+        content existence matches {0..1} cardinality matches {0..*; ordered} matches {
+            SECTION[at0001] occurrences matches {1..1} matches {  -- Datos del documento
+                members existence matches {0..1} cardinality matches {0..*; ordered; unique} matches {
+                    ENTRY[at0004] occurrences matches {1..1} matches {  -- Fecha de firma
+                        items existence matches {0..1} cardinality matches {1..1; unordered; unique} matches {
+                            ELEMENT[at0005] occurrences matches {1..1} matches {  -- Fecha de emision informe
+                                value existence matches {0..1} matches {
+                                    TSDATE[at0006] occurrences matches {0..1} matches {  -- DATE
+                                        value existence matches {1..1} matches {yyyy-mm-dd}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            SECTION[at0002] occurrences matches {1..1} matches {  -- Datos del paciente
+                members existence matches {0..1} cardinality matches {0..*; ordered; unique} matches {
+                    allow_archetype ENTRY[at0010] occurrences matches {1..1} matches {  -- Identificadores del paciente
+                        include
+                            archetype_id/value matches {/CEN-EN13606-ENTRY.IdentificacionPersona.v1/}
+                    }
+                    allow_archetype ENTRY[at0011] occurrences matches {1..1} matches {  -- Datos demográficos básicos
+                        include
+                            archetype_id/value matches {/CEN-EN13606-ENTRY.DemograficosPersona.v1/}
+                    }
+                }
+            }
+            SECTION[at0003] occurrences matches {1..1} matches {  -- Datos clínicos
+                members existence matches {0..1} cardinality matches {1..1; ordered; unique} matches {
+                    allow_archetype SECTION[at0012] occurrences matches {1..1} matches {  -- S
+                        include
+                            archetype_id/value matches {/CEN-EN13606-SECTION.Subjetivo.v1/}
+                    }
+                    allow_archetype SECTION[at0013] occurrences matches {0..1} matches {  -- O
+                        include
+                            archetype_id/value matches {/CEN-EN13606-SECTION.Objetivo.v1/}
+                    }
+                    allow_archetype SECTION[at0014] occurrences matches {0..1} matches {  -- I
+                        include
+                            archetype_id/value matches {/CEN-EN13606-SECTION.ImpresionMedica.v1/}
+                    }
+                    allow_archetype SECTION[at0015] occurrences matches {0..1} matches {  -- P
+                        include
+                            archetype_id/value matches {/CEN-EN13606-SECTION.PlanTerapeutico.v1/}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Informe Clinico Nota SOIP">
+                    description = <"Informe Clinico Nota SOIP">
+                >
+                ["at0001"] = <
+                    text = <"Datos del documento">
+                    description = <"">
+                >
+                ["at0002"] = <
+                    text = <"Datos del paciente">
+                    description = <"">
+                >
+                ["at0003"] = <
+                    text = <"Datos clínicos">
+                    description = <"">
+                >
+                ["at0004"] = <
+                    text = <"Fecha de firma">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Fecha de emision informe">
+                    description = <"fecha de emisión del informe">
+                >
+                ["at0006"] = <
+                    text = <"DATE">
+                    description = <"">
+                >
+                ["at0010"] = <
+                    text = <"Identificadores del paciente">
+                    description = <"">
+                >
+                ["at0011"] = <
+                    text = <"Datos demográficos básicos">
+                    description = <"">
+                >
+                ["at0012"] = <
+                    text = <"S">
+                    description = <"Subjetivo">
+                >
+                ["at0013"] = <
+                    text = <"O">
+                    description = <"Objetivo">
+                >
+                ["at0014"] = <
+                    text = <"I">
+                    description = <"Impresión médica">
+                >
+                ["at0015"] = <
+                    text = <"P">
+                    description = <"Plan terapéutico">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+    >
+    constraint_binding = <
+    >

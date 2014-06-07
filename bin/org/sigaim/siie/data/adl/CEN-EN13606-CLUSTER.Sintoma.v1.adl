@@ -1,0 +1,273 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-CLUSTER.Sintoma.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140225">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Registra los detalles sobre un síntoma - bien auto-registrados por un individuo o registrados en nombre de un paciente, por un clínico. Una historia clínica electrónica completa puede contener varios niveles de detalle sobre diferentes síntomas.">
+            keywords = <"síntoma">
+            use = <"Usar para registrar información detallada sobre los síntomas que presenta un paciente">
+        >
+    >
+
+definition
+    CLUSTER[at0000] occurrences matches {1..1} matches {  -- Síntoma
+        parts existence matches {0..1} cardinality matches {0..*; ordered} matches {
+            ELEMENT[at0002] occurrences matches {1..1} matches {  -- Nombre del síntoma
+                value existence matches {1..1} matches {
+                    CV occurrences matches {1..1} matches {  -- Nombre del síntoma
+                        code existence matches {1..1} matches {*}
+                        displayName existence matches {1..1} matches {
+                        	ST occurrences matches {1..1} matches { 
+                        		value existence matches {0..1} matches {*}
+                        	}
+                        }
+                        codeSystemName existence matches {0..1} matches {*}
+                        codeSystemVersion existence matches {0..1} matches {*}
+                    }
+                }
+            }
+            ELEMENT[at0005] occurrences matches {0..1} matches {  -- Localizacion
+                value existence matches {0..1} matches {
+                    ST occurrences matches {0..1} matches {  -- Localizacion
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+            ELEMENT[at0003] occurrences matches {0..1} matches {  -- Descripcion
+                value existence matches {0..1} matches {
+                    ST occurrences matches {0..1} matches {  -- Descripcion
+                        value existence matches {0..1} matches {/.*/}
+                    }
+                }
+            }
+            ELEMENT[at0006] occurrences matches {0..1} matches {  -- Duracion
+                value existence matches {0..1} matches {
+                    PQ occurrences matches {0..1} matches {  -- Duracion relativa
+                    	value existence matches {0..1} matches {*}
+                    	unit existence matches {0..1} matches {"año", "años", "mes", "meses", "día", "días", "hora", "horas", "minuto", "minutos", "segundo", "segundos"}                       	
+                    }
+                    TSDATE occurrences matches {0..1} matches {  -- Duracion absoluta
+                        value existence matches {0..1} matches {yyyy-mm-dd}
+                    }
+                }
+            }
+            ELEMENT[at0022] occurrences matches {0..1} matches {  -- Numero de ocurrencias
+                value existence matches {0..1} matches {
+                    INT occurrences matches {0..1} matches {  -- Numero de ocurrencias
+                        value existence matches {0..1} matches {*}
+                    }
+                }
+            }
+ --           CLUSTER[at0025] occurrences matches {0..1} matches {  -- Sintomas asociados
+ --               parts existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+ --                   allow_archetype CLUSTER[at0029] occurrences matches {0..1} matches {  -- Sintoma asociado
+ --                       include
+ --                           archetype_id/value matches {/CEN-EN13606-CLUSTER.Sintoma.v1/}
+ --                   }
+ --               }
+ --              structure_type existence matches {0..1} matches {
+ --                   STRUCTURE_TYPE occurrences matches {0..1} matches {  -- 
+ --                       value existence matches {0..1} matches {"list"}
+ --                   }
+ --               }
+ --           }
+            CLUSTER[at0030] occurrences matches {0..1} matches {  -- Evolución
+                parts existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0036] occurrences matches {0..1} matches {  -- Progresión
+                        value existence matches {0..1} matches {
+                            CV occurrences matches {0..1} matches {  -- Progresión
+                                code existence matches {0..1} matches {
+                                	[ac0007]
+                                    [ac0008]
+                                    [ac0009]
+                                    [ac0010]
+                                    [ac0011]
+                                    [ac0012]
+                                }
+                                displayName existence matches {1..1} matches {
+		                        	ST occurrences matches {1..1} matches { 
+		                        		value existence matches {0..1} matches {*}
+		                        	}
+		                        }
+		                        codeSystemName existence matches {0..1} matches {*}
+		                        codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                }
+                structure_type existence matches {0..1} matches {
+                    STRUCTURE_TYPE occurrences matches {0..1} matches {  -- 
+                        value existence matches {0..1} matches {"list"}
+                    }
+                }
+            }
+            ELEMENT[at0017] occurrences matches {0..1} matches {  -- Presencia
+                value existence matches {0..1} matches {
+                    BL occurrences matches {0..1} matches {  -- BL
+                        value existence matches {0..1} matches {true, false}
+                    }
+                }
+            }
+        }
+        structure_type existence matches {0..1} matches {
+            STRUCTURE_TYPE occurrences matches {0..1} matches {  -- 
+                value existence matches {0..1} matches {"list"}
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Sintoma">
+                    description = <"A subjective observation by an individual about departure from normal function and which may indicate the presence of disease or abnormality. Either self-recorded or recorded on the behalf of a patient by a clinician.">
+                >
+                ["at0001"] = <
+                    text = <"Duracion relativa">
+                    description = <"">
+                >
+                ["at0002"] = <
+                    text = <"Nombre del síntoma">
+                    description = <"El síntoma experimentado por el paciente">
+                >
+                ["at0003"] = <
+                    text = <"Descripcion">
+                    description = <"Una narración descriptiva del síntoma">
+                >
+                ["at0004"] = <
+                    text = <"Nombre del síntoma">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Localizacion">
+                    description = <"La parte del cuerpo humano donde el síntoma fue localizado">
+                >
+                ["at0006"] = <
+                    text = <"Duracion">
+                    description = <"Duración del síntoma desde su aparición">
+                >
+                ["at0007"] = <
+                    text = <"Localizacion">
+                    description = <"">
+                >                
+                ["at0009"] = <
+                    text = <"Descripcion">
+                    description = <"">
+                >
+                ["at0022"] = <
+                    text = <"Numero de ocurrencias">
+                    description = <"Número de veces que este síntoma ha ocurrido">
+                >
+                ["at0024"] = <
+                    text = <"Numero de ocurrencias">
+                    description = <"">
+                >                
+                ["at0010"] = <
+                    text = <"Duracion absoluta">
+                    description = <"">
+                >
+                ["at0017"] = <
+                    text = <"Presencia">
+                    description = <"Indica presencia o ausencia">
+                >
+                ["at0019"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0025"] = <
+                    text = <"Sintomas asociados">
+                    description = <"Lista de sintomas secundarios asociados al principal y características esperadas que no estÃ¡n presentes.">
+                >
+                ["at0029"] = <
+                    text = <"Sintoma asociado">
+                    description = <"Síntoma secundario asociado al principal">
+                >
+                ["at0030"] = <
+                    text = <"Evolución">
+                    description = <"Características de la evolución del síntoma">
+                >
+                ["at0036"] = <
+                    text = <"Progresión">
+                    description = <"La progresión del síntoma con relación al pasado">
+                >
+                ["at0038"] = <
+                    text = <"Progresión">
+                    description = <"">
+                >                
+            >
+        >
+    >
+    constraint_definitions = <
+        ["es"] = <
+            items = <
+                ["ac0007"] = <
+                    text = <"Mejorando">
+                    description = <"El síntoma ha mejorado a lo largo del tiempo">
+                >
+                ["ac0008"] = <
+                    text = <"Disminuyendo intensidad">
+                    description = <"El síntoma disminuye en intensidad a medida que pasa el tiempo">
+                >
+                ["ac0009"] = <
+                    text = <"Estable">
+                    description = <"El síntoma no ha cambiado a lo largo del tiempo">
+                >
+                ["ac0010"] = <
+                    text = <"Aumentando intensidad">
+                    description = <"El síntoma aumenta en intensidad a medida que pasa el tiempo">
+                >
+                ["ac0011"] = <
+                    text = <"Empeorando">
+                    description = <"El síntoma ha empeorado a lo largo del tiempo">
+                >
+                ["ac0012"] = <
+                    text = <"Desaparecido">
+                    description = <"El síntoma ha desaparecido con el paso del tiempo">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::19019007]>
+                ["at0002"] = <[SNOMED-CT::19019007]>
+                ["at0003"] = <[SNOMED-CT::162408000]>
+                ["at0006"] = <[SNOMED-CT::162442009]>
+                ["at0017"] = <[SNOMED-CT::52101004]>
+                ["at0025"] = <[SNOMED-CT::102483000]>
+                ["at0029"] = <[SNOMED-CT::102483000]>
+                ["at0030"] = <[SNOMED-CT::260908002]>                
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+            	["ac0007"] = <[SNOMED-CT::385633008]>
+                ["ac0008"] = <[SNOMED-CT::260371004]>
+                ["ac0009"] = <[SNOMED-CT::58158008]>
+                ["ac0010"] = <[SNOMED-CT::260369004]>
+                ["ac0011"] = <[SNOMED-CT::230993007]>
+                ["ac0012"] = <[SNOMED-CT::370996005]>                
+            >
+        >
+    >

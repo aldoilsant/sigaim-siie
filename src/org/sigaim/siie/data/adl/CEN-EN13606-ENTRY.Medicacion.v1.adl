@@ -1,0 +1,426 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.Medicacion.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["name"] = <"Jesús Barros Castro">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["date"] = <"20140516">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar datos relacionados con la medicación de un paciente">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- Medicacion
+        items existence matches {0..1} cardinality matches {0..*; ordered} matches {
+            CLUSTER[at0001] occurrences matches {1..1} matches {  -- Presentación clínica
+                parts existence matches {0..1} cardinality matches {1..*; unordered; unique} matches {
+                    ELEMENT[at0004] occurrences matches {1..1} matches {  -- Nombre del medicamento
+                        value existence matches {1..1} matches {
+                            CV[at0056] occurrences matches {1..1} matches {  -- CV
+                                code existence matches {1..1} matches {*}
+		                        displayName existence matches {1..1} matches {
+		                        	ST occurrences matches {1..1} matches { 
+		                        		value existence matches {1..1} matches {*}
+		                        	}
+		                        }
+		                        codeSystemName existence matches {0..1} matches {*}
+		                        codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                }
+                structure_type existence matches {1..1} matches {
+                    STRUCTURE_TYPE[at0010] occurrences matches {1..1} matches {  -- 
+                        value existence matches {0..1} matches {"list"}
+                    }
+                }
+            }
+            ELEMENT[at0012] occurrences matches {0..1} matches {  -- Vía de administración
+                value existence matches {0..1} matches {
+                    CV[at0013] occurrences matches {0..1} matches {  -- CV
+                        code existence matches {0..1} matches {
+                            [ac0001]
+                            [ac0002]
+                            [ac0003]
+                            [ac0004]
+                            [ac0005]
+                        }
+                        displayName existence matches {1..1} matches {
+                        	ST occurrences matches {1..1} matches { 
+                        		value existence matches {0..1} matches {*}
+                        	}
+                        }
+                        codeSystemName existence matches {0..1} matches {*}
+                        codeSystemVersion existence matches {0..1} matches {*}
+                    }
+                }
+            }
+            CLUSTER[at0007] occurrences matches {1..1} matches {  -- Posología
+                parts existence matches {0..1} cardinality matches {0..4; ordered; unique} matches {
+                    ELEMENT[at0009] occurrences matches {1..1} matches {  -- Cantidad
+                        value existence matches {0..1} matches {
+                            REAL[at0016] occurrences matches {0..1} matches {  -- REAL
+                                value existence matches {1..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0020] occurrences matches {0..1} matches {  -- Forma farmacéutica
+                        value existence matches {0..1} matches {
+                            CV[at0023] occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0008]
+                                    [ac0009]
+                                    [ac0010]
+                                    [ac0011]
+                                    [ac0012]
+                                    [ac0013]
+                                }
+                                displayName existence matches {1..1} matches {
+		                        	ST occurrences matches {1..1} matches { 
+		                        		value existence matches {0..1} matches {*}
+		                        	}
+		                        }
+		                        codeSystemName existence matches {0..1} matches {*}
+		                        codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0025] occurrences matches {0..1} matches {  -- Frecuencia de administración
+                        value existence matches {0..1} matches {
+                            CV[at0027] occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0014]
+                                    [ac0015]
+                                    [ac0016]
+                                    [ac0017]
+                                }
+                                displayName existence matches {1..1} matches {
+		                        	ST occurrences matches {1..1} matches { 
+		                        		value existence matches {0..1} matches {*}
+		                        	}
+		                        }
+		                        codeSystemName existence matches {0..1} matches {*}
+		                        codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                            ST[at0008] occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                    ELEMENT[at0021] occurrences matches {0..1} matches {  -- Momento de administración
+                        value existence matches {0..1} matches {
+                            CV[at0045] occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0020]
+                                    [ac0021]
+                                    [ac0022]
+                                }
+                                displayName existence matches {1..1} matches {
+		                        	ST occurrences matches {1..1} matches { 
+		                        		value existence matches {0..1} matches {*}
+		                        	}
+		                        }
+		                        codeSystemName existence matches {0..1} matches {*}
+		                        codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                }
+                structure_type existence matches {1..1} matches {
+                    STRUCTURE_TYPE[at0022] occurrences matches {1..1} matches {  -- 
+                        value existence matches {0..1} matches {"list"}
+                    }
+                }
+            }
+            ELEMENT[at0028] occurrences matches {0..1} matches {  -- Fecha de inicio
+                value existence matches {0..1} matches {
+                    TSDATE[at0029] occurrences matches {0..1} matches {  -- DATE
+                        value existence matches {1..1} matches {yyyy-mm-dd}
+                    }
+                }
+            }
+            ELEMENT[at0030] occurrences matches {0..1} matches {  -- Fecha de fin
+                value existence matches {0..1} matches {
+                    TSDATE[at0031] occurrences matches {0..1} matches {  -- DATE
+                        value existence matches {1..1} matches {yyyy-mm-dd}
+                    }
+                }
+            }
+            ELEMENT[at0032] occurrences matches {0..1} matches {  -- Duración
+                value existence matches {0..1} matches {
+                    PQ occurrences matches {0..1} matches {  -- Duración
+                    	value existence matches {0..1} matches {*}
+                    	unit existence matches {0..1} matches {"año", "años", "mes", "meses", "día", "días", "hora", "horas", "minuto", "minutos", "segundo", "segundos"}                       	
+                    }
+                }
+            }
+            CLUSTER[at0014] occurrences matches {0..1} matches {  -- Especialidad
+                parts existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0037] occurrences matches {0..1} matches {  -- Marca comercial
+                        value existence matches {0..1} matches {
+                            ST[at0039] occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                    ELEMENT[at0041] occurrences matches {0..1} matches {  -- Motivo
+                        value existence matches {0..1} matches {
+                            ST[at0043] occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                }
+                structure_type existence matches {1..1} matches {
+                    STRUCTURE_TYPE[at0046] occurrences matches {1..1} matches {  -- 
+                        value existence matches {0..1} matches {"list"}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Medicacion">
+                    description = <"Medicacion">
+                >
+                ["at0001"] = <
+                    text = <"Presentación clínica">
+                    description = <"">
+                >
+                ["at0004"] = <
+                    text = <"Nombre del medicamento">
+                    description = <"Nombre del medicamento">
+                >
+                ["at0011"] = <
+                    text = <"ST">
+                    description = <"">
+                >
+                ["at0012"] = <
+                    text = <"Vía de administración">
+                    description = <"Vía de administración">
+                >
+                ["at0013"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+                ["at0007"] = <
+                    text = <"Posología">
+                    description = <"">
+                >
+                ["at0009"] = <
+                    text = <"Cantidad">
+                    description = <"">
+                >
+                ["at0016"] = <
+                    text = <"REAL">
+                    description = <"">
+                >
+                ["at0020"] = <
+                    text = <"Forma farmacéutica">
+                    description = <"">
+                >
+                ["at0023"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+                ["at0025"] = <
+                    text = <"Frecuencia de administración">
+                    description = <"">
+                >
+                ["at0027"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+                ["at0028"] = <
+                    text = <"Fecha de inicio">
+                    description = <"">
+                >
+                ["at0029"] = <
+                    text = <"DATE">
+                    description = <"">
+                >
+                ["at0030"] = <
+                    text = <"Fecha de fin">
+                    description = <"">
+                >
+                ["at0031"] = <
+                    text = <"DATE">
+                    description = <"">
+                >
+                ["at0032"] = <
+                    text = <"Duración">
+                    description = <"Duración del tratamiento">
+                >
+                ["at0033"] = <
+                    text = <"DURATION">
+                    description = <"">
+                >
+                ["at0014"] = <
+                    text = <"Especialidad">
+                    description = <"">
+                >
+                ["at0008"] = <
+                    text = <"ST">
+                    description = <"">
+                >
+                ["at0021"] = <
+                    text = <"Momento de administración">
+                    description = <"Por ejemplo antes de la cena, después del desayuno, etc.">
+                >
+                ["at0037"] = <
+                    text = <"Marca comercial">
+                    description = <"">
+                >
+                ["at0039"] = <
+                    text = <"ST">
+                    description = <"">
+                >
+                ["at0041"] = <
+                    text = <"Motivo">
+                    description = <"">
+                >
+                ["at0043"] = <
+                    text = <"ST">
+                    description = <"">
+                >
+                ["at0045"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+        ["es"] = <
+            items = <
+                ["ac0001"] = <
+                    text = <"Oral">
+                    description = <"Administración de tratamiento por vía oral">
+                >
+                ["ac0002"] = <
+                    text = <"Subcutánea">
+                    description = <"Administración de tratamiento por vía subcutánea">
+                >
+                ["ac0003"] = <
+                    text = <"Nasogástrica">
+                    description = <"Administración de sustancia por vía nasogástrica">
+                >
+                ["ac0004"] = <
+                    text = <"Intravenosa">
+                    description = <"Administración de sustancia por vía intravenosa">
+                >
+                ["ac0005"] = <
+                    text = <"Inhalatoria">
+                    description = <"Administración de sustancia por vía inhalatoria">
+                >
+                ["ac0008"] = <
+                    text = <"Comprimido">
+                    description = <"Comprimido">
+                >
+                ["ac0009"] = <
+                    text = <"Cápsula">
+                    description = <"Capsula">
+                >
+                ["ac0010"] = <
+                    text = <"Gránulos">
+                    description = <"Gránulos">
+                >
+                ["ac0011"] = <
+                    text = <"Supositorio">
+                    description = <"Supositorio">
+                >
+                ["ac0012"] = <
+                    text = <"Tampón">
+                    description = <"Tampón">
+                >
+                ["ac0013"] = <
+                    text = <"Champú">
+                    description = <"Champú">
+                >
+                ["ac0014"] = <
+                    text = <"Diario">
+                    description = <"Cada día">
+                >
+                ["ac0015"] = <
+                    text = <"Mensual">
+                    description = <"Cada mes">
+                >
+                ["ac0016"] = <
+                    text = <"Anual">
+                    description = <"Cada aÃ±o">
+                >
+                ["ac0017"] = <
+                    text = <"Cada hora">
+                    description = <"Cada hora">
+                >
+                ["ac0020"] = <
+                    text = <"Comida">
+                    description = <"A la hora del comida">
+                >
+                ["ac0021"] = <
+                    text = <"Desayuno">
+                    description = <"A la hora de la desayuno">
+                >
+                ["ac0022"] = <
+                    text = <"Cena">
+                    description = <"A la hora de la cena">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+            	["at0000"] = <[SNOMED-CT::16076005]>
+            	["at0004"] = <[SNOMED-CT::410942007]>
+            	["at0007"] = <[SNOMED-CT::223420003]>
+                ["at0012"] = <[SNOMED-CT::410675002]>
+                ["at0020"] = <[SNOMED-CT::421967003]>
+                ["at0028"] = <[SNOMED-CT::413946009]>
+                ["at0032"] = <[SNOMED-CT::261774000]>
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["ac0002"] = <[SNOMED-CT::394901007]>
+                ["ac0003"] = <[SNOMED-CT::431465006]>
+                ["ac0004"] = <[SNOMED-CT::431215000]>
+                ["ac0008"] = <[SNOMED-CT::385055001]>
+                ["ac0009"] = <[SNOMED-CT::385049006]>
+                ["ac0010"] = <[SNOMED-CT::385043007]>
+                ["ac0011"] = <[SNOMED-CT::385194003]>
+                ["ac0012"] = <[SNOMED-CT::420243009]>
+                ["ac0013"] = <[SNOMED-CT::385104006]>
+                ["ac0005"] = <[SNOMED-CT::385288002]>
+                ["ac0001"] = <[SNOMED-CT::421106005]>
+                ["ac0014"] = <[SNOMED-CT::69620002]>
+                ["ac0015"] = <[SNOMED-CT::89185003]>
+                ["ac0016"] = <[SNOMED-CT::53281000]>
+                ["ac0017"] = <[SNOMED-CT::225768006]>
+                ["ac0020"] = <[SNOMED-CT::444752003]>
+                ["ac0021"] = <[SNOMED-CT::307160001]>
+                ["ac0022"] = <[SNOMED-CT::307163004]>
+            >
+        >
+    >

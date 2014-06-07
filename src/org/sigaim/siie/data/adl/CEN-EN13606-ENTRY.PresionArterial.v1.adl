@@ -1,0 +1,162 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.PresionArterial.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140508">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar la presión arterial sistémica de un paciente">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- Presión arterial
+        items existence matches {0..1} cardinality matches {0..*; ordered} matches {
+            ELEMENT[at0001] occurrences matches {1..1} matches {  -- Sistólica
+                value existence matches {0..1} matches {
+                    PQR[at0002] occurrences matches {1..1} matches {  -- PQ
+                        unit existence matches {1..1} matches {
+                            CV[at0004] occurrences matches {1..1} matches {  -- 
+                                code existence matches {0..1} matches {"mm[Hg]"}
+                                codeSystemName existence matches {0..1} matches {"UCUM"}
+                            }
+                        }
+                        value existence matches {1..1} matches {|>10.0..<500.0|}
+                    }
+                }
+            }
+            ELEMENT[at0007] occurrences matches {1..1} matches {  -- Dastólica
+                value existence matches {0..1} matches {
+                    PQR[at0008] occurrences matches {1..1} matches {  -- PQ
+                        unit existence matches {1..1} matches {
+                            CV[at0010] occurrences matches {1..1} matches {  -- 
+                                code existence matches {0..1} matches {"mm[Hg]"}
+                                codeSystemName existence matches {0..1} matches {"UCUM"}
+                            }
+                        }
+                        value existence matches {1..1} matches {|>10.0..<500.0|}
+                    }
+                }
+            }
+            ELEMENT[at0011] occurrences matches {0..1} matches {  -- Posición
+                value existence matches {0..1} matches {
+                    CV[at0012] occurrences matches {0..1} matches {  -- CV
+                        code existence matches {0..1} matches {
+                            [ac0001]
+                            [ac0002]
+                        }
+                        displayName existence matches {1..1} matches {
+		                	ST occurrences matches {1..1} matches { 
+		                    	value existence matches {0..1} matches {*}
+		                    }
+		                }
+		                codeSystemName existence matches {0..1} matches {*}
+		                codeSystemVersion existence matches {0..1} matches {*}
+                    }
+                }
+            }
+            ELEMENT[at0006] occurrences matches {0..1} matches {  -- Presión arterial media
+                value existence matches {0..1} matches {
+                    PQR[at0009] occurrences matches {0..1} matches {  -- PQ
+                        unit existence matches {1..1} matches {
+                            CV[at0016] occurrences matches {1..1} matches {  -- 
+                                code existence matches {0..1} matches {"mm[Hg]"}
+                                codeSystemName existence matches {0..1} matches {"UCUM"}
+                            }
+                        }
+                        value existence matches {1..1} matches {|>10.0..<500.0|}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Presión arterial">
+                    description = <"Presión arterial">
+                >
+                ["at0001"] = <
+                    text = <"Sistólica">
+                    description = <"Medida de la presión arterial sistólica">
+                >
+                ["at0002"] = <
+                    text = <"PQ">
+                    description = <"">
+                >
+                ["at0007"] = <
+                    text = <"Dastólica">
+                    description = <"Medida de la presión arterial diastólica">
+                >
+                ["at0008"] = <
+                    text = <"PQ">
+                    description = <"">
+                >
+                ["at0011"] = <
+                    text = <"Posición">
+                    description = <"Posición del paciente">
+                >
+                ["at0012"] = <
+                    text = <"CV">
+                    description = <"">
+                >
+                ["at0006"] = <
+                    text = <"Presión arterial media">
+                    description = <"La presión arterial media que se produce durante todo el curso del ciclo de contracción y relajación del corazón">
+                >
+                ["at0009"] = <
+                    text = <"PQ">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+        ["es"] = <
+            items = <
+                ["ac0001"] = <
+                    text = <"sentado">
+                    description = <"sentado">
+                >
+                ["ac0002"] = <
+                    text = <"hallado de pie">
+                    description = <"hallado de pie">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0007"] = <[SNOMED-CT::163031004]>
+                ["at0001"] = <[SNOMED-CT::163030003]>
+                ["at0000"] = <[SNOMED-CT::163020007]>
+                ["at0006"] = <[SNOMED-CT::6797001]>
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["ac0002"] = <[SNOMED-CT::429130005]>
+                ["ac0001"] = <[SNOMED-CT::33586001]>
+            >
+        >
+    >

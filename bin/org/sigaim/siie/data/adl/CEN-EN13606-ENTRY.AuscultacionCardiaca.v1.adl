@@ -1,0 +1,124 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.AuscultacionCardiaca.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140515">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Registrar datos encontrados en la examinación por auscultación cardíaca">
+            keywords = <"aucultación","cardíaca">
+            use = <"Para registrar datos encontrados en la examinación por auscultación cardíaca">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- AuscultacionCardiaca
+        items existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ELEMENT[at0001] occurrences matches {0..1} matches {  -- Rítmico
+                value existence matches {0..1} matches {
+                    BL[at0009] occurrences matches {0..1} matches {  -- BL
+                        value existence matches {1..1} matches {true, false}
+                    }
+                }
+            }
+            ELEMENT[at0002] occurrences matches {0..1} matches {  -- Frecuencia cardíaca
+                value existence matches {0..1} matches {
+                    PQR[at0003] occurrences matches {0..1} matches {  -- PQ
+                        unit existence matches {1..1} matches {
+                            CV[at0005] occurrences matches {1..1} matches {  -- 
+                                code existence matches {0..1} matches {"{bh}/min"}
+                                codeSystemName existence matches {0..1} matches {"UCUM"}
+                            }
+                        }
+                        value existence matches {1..1} matches {|>0.0..<400.0|}
+                    }
+                }
+            }
+            ELEMENT[at0004] occurrences matches {0..1} matches {  -- Existencia de soplos
+                value existence matches {0..1} matches {
+                    BL[at0006] occurrences matches {0..1} matches {  -- BL
+                        value existence matches {1..1} matches {true, false}
+                    }
+                }
+            }
+            ELEMENT[at0007] occurrences matches {0..1} matches {  -- Existencia de roces
+                value existence matches {0..1} matches {
+                    BL[at0008] occurrences matches {0..1} matches {  -- BL
+                        value existence matches {1..1} matches {true, false}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"AuscultacionCardiaca">
+                    description = <"AuscultacionCardiaca">
+                >
+                ["at0001"] = <
+                    text = <"Rítmico">
+                    description = <"Rítmico">
+                >
+                ["at0002"] = <
+                    text = <"Frecuencia cardíaca">
+                    description = <"Medida de la frecuencia cardíaca">
+                >
+                ["at0003"] = <
+                    text = <"PQ">
+                    description = <"">
+                >
+                ["at0004"] = <
+                    text = <"Existencia de soplos">
+                    description = <"Existencia de soplos">
+                >
+                ["at0006"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0007"] = <
+                    text = <"Existencia de roces">
+                    description = <"Existencia de roces cardíacos">
+                >
+                ["at0008"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0009"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0004"] = <[SNOMED-CT::268934006]>
+                ["at0002"] = <[SNOMED-CT::364075005]>
+                ["at0000"] = <[SNOMED-CT::449263002]>
+                ["at0007"] = <[SNOMED-CT::162967004]>
+            >
+        >
+    >
+    constraint_binding = <
+    >

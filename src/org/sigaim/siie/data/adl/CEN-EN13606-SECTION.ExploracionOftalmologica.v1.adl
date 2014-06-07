@@ -1,0 +1,141 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.ExploracionOftalmologica.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140515">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar datos relacionados con la exploración oftalmológica de un paciente">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {  -- Exploracion oftalmologica
+        members existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ENTRY[at0001] occurrences matches {0..1} matches {  -- Ojo izquierdo
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {*}
+            }
+            ENTRY[at0002] occurrences matches {0..1} matches {  -- Ojo derecho
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {*}
+            }
+            ENTRY[at0003] occurrences matches {0..1} matches {  -- Ambos ojos
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0004] occurrences matches {0..1} matches {  -- Hiperemia conjuntival
+                        value existence matches {0..1} matches {
+                            BL[at0005] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0006] occurrences matches {0..1} matches {  -- Inyección ciliar
+                        value existence matches {0..1} matches {
+                            BL[at0007] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0008] occurrences matches {0..1} matches {  -- Existencia de exudados
+                        value existence matches {0..1} matches {
+                            BL[at0009] occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0010] occurrences matches {0..1} matches {  -- Fluotest
+                        value existence matches {0..1} matches {
+                            ST[at0011] occurrences matches {0..1} matches {  -- SIMPLE_TEXT
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Exploracion oftalmologica">
+                    description = <"Exploracion oftalmologica">
+                >
+                ["at0001"] = <
+                    text = <"Ojo izquierdo">
+                    description = <"Observaciones en el ojo derecho">
+                >
+                ["at0002"] = <
+                    text = <"Ojo derecho">
+                    description = <"Observaciones en el ojo derecho">
+                >
+                ["at0003"] = <
+                    text = <"Ambos ojos">
+                    description = <"Observaciones en ambos ojos">
+                >
+                ["at0004"] = <
+                    text = <"Hiperemia conjuntival">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0006"] = <
+                    text = <"Inyección ciliar">
+                    description = <"Inyección ciliar: Ojo, código SNOMED NO activo">
+                >
+                ["at0007"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0008"] = <
+                    text = <"Existencia de exudados">
+                    description = <"Existencia de exudados">
+                >
+                ["at0009"] = <
+                    text = <"BL">
+                    description = <"">
+                >
+                ["at0010"] = <
+                    text = <"Fluotest">
+                    description = <"">
+                >
+                ["at0011"] = <
+                    text = <"SIMPLE_TEXT">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["at0000"] = <[SNOMED-CT::36228007]>
+                ["at0003"] = <[SNOMED-CT::40638003]>
+                ["at0002"] = <[SNOMED-CT::362502000]>
+                ["at0001"] = <[SNOMED-CT::362503005]>
+                ["at0006"] = <[SNOMED-CT::29309008]>
+                ["at0004"] = <[SNOMED-CT::193894004]>
+                ["at0008"] = <[SNOMED-CT::163988000]>
+            >
+        >
+    >
+    constraint_binding = <
+    >

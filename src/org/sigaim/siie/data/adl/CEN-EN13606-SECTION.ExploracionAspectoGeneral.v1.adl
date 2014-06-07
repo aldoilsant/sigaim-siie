@@ -1,0 +1,610 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-SECTION.ExploracionAspectoGeneral.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["date"] = <"20140404">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar la exploración del aspecto general de un paciente">
+            keywords = <"exploración","aspecto general">
+            use = <"Usar para registrar la exploración del aspecto general de un paciente">
+        >
+    >
+
+definition
+    SECTION[at0000] occurrences matches {1..1} matches {  -- Exploración aspecto general
+        members existence matches {0..1} cardinality matches {0..*; unordered} matches {
+            ENTRY[at0001] occurrences matches {0..1} matches {  -- Actividades funcionales
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    CLUSTER[at0003] occurrences matches {0..1} matches {  -- Respiración
+                        parts existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                            ELEMENT[at0006] occurrences matches {0..1} matches {  -- Distrés respiratorio
+                                value existence matches {0..1} matches {
+                                    BL occurrences matches {0..1} matches {  -- BL
+                                        value existence matches {1..1} matches {true, false}
+                                    }
+                                }
+                            }
+                            ELEMENT[at0010] occurrences matches {0..1} matches {  -- Función respiratoria
+                                value existence matches {0..1} matches {
+                                    CV occurrences matches {0..1} matches {  -- CV
+                                        code existence matches {1..1} matches {
+                                            [ac0001]
+                                            [ac0002]
+                                        }
+                                        displayName existence matches {1..1} matches {
+                                        	ST occurrences matches {1..1} matches {
+                                        		value existence matches {1..1} matches {*}
+                                        	}
+                                        }
+                                        codeSystemName existence matches {0..1} matches {*}
+                        				codeSystemVersion existence matches {0..1} matches {*}
+                                    }
+                                    ST occurrences matches {0..1} matches {  -- ST
+                                        value existence matches {0..1} matches {/.*/}
+                                    }
+                                }
+                            }
+                        }
+                        structure_type existence matches {1..1} matches {
+                            STRUCTURE_TYPE occurrences matches {1..1} matches {  -- 
+                                value existence matches {0..1} matches {"list"}
+                            }
+                        }
+                    }
+                    ELEMENT[at0005] occurrences matches {0..1} matches {  -- Consciente, orientado y colaborador
+                        value existence matches {0..1} matches {
+                            BL occurrences matches {0..1} matches {  -- BL
+                                value existence matches {1..1} matches {true, false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0009] occurrences matches {0..1} matches {  -- Habla
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                    ELEMENT[at0014] occurrences matches {0..1} matches {  -- Movimientos involuntarios
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0016] occurrences matches {0..1} matches {  -- Afirmaciones generales
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0017] occurrences matches {0..1} matches {  -- Fiebre
+                        value existence matches {0..1} matches {
+                            CV occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0003]
+                                    [ac0004]
+                                }
+                                displayName existence matches {1..1} matches {
+                                  	ST occurrences matches {1..1} matches {
+                                		value existence matches {1..1} matches {*}
+                                	}
+                                }
+                                codeSystemName existence matches {0..1} matches {*}
+                        		codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0043] occurrences matches {0..1} matches {  -- Estado general
+                        value existence matches {0..1} matches {
+                            CV occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0005]
+                                    [ac0006]
+                                }
+                                displayName existence matches {1..1} matches {
+                                  	ST occurrences matches {1..1} matches {
+                                		value existence matches {1..1} matches {*}
+                                	}
+                                }
+                                codeSystemName existence matches {0..1} matches {*}
+                        		codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0022] occurrences matches {0..1} matches {  -- Apariencia física
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0023] occurrences matches {0..1} matches {  -- Actitud
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                    ELEMENT[at0024] occurrences matches {0..1} matches {  -- Físico
+                        value existence matches {0..1} matches {
+                            CV occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0007]
+                                    [ac0008]
+                                    [ac0009]
+                                    [ac0010]
+                                    [ac0011]
+                                    [ac0012]
+                                    [ac0013]
+                                    [ac0014]
+                                    [ac0015]
+                                }
+                                displayName existence matches {1..1} matches {
+                                  	ST occurrences matches {1..1} matches {
+                                		value existence matches {1..1} matches {*}
+                                	}
+                                }
+                                codeSystemName existence matches {0..1} matches {*}
+                        		codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0025] occurrences matches {0..1} matches {  -- Nutrición
+                        value existence matches {0..1} matches {
+                            CV occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0016]
+                                    [ac0017]
+                                    [ac0018]
+                                    [ac0019]
+                                    [ac0020]
+                                    [ac0021]
+                                }
+                                displayName existence matches {1..1} matches {
+                                  	ST occurrences matches {1..1} matches {
+                                		value existence matches {1..1} matches {*}
+                                	}
+                                }
+                                codeSystemName existence matches {0..1} matches {*}
+                        		codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0026] occurrences matches {0..1} matches {  -- Perfusión
+                        value existence matches {0..1} matches {
+                            CV occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0022]
+                                    [ac0023]
+                                }
+                                displayName existence matches {1..1} matches {
+                                  	ST occurrences matches {1..1} matches {
+                                		value existence matches {1..1} matches {*}
+                                	}
+                                }
+                                codeSystemName existence matches {0..1} matches {*}
+                        		codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0027] occurrences matches {0..1} matches {  -- Piel
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0028] occurrences matches {0..1} matches {  -- Aspecto
+                        value existence matches {0..1} matches {*}
+                    }
+                    ELEMENT[at0029] occurrences matches {0..1} matches {  -- Existencia exantemas
+                        value existence matches {0..1} matches {*}
+                    }
+                    ELEMENT[at0030] occurrences matches {0..1} matches {  -- Existencia petequias
+                        value existence matches {0..1} matches {*}
+                    }
+                }
+            }
+            ENTRY[at0031] occurrences matches {0..1} matches {  -- Comportamiento
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0032] occurrences matches {0..1} matches {  -- Estado de ánimo
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                    ELEMENT[at0033] occurrences matches {0..1} matches {  -- Comportamientos inusuales
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0034] occurrences matches {0..1} matches {  -- Cuidado personal
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0035] occurrences matches {0..1} matches {  -- Aseo personal
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                    ELEMENT[at0037] occurrences matches {0..1} matches {  -- Higiene
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                    ELEMENT[at0039] occurrences matches {0..1} matches {  -- Olor corporal
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                    ELEMENT[at0041] occurrences matches {0..1} matches {  -- Vestimenta
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                }
+            }
+            ENTRY[at0046] occurrences matches {0..1} matches {  -- Sudoración e Hidratación
+                items existence matches {0..1} cardinality matches {0..*; unordered; unique} matches {
+                    ELEMENT[at0047] occurrences matches {0..1} matches {  -- Hidratación
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                            CV occurrences matches {0..1} matches {  -- CV
+                                code existence matches {0..1} matches {
+                                    [ac0024]
+                                    [ac0025]
+                                }
+                                displayName existence matches {1..1} matches {
+                                  	ST occurrences matches {1..1} matches {
+                                		value existence matches {1..1} matches {*}
+                                	}
+                                }
+                                codeSystemName existence matches {0..1} matches {*}
+                        		codeSystemVersion existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0048] occurrences matches {0..1} matches {  -- Sudoración
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {/.*/}
+                            }
+                        }
+                    }
+                }
+            }
+            allow_archetype ENTRY[at0052] occurrences matches {0..1} matches {  -- Temperatura corporal
+                include
+                    archetype_id/value matches {/CEN-EN13606-ENTRY.TemperaturaCorporal.v1/}
+            }
+        }
+    }
+
+ontology
+    terminologies_available = <"SNOMED-CT", "ICPCSPA_1993", "ICD10_1998", ...>
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Exploración aspecto general">
+                    description = <"Exploración aspecto general">
+                >
+                ["at0001"] = <
+                    text = <"Actividades funcionales">
+                    description = <"Aspecto general de la función del paciente">
+                >
+                ["at0003"] = <
+                    text = <"Respiración">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Consciente, orientado y colaborador">
+                    description = <"El paciente se encuentra consciente, orientado y colaborando">
+                >
+                ["at0006"] = <
+                    text = <"Distrés respiratorio">
+                    description = <"">
+                >
+                ["at0009"] = <
+                    text = <"Habla">
+                    description = <"Descipción clínica del habla">
+                >
+                ["at0010"] = <
+                    text = <"Función respiratoria">
+                    description = <"">
+                >
+                ["at0014"] = <
+                    text = <"Movimientos involuntarios">
+                    description = <"Descripción clínica de movimientos corporales generales">
+                >
+                ["at0016"] = <
+                    text = <"Afirmaciones generales">
+                    description = <"Afirmaciones generales sobre el paciente">
+                >
+                ["at0017"] = <
+                    text = <"Fiebre">
+                    description = <"">
+                >
+                ["at0022"] = <
+                    text = <"Apariencia física">
+                    description = <"Hallazgos sobre la apariencia en general">
+                >
+                ["at0023"] = <
+                    text = <"Actitud">
+                    description = <"">
+                >
+                ["at0024"] = <
+                    text = <"Físico">
+                    description = <"">
+                >
+                ["at0025"] = <
+                    text = <"Nutrición">
+                    description = <"">
+                >
+                ["at0026"] = <
+                    text = <"Perfusión">
+                    description = <"">
+                >
+                ["at0027"] = <
+                    text = <"Piel">
+                    description = <"">
+                >
+                ["at0028"] = <
+                    text = <"Aspecto">
+                    description = <"Aspecto de la piel">
+                >
+                ["at0029"] = <
+                    text = <"Existencia exantemas">
+                    description = <"">
+                >
+                ["at0030"] = <
+                    text = <"Existencia petequias">
+                    description = <"">
+                >
+                ["at0031"] = <
+                    text = <"Comportamiento">
+                    description = <"Descripción de comportamientos observados">
+                >
+                ["at0032"] = <
+                    text = <"Estado de ánimo">
+                    description = <"">
+                >
+                ["at0033"] = <
+                    text = <"Comportamientos inusuales">
+                    description = <"Descripción de comportamientos observados inusuales, anormales o inapropiados">
+                >
+                ["at0034"] = <
+                    text = <"Cuidado personal">
+                    description = <"Inspección de la higiene del paciente">
+                >
+                ["at0035"] = <
+                    text = <"Aseo personal">
+                    description = <"Descripción subjetiva del aseo personal del paciente">
+                >
+                ["at0037"] = <
+                    text = <"Higiene">
+                    description = <"Descripción subjetiva de la higiene">
+                >
+                ["at0039"] = <
+                    text = <"Olor corporal">
+                    description = <"Descripción subjetiva del olor corporal del paciente, con respecto al cuidado personal">
+                >
+                ["at0041"] = <
+                    text = <"Vestimenta">
+                    description = <"Descripción del estado y condición de la vestimenta del paciente">
+                >
+                ["at0043"] = <
+                    text = <"Estado general">
+                    description = <"Estado general de salud del paciente">
+                >
+                ["at0046"] = <
+                    text = <"Sudoración e Hidratación">
+                    description = <"">
+                >
+                ["at0047"] = <
+                    text = <"Hidratación">
+                    description = <"">
+                >
+                ["at0048"] = <
+                    text = <"Sudoración">
+                    description = <"">
+                >
+                ["at0052"] = <
+                    text = <"Temperatura corporal">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+        ["es"] = <
+            items = <
+                ["ac0001"] = <
+                    text = <"Normal">
+                    description = <"Función respiratoria normal">
+                >
+                ["ac0002"] = <
+                    text = <"Disminuida">
+                    description = <"Función respiratoria disminuida">
+                >
+                ["ac0003"] = <
+                    text = <"Ausente">
+                    description = <"Ausencia de fiebre">
+                >
+                ["ac0004"] = <
+                    text = <"Presente">
+                    description = <"Presencia de fiebre">
+                >
+                ["ac0005"] = <
+                    text = <"Bueno">
+                    description = <"Estado general de salud, bueno">
+                >
+                ["ac0006"] = <
+                    text = <"Malo">
+                    description = <"Estado general de salud, malo">
+                >
+                ["ac0007"] = <
+                    text = <"Delgado">
+                    description = <"El sujeto parece delgado">
+                >
+                ["ac0008"] = <
+                    text = <"Alto">
+                    description = <"El sujeto parece más alto que la media.">
+                >
+                ["ac0009"] = <
+                    text = <"Bajo">
+                    description = <"El sujeto parece más bajo que la media de altura">
+                >
+                ["ac0010"] = <
+                    text = <"Peso normal para su altura">
+                    description = <"El sujeto parece tener un peso normal para su altura">
+                >
+                ["ac0011"] = <
+                    text = <"Ligeramente sobrepeso para su altura">
+                    description = <"El sujeto parece tener ligeramente sobrepeso para su altura">
+                >
+                ["ac0012"] = <
+                    text = <"Ligeramente por debajo de su peso para su altura">
+                    description = <"El sujeto parece tener ligeramente por debajo de su peso para su altura">
+                >
+                ["ac0013"] = <
+                    text = <"Sobrepeso para su altura">
+                    description = <"El sujeto parece tener sobrepeso para su altura">
+                >
+                ["ac0014"] = <
+                    text = <"Por debajo de su peso para su altura">
+                    description = <"El paciente parece estar por debajo de su peso para su altura">
+                >
+                ["ac0015"] = <
+                    text = <"Altura media">
+                    description = <"El sujero parece estar en ala media de altura">
+                >
+                ["ac0016"] = <
+                    text = <"Bien nutrido">
+                    description = <"El paciente está bien nutrido pero sin sobrepeso">
+                >
+                ["ac0017"] = <
+                    text = <"Desnutrido">
+                    description = <"El paciente parece desnutrido">
+                >
+                ["ac0018"] = <
+                    text = <"Desnutrición profunda">
+                    description = <"El paciente se encuentra en estado de desnutrición profunda">
+                >
+                ["ac0019"] = <
+                    text = <"Obesidad morbida">
+                    description = <"El paciente presenta obesidad morbida">
+                >
+                ["ac0020"] = <
+                    text = <"Obeso">
+                    description = <"El paciente presenta obesidad">
+                >
+                ["ac0021"] = <
+                    text = <"Anoréxico">
+                    description = <"El paciente presenta anorexia">
+                >
+                ["ac0022"] = <
+                    text = <"Buena">
+                    description = <"Buena perfusión">
+                >
+                ["ac0023"] = <
+                    text = <"Mala">
+                    description = <"Mala perfusión">
+                >
+                ["ac0024"] = <
+                    text = <"Buena">
+                    description = <"Buena hidratación">
+                >
+                ["ac0025"] = <
+                    text = <"Mala">
+                    description = <"Mala hidratación">
+                >
+            >
+        >
+    >
+    term_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+            	["at0003"] = <[SNOMED-CT::363791007]>  -- aspecto general del paciente
+                ["at0003"] = <[SNOMED-CT::364062005]>  -- característica observable de la respiración
+                ["at0006"] = <[SNOMED-CT::162892000]>  -- al examen: distrés respiratorio
+                ["at0009"] = <[SNOMED-CT::363918005]>  -- característica observable del habla
+                ["at0010"] = <[SNOMED-CT::78064003]>   -- función respiratoria
+                ["at0014"] = <[SNOMED-CT::163662001]>  -- al examen: movimientos involuntarios
+                ["at0017"] = <[SNOMED-CT::164285001]>  -- al examen: fiebre
+                ["at0023"] = <[SNOMED-CT::225464009]>  -- actitud
+                ["at0026"] = <[SNOMED-CT::364668008]>  -- diálisis y/o perfusión
+                ["at0028"] = <[SNOMED-CT::364529009]>  -- aspecto de la piel
+                ["at0029"] = <[SNOMED-CT::164623002]>  -- existencia de exantemas
+                ["at0030"] = <[SNOMED-CT::164331003]>  -- existencia de petequias
+                ["at0031"] = <[SNOMED-CT::363909008]>  -- aspecto de la conducta
+                ["at0032"] = <[SNOMED-CT::85256008]>   -- estado de ánimo
+                ["at0034"] = <[SNOMED-CT::285592006]>  -- cuidado personal
+                ["at0035"] = <[SNOMED-CT::286850002]>  -- aseo personal
+                ["at0037"] = <[SNOMED-CT::129004006]>  -- higiene
+                ["at0039"] = <[SNOMED-CT::363813002]>  -- olor corporal
+                ["at0041"] = <[SNOMED-CT::248159006]>  -- estado de la vestimenta
+                ["at0043"] = <[SNOMED-CT::278844005]>  -- estado clínico general
+                ["at0047"] = <[SNOMED-CT::405006006]>  -- estado de hidratación
+                ["at0048"] = <[SNOMED-CT::364538006]>  -- estado de sudoración
+            >
+        >
+        ["ICPCSPA_1993"] = <
+            items = <
+                ["at0006"] = <[ICPCSPA_1993::R29]>
+            >
+        >
+        ["ICD10_1998"] = <
+            items = <
+                ["at0006"] = <[ICD10_1998::R06.0]>
+            >
+        >
+    >
+    constraint_binding = <
+        ["SNOMED-CT"] = <
+            items = <
+                ["ac0001"] = <[SNOMED-CT::22803001]>
+                ["ac0002"] = <[SNOMED-CT::80954004]>
+                ["ac0003"] = <[SNOMED-CT::86699002]>
+                ["ac0004"] = <[SNOMED-CT::386661006]>
+                ["ac0005"] = <[SNOMED-CT::135815002]>
+                ["ac0006"] = <[SNOMED-CT::135818000]>
+                ["ac0007"] = <[SNOMED-CT::61294007]>
+                ["ac0008"] = <[SNOMED-CT::248328003]>
+                ["ac0009"] = <[SNOMED-CT::277266007]>
+                ["ac0010"] = <[SNOMED-CT::309534003]>
+                ["ac0011"] = <[SNOMED-CT::000000000]>
+                ["ac0012"] = <[SNOMED-CT::000000001]>
+                ["ac0013"] = <[SNOMED-CT::000000002]>
+                ["ac0014"] = <[SNOMED-CT::000000003]>
+                ["ac0015"] = <[SNOMED-CT::000000004]>
+                ["ac0016"] = <[SNOMED-CT::248324001]>
+                ["ac0017"] = <[SNOMED-CT::248325000]>
+                ["ac0018"] = <[SNOMED-CT::238108007]>
+                ["ac0019"] = <[SNOMED-CT::238136002]>
+                ["ac0020"] = <[SNOMED-CT::414915002]>
+                ["ac0021"] = <[SNOMED-CT::269813009]>
+                ["ac0022"] = <[SNOMED-CT::20572008]>
+                ["ac0023"] = <[SNOMED-CT::556001]>
+                ["ac0024"] = <[SNOMED-CT::312450001]>
+                ["ac0025"] = <[SNOMED-CT::162685008]>
+            >
+        >
+    >
