@@ -2,7 +2,7 @@ package org.sigaim.siie.seql.parser.model;
 
 import java.util.List;
 
-import org.sigaim.siie.seql.parser.model.SEQLPath.SEQLPathComponent;
+import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
 
 
 public class SEQLSelectCondition {

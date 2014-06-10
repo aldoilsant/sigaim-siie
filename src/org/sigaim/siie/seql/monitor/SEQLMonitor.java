@@ -32,16 +32,18 @@ public class SEQLMonitor {
 	public static void main(String[] args) throws Exception {
 		boolean done=false;
 		System.out.println("Welcome to SEQLMON 0.1");
-		ReflectorReferenceModelManager mng=new ReflectorReferenceModelManager();
+		DADLManager dmng=new OpenEHRDADLManager();
+		ReflectorReferenceModelManager mng=new ReflectorReferenceModelManager(dmng);
 		Class<?> type=mng.getPathType("composition", new SEQLPath("c/content/items/structure_type"));
 		InputStream is;
 		FileArchetypeManager mgr=new FileArchetypeManager();
 		Archetype arq=mgr.getArquetypeById("CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1");
 
 		is=SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/ehr_001.dadl");
-		DADLManager dmng=new OpenEHRDADLManager();
 		ContentObject unbinded=dmng.parseDADL(is);
 		SQLPersistenceManager pmngr=new SQLPersistenceManager();
+		pmngr.setDADLManager(dmng);
+		pmngr.setReferenceModelManager(mng);
 		System.out.print("Starting persistence manager...");
 		pmngr.start();
 		System.out.println("Done");
@@ -49,7 +51,7 @@ public class SEQLMonitor {
 		pmngr.reset();
 		System.out.println("Done");
 		
-		//pmngr.saveReferenceModelObjectFromContentObject(unbinded);
+		pmngr.saveReferenceModelObjectFromContentObject(unbinded);
 		/*String serialized=dmng.serialize(dmng.parseDADL(is),false);
 		serialized=dmng.serialize(dmng.parseDADL(new ByteArrayInputStream(serialized.getBytes())),false);
 		System.out.println(serialized);

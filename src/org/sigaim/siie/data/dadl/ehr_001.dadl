@@ -16,7 +16,7 @@
 			>
 			content=<
 				[0]=<
-					reference_model_class_name = <"Cluster">
+					reference_model_class_name = <"cluster">
 				>
 			>
 		>

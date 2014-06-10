@@ -28,17 +28,22 @@ import org.openehr.am.parser.PrimitiveObjectBlock;
 import org.openehr.am.parser.SimpleValue;
 import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.openehr.am.parser.StringValue;
+import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.dadl.exceptions.SemanticDADLException;
 import org.sigaim.siie.rm.exceptions.ReferenceModelException;
 import org.sigaim.siie.seql.parser.model.SEQLPath;
-import org.sigaim.siie.seql.parser.model.SEQLPath.SEQLPathComponent;
+import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
 import org.sigaim.siie.utils.Utils;
 
 public class ReflectorReferenceModelManager implements ReferenceModelManager{
 	private Map<String,Class<?>> classesForString;
+	private List<Class<?>> rmObjects;
 	private Class<?> root;
+	private DADLManager dadlManager;
 	
-	
+	private boolean isRMObjectClass(Class<?> tclass) {
+		return rmObjects.contains(tclass);
+	}
 	/**
 	 * Scans all classes accessible from the context class loader which belong to the given package and subpackages.
 	 *
@@ -90,19 +95,36 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 	    }
 	    return classes;
 	}
+	private static List<Class<?>> getRMObjectClasses() {
+		List<Class<?>> objects=new ArrayList<Class<?>>();
+		objects.add(org.sigaim.siie.iso13606.rm.EHRExtract.class);
+		objects.add(org.sigaim.siie.iso13606.rm.RecordComponent.class);
+		objects.add(org.sigaim.siie.iso13606.rm.Composition.class);
+		objects.add(org.sigaim.siie.iso13606.rm.Folder.class);
+		objects.add(org.sigaim.siie.iso13606.rm.Content.class);
+		objects.add(org.sigaim.siie.iso13606.rm.Section.class);
+		objects.add(org.sigaim.siie.iso13606.rm.Entry.class);
+		objects.add(org.sigaim.siie.iso13606.rm.Item.class);
+		objects.add(org.sigaim.siie.iso13606.rm.Cluster.class);
+		objects.add(org.sigaim.siie.iso13606.rm.Element.class);
+		objects.add(org.sigaim.siie.iso13606.rm.ExtractCriteria.class);
+		objects.add(org.sigaim.siie.iso13606.rm.AuditInfo.class);
+		objects.add(org.sigaim.siie.iso13606.rm.AttestationInfo.class);
+		objects.add(org.sigaim.siie.iso13606.rm.FunctionalRole.class);
+		objects.add(org.sigaim.siie.iso13606.rm.RelatedParty.class);
+		objects.add(org.sigaim.siie.iso13606.rm.Link.class);
+		return objects;
+	}
 	
-	
-	public ReflectorReferenceModelManager() {
+	public ReflectorReferenceModelManager(DADLManager dadlManager) {
+		this.dadlManager=dadlManager;
 		try {
 			classesForString=ReflectorReferenceModelManager.getClasses("org.sigaim.siie.iso13606.rm");
+			rmObjects=ReflectorReferenceModelManager.getRMObjectClasses();
 			System.out.println("Loaded "+classesForString.size()+" reference model classes");
 		} catch(Exception e){
 			
 		}
-		/*classesForString=new HashMap<String,Class<?>>();
-		classesForString.put("ehrextract", org.sigaim.siie.iso13606.rm.EHRExtract.class);
-		classesForString.put("composition", org.sigaim.siie.iso13606.rm.Composition.class);
-		classesForString.put("section", org.sigaim.siie.iso13606.rm.Section.class);*/
 		root=org.sigaim.siie.iso13606.rm.EHRExtract.class;
 	}
 		
@@ -225,20 +247,27 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 			return this.bindPrimitiveObjectBlock((PrimitiveObjectBlock) block);
 		}
 	}
-	private Object bindSingleAttributeObjectBlock(SingleAttributeObjectBlock block)  throws SemanticDADLException, ReferenceModelException{
-		//Attempt to get the reference model class name
+	public String getReferenceModelClassName(SingleAttributeObjectBlock block) throws SemanticDADLException {
 		String referenceModelClassName=null;
 		for(AttributeValue value : block.getAttributeValues()) {
 			if(value.getId().equals("reference_model_class_name")) {
 				try {
 					PrimitiveObjectBlock pblock=(PrimitiveObjectBlock)value.getValue();
-					referenceModelClassName=pblock.getSimpleValue().getValue().toString();
+					referenceModelClassName=pblock.getSimpleValue().getValue().toString().toLowerCase();
 				} catch(Exception e) {
 					throw new SemanticDADLException("Invalid value for referenceModelClassName");
 				}
 				break;
 			}
 		}
+		if(referenceModelClassName==null) {
+			throw new SemanticDADLException("Missing reference model class name for block: "+block);
+		}
+		return referenceModelClassName;
+	}
+	private Object bindSingleAttributeObjectBlock(SingleAttributeObjectBlock block)  throws SemanticDADLException, ReferenceModelException{
+		//Attempt to get the reference model class name
+		String referenceModelClassName=this.getReferenceModelClassName(block);
 		if(referenceModelClassName==null) {
 			throw new SemanticDADLException("Object blocks must have the mandatory field referenceModelClassName");
 		}
@@ -440,13 +469,66 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 		SingleAttributeObjectBlock sblock=this.unbindObject(root);
 		return new ContentObject(null,sblock);
 	}
-	@Override
-	public String getReferenceModelClassNameFromObjectBlock(SingleAttributeObjectBlock block) {
+	private SimpleValue getSimpleValueFromObjectBlock(SingleAttributeObjectBlock block) {
 		for(AttributeValue vl: block.getAttributeValues()) {
 			if(vl.getId().equals("reference_model_class_name")) {
-				return vl.getValue().toString();
+				return ((PrimitiveObjectBlock) vl.getValue()).getSimpleValue();
 			}
 		}
 		return null;
+	}
+
+	private SEQLPathComponent createPathComponentFromSingleAttributeObjectBlock(String id, SingleAttributeObjectBlock block, SimpleValue collectionKey) throws ReferenceModelException{
+		//Create the path component. Add the id and possible the collection "index"
+		String sPath=id;
+		if(collectionKey!=null) {
+			sPath+="["+this.dadlManager.serializeSimpleValue(collectionKey)+"]";
+		}
+		return new SEQLPathComponent(sPath);
+	}
+	
+	@Override
+	public Map<SEQLPathComponent,SingleAttributeObjectBlock> splitForRMObjectVsDataObject(SingleAttributeObjectBlock block) throws SemanticDADLException, ReferenceModelException{
+		//Recurse and if we find a collection or a single attribute value that is an rmobject add it to the list
+		//We need some kind of path to "store" these other objects, that is, save the relation with the input block
+		Map<SEQLPathComponent, SingleAttributeObjectBlock> ret=new HashMap<SEQLPathComponent, SingleAttributeObjectBlock>();
+		List<AttributeValue> toRemove=new ArrayList<AttributeValue>();
+		//First, we iterate all the data values
+		for(AttributeValue value : block.getAttributeValues()) {
+			ObjectBlock atvalue=value.getValue();
+			//The only option for being an rmobject is a ComplexObjectBlock
+			if(atvalue instanceof ComplexObjectBlock) {
+				//Either a collection or another object
+				if(atvalue instanceof SingleAttributeObjectBlock) {
+					//Object, directly test for rmobject class
+					SingleAttributeObjectBlock sblock=(SingleAttributeObjectBlock) atvalue;
+					String referenceModelClassName=this.getReferenceModelClassName(sblock);
+					Class<?> referenceModelClass=this.referenceModelClassFromString(referenceModelClassName);
+					if(this.isRMObjectClass(referenceModelClass)) {
+						toRemove.add(value);
+						ret.put(this.createPathComponentFromSingleAttributeObjectBlock(value.getId(),sblock,null), sblock);
+						//Remove the block and add it to the result. 
+					} //Else nothing. A data value that will be serialized in with the container rm object
+				} else { //MultipleAttributeObjectBlock, collection
+					MultipleAttributeObjectBlock mblock=(MultipleAttributeObjectBlock) atvalue;
+					//Test if this is a primitive collection or a rmobject collection
+					ComplexObjectBlock tblock=(ComplexObjectBlock)mblock.getKeyObjects().get(0).getObject();
+					if(tblock instanceof SingleAttributeObjectBlock) {
+						SingleAttributeObjectBlock sblock=(SingleAttributeObjectBlock) tblock;
+						String referenceModelClassName=this.getReferenceModelClassName(sblock);
+						Class<?> referenceModelClass=this.referenceModelClassFromString(referenceModelClassName);
+						if(this.isRMObjectClass(referenceModelClass)) {
+							toRemove.add(value);
+							//Iterate the collection and create the paths
+							for(KeyedObject keyedObject : mblock.getKeyObjects()) {
+								ret.put(this.createPathComponentFromSingleAttributeObjectBlock(value.getId(),sblock, keyedObject.getKey()),sblock);
+							}
+						}
+					}
+				}
+			} 
+		}
+		block.getAttributeValues().removeAll(toRemove);
+		return ret;
 	}
 }

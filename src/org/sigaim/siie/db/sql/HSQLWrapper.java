@@ -62,7 +62,7 @@ public class HSQLWrapper implements SQLWrapper {
 	public ResultSet updateWithGeneratedKeys(String query) throws SQLException {
         Statement st = null;
         ResultSet rs = null;
-
+ 
         st = conn.createStatement();
 
         // repeated calls to execute but we

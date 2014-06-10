@@ -32,7 +32,7 @@ public class SEQLPath implements SEQLEvaluable {
 		this.compile();
 	}
 	public void addPathComponent(SEQLPathComponent component) {
-		this.fullPath+=component.toString();
+		this.fullPath+=component.toString()+"/";
 	}
 	public SEQLPath toUppercaseNotation() {
 		return new SEQLPath(Utils.toUppercaseNotation(this.getFullPath()));
@@ -60,39 +60,5 @@ public class SEQLPath implements SEQLEvaluable {
 	}
 	@Override public Object clone() {
 		return new SEQLPath(this.fullPath);
-	}
-	public class SEQLPathComponent {
-		private String pathComponent;
-		private boolean hasPredicate;
-		private String pathIdentifier;
-		private String pathPredicate;
-
-		public SEQLPathComponent(String pathComponent){
-			this.pathComponent=pathComponent;
-			if(pathComponent.contains(Character.toString('['))) {
-				this.hasPredicate=true;
-				String[] parts=pathComponent.split("[");
-				this.pathIdentifier=parts[0];
-				this.pathPredicate=parts[1].replace("]", "");
-			} else {
-				this.hasPredicate=false;
-				this.pathIdentifier=pathComponent;
-			}
-		}
-		public String getPathComponent() {
-			return pathComponent;
-		}
-		public String getPathIdentifier() {
-			return pathIdentifier;
-		}
-		public String getPathPredicate() {
-			return pathPredicate;
-		}
-		public boolean hasPredicate() {
-			return hasPredicate;
-		}
-		@Override public String toString() {
-			return this.pathComponent;
-		}
 	}
 }

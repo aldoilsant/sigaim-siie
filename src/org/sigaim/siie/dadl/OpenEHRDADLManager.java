@@ -36,7 +36,11 @@ public class OpenEHRDADLManager implements DADLManager {
 		}
 		return ret;
 	}
-	private String serializeSimpleValue(SimpleValue value) {
+	public String serialize(SimpleValue value) {
+		return this.serializeSimpleValue(value);
+	}
+	@Override
+	public String serializeSimpleValue(SimpleValue value) {
 		if(value.getValue() instanceof String) {
 			return "\""+value.getValue().toString()+"\"";
 		} else return value.getValue().toString();

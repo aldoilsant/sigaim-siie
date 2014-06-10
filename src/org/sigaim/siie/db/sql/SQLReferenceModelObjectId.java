@@ -5,28 +5,42 @@ import org.sigaim.siie.seql.parser.model.SEQLPath;
 
 public class SQLReferenceModelObjectId implements ReferenceModelObjectId{
 	private Class<?> objectClass;
-	private SEQLPath idPath;
+	private SEQLPath uniqueIdPath;
+	private SEQLPath referenceModelPath;
+	private SEQLPath archetypePath;
 	
 	public SQLReferenceModelObjectId() {
 		
 	}
-	public SQLReferenceModelObjectId(Class<?> objectClass, SEQLPath idPath) {
+	public SQLReferenceModelObjectId(Class<?> objectClass, SEQLPath idPath, SEQLPath referenceModelPath, SEQLPath archetypePath) {
 		this.setObjectClass(objectClass);
 		this.setUniqueIdPath(idPath);
+		this.setReferenceModelPath(referenceModelPath);
+		this.setArchetypePath(archetypePath);
 	}
 	@Override
 	public Class<?> getObjectClass() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
+		return this.objectClass;
+	}	
 	public SEQLPath getUniqueIdPath() {
-		return null;
+		return this.uniqueIdPath;
+	}
+	public SEQLPath getReferenceModelPath() {
+		return this.referenceModelPath;
+	}
+	public SEQLPath getArchetypePath() {
+		return this.archetypePath;
 	}
 	public void setObjectClass(Class<?> objectClass) {
 		this.objectClass=objectClass;
 	}
-	public void setUniqueIdPath(SEQLPath idPath) {
-		this.idPath=idPath;
+	public void setUniqueIdPath(SEQLPath uniqueIdPath) {
+		this.uniqueIdPath=uniqueIdPath;
+	}
+	public void setReferenceModelPath(SEQLPath path) {
+		this.referenceModelPath=path;
+	}
+	public void setArchetypePath(SEQLPath path) {
+		this.archetypePath=path;
 	}
 }
