@@ -15,6 +15,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.openehr.am.parser.AttributeValue;
 import org.openehr.am.parser.BooleanValue;
 import org.openehr.am.parser.CharacterValue;
@@ -256,6 +259,7 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 		return null;
 	}
 	private Object bindMultipleAttributeObjectBlock(MultipleAttributeObjectBlock block) throws SemanticDADLException, ReferenceModelException {
+		if(block.getKeyObjects().size()==0) return null;
 		SimpleValue keySample=block.getKeyObjects().get(0).getKey();
 		if(keySample instanceof IntegerValue) { //Cast to List
 			ArrayList multipleValue=new ArrayList();
@@ -384,6 +388,15 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 										if(setterParameter instanceof Boolean && method.getParameterTypes()[0].equals(boolean.class)) {
 											//Use autoboxing
 											method.invoke(instance, setterParameter);
+										} //Shorcuts for StringValue unbinding
+										else if(setterParameter instanceof String && method.getParameterTypes()[0].equals(XMLGregorianCalendar.class)) {
+											XMLGregorianCalendar xgc=DatatypeFactory.newInstance().newXMLGregorianCalendar((String)setterParameter);
+											try {
+												method.invoke(instance, xgc);
+											} catch(Exception e) {
+												e.printStackTrace();
+												throw new ReferenceModelException("Unable to convert enum value "+setterParameter);
+											}
 										} else if(setterParameter instanceof String) {
 											Class<?> parameterType=method.getParameterTypes()[0];
 											if(parameterType.isEnum()) {
@@ -393,6 +406,8 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 													e.printStackTrace();
 													throw new ReferenceModelException("Unable to convert enum value "+setterParameter);
 												}
+											} else {
+												throw new ReferenceModelException("Unable to cast object "+setterParameter+" to "+method.getParameterTypes()[0].getName());
 											}
 										} else {
 											throw new ReferenceModelException("Unable to cast object "+setterParameter+" to "+method.getParameterTypes()[0].getName());
@@ -456,7 +471,7 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 	}
 	private SimpleValue unbindSimpleValue(Object obj) throws ReferenceModelException  {
 		if(obj instanceof Boolean) {
-			return  new BooleanValue((Boolean)obj);
+			return new BooleanValue((Boolean)obj);
 		} else if(obj instanceof Character) {
 			return new CharacterValue((Character)obj);
 		} else if(obj instanceof Integer) {
@@ -471,6 +486,8 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 			return new RealValue(dv); //autoboxing
 		} else if(obj instanceof String) {
 			return new StringValue(""+obj);
+		} else if(obj instanceof XMLGregorianCalendar) {
+			return new StringValue(obj.toString());
 		} else if(obj instanceof Enum) {
 			return new StringValue(""+((Enum)obj));
 		} else {
@@ -522,6 +539,16 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 			PropertyDescriptor[] descriptors=Introspector.getBeanInfo(object.getClass(),Object.class).getPropertyDescriptors();
 			for(PropertyDescriptor descriptor : descriptors) {
 				Method readMethod=descriptor.getReadMethod();
+				if(readMethod==null) { //Hackfix for wrong isXXX Boolean properties
+					Method writeMethod=descriptor.getWriteMethod();
+					if(writeMethod.getParameterTypes()[0].equals(Boolean.class)) {
+						String readMethodName="is"+descriptor.getName().substring(0, 1).toUpperCase() + descriptor.getName().substring(1);
+						Method booleanGetterMethod=object.getClass().getMethod(readMethodName, null);
+						if(booleanGetterMethod!=null && booleanGetterMethod.getReturnType().equals(Boolean.class)) {
+							readMethod=booleanGetterMethod;
+						}
+					}
+				}
 				if(readMethod!=null) {
 					//Invoke the reader 
 					Object propertyObject=readMethod.invoke(object);

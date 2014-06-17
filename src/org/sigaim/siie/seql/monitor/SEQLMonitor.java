@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.GregorianCalendar;
+
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
@@ -20,6 +24,8 @@ import org.sigaim.siie.archetypes.FileArchetypeManager;
 import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.dadl.OpenEHRDADLManager;
 import org.sigaim.siie.db.sql.SQLPersistenceManager;
+import org.sigaim.siie.iso13606.rm.BL;
+import org.sigaim.siie.iso13606.rm.EHRExtract;
 import org.sigaim.siie.rm.ReflectorReferenceModelManager;
 import org.sigaim.siie.seql.engine.SEQLPipeEngine;
 import org.sigaim.siie.seql.engine.exceptions.SEQLException;
@@ -63,11 +69,17 @@ public class SEQLMonitor {
 		System.out.print("Ressetting database....");
 		pmngr.reset();
 		System.out.println("Done");
-		
 		//For stress test
 		for(int i=0;i<1;i++) {
 			is=SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_001.dadl");
 			ContentObject unbinded=dmng.parseDADL(is);
+			EHRExtract extract=(EHRExtract)mng.bind(unbinded);
+			GregorianCalendar gregorianCalendar = new GregorianCalendar();
+		    DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+		    XMLGregorianCalendar now = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar);
+			extract.setTimeCreated(now);
+			unbinded=mng.unbind(extract);
+			extract=(EHRExtract)mng.bind(unbinded);
 			pmngr.saveReferenceModelObjectFromContentObject(unbinded);
 		}
 		SEQLExecutionMemorySolverStage stage=new SEQLExecutionMemorySolverStage(pmngr,mng);
