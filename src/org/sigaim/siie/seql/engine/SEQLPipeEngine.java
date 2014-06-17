@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openehr.am.parser.ContentObject;
+import org.sigaim.siie.db.exceptions.PersistenceException;
 import org.sigaim.siie.seql.annotations.DADL;
 import org.sigaim.siie.seql.engine.exceptions.SEQLException;
 import org.sigaim.siie.seql.parser.model.SEQLQuery;
+import org.sigaim.siie.seql.parser.model.SEQLResultSet;
 
 public class SEQLPipeEngine implements SEQLEngine{
 	private List<SEQLQueryPreprocessStage> preprocessStages;
@@ -30,18 +32,18 @@ public class SEQLPipeEngine implements SEQLEngine{
 	}
 
 	@DADL
-	public ContentObject runQuery(SEQLQuery query) throws SEQLException {
+	public SEQLResultSet runQuery(SEQLQuery query) throws SEQLException {
 		SEQLQuery pquery=query;
 		for(SEQLQueryPreprocessStage stage : preprocessStages) {
 			pquery=stage.preprocessQuery(pquery);
 		}
+		SEQLResultSet set=null;
 		for(SEQLQueryExecutionStage stage : executionStages) {
-			pquery=stage.runQuery(pquery);
+			set=stage.runQuery(pquery);
 		}
-		ContentObject input=null;
 		for(SEQLQueryPostprocessStage stage : postprocessStages) {
-			input=stage.postProcessQueryResult(pquery,input);
+			set=stage.postProcessQueryResult(pquery, set);
 		}
-		return input;
+		return set;
 	}
 }

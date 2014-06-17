@@ -19,6 +19,9 @@ public class SEQLSelectCondition {
 	public boolean isAbsolute() {
 		return path.isAbsolute();
 	}
+	public SEQLPath getPath() {
+		return path;
+	}
 	public String getIdentifiedVariableId() {
 		if(!this.isAbsolute()){
 			return path.getFirstPathComponent().getPathIdentifier();

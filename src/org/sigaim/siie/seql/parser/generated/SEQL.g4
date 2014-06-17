@@ -1,14 +1,15 @@
 grammar SEQL;
 
 @header {
-import org.sigaim.siie.seql.parser.model.SEQLFromCondition.SEQLFromComponent;
+import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
 import org.sigaim.siie.seql.parser.model.SEQLOperation;
 import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
 import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
 import org.sigaim.siie.seql.parser.model.SEQLPath;
-
-
+import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
+import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
 }
+
 //Lexer
 WS : [ \t\r\n]+ -> skip ; // skip spaces, tabs, newlines
 NODEID  : 'at' DIGIT+ ('.' DIGIT+)*;
@@ -72,21 +73,27 @@ asIdentifier: AS IDENTIFIER;
 
 identifiedPath locals [SEQLPath path]: IDENTIFIER nodePredicate? ('/' objectPath)?; 
 
-objectPath : pathPart ('/' pathPart)*;
+objectPath locals [SEQLPath path] : pathPart ('/' pathPart)*;
  
-pathPart : IDENTIFIER nodePredicate?;
+pathPart locals [SEQLPathComponent pathComponent]: IDENTIFIER nodePredicate?;
 
-nodePredicate: OPENBRACKET nodePredicateOr CLOSEBRACKET;
-nodePredicateOr : nodePredicateAnd (OR nodePredicateAnd)*;
-nodePredicateAnd :nodePredicateComparable (AND nodePredicateComparable)*;
+nodePredicate locals [SEQLPathPredicate pathPredicate]: OPENBRACKET nodePredicateOr CLOSEBRACKET;
+nodePredicateOr locals [SEQLEvaluable evaluable] : nodePredicateAnd (OR nodePredicateAnd)*;
+nodePredicateAnd locals [SEQLEvaluable evaluable] :nodePredicateComparable (AND nodePredicateComparable)*;
 
-nodePredicateComparable
+nodePredicateComparable locals [SEQLEvaluable evaluable] 
         : NODEID (COMMA (STRING))?
-        | ARCHETYPEID (COMMA (STRING))?;
- 
+        | ARCHETYPEID (COMMA (STRING))?
+        | (COMMA (STRING))?
+ 		| predicateOperand (COMPARABLEOPERATOR predicateOperand);
+ 		
+predicateOperand locals [SEQLEvaluable evaluable] 
+        : objectPath | operand;
 
 
-from    :  FROM EHR CONTAINS containsExpr ;
+
+from    :  FROM EHR IDENTIFIER
+		   | FROM EHR IDENTIFIER? CONTAINS containsExpr ;
 
  
 containsExpr locals[ SEQLOperation operation]: containExpressionBool (boolOp containsExpr)?;

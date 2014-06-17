@@ -1,7 +1,10 @@
 package org.sigaim.siie.db.sql;
 
+import java.io.ByteArrayInputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.openehr.am.parser.ComplexObjectBlock;
@@ -18,6 +21,7 @@ import org.sigaim.siie.rm.exceptions.ReferenceModelException;
 import org.sigaim.siie.seql.engine.exceptions.SEQLException;
 import org.sigaim.siie.seql.parser.model.SEQLPath;
 import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
+import org.sigaim.siie.utils.Utils;
 
 public class SQLPersistenceManager implements PersistenceManager {
 	private String dbName="sigaim";
@@ -70,11 +74,23 @@ public class SQLPersistenceManager implements PersistenceManager {
 		} else{
 			SQLReferenceModelObjectId sparent=(SQLReferenceModelObjectId) parent;
 			SEQLPath path=sparent.getUniqueIdPath();
-			String objectClass =this.referenceModelManager.getReferenceModelClassName(block);
+			String objectClass =Utils.toUppercaseNotation(this.referenceModelManager.getReferenceModelClassName(block)).toLowerCase();
+			String archetypeId=this.referenceModelManager.getArchetypeIdForRMObject(block);
+			if(archetypeId==null) {
+				archetypeId="NULL";
+			} else {
+				archetypeId="'"+archetypeId+"'";
+			}
+			String nodeId=this.referenceModelManager.getArchetypeNodeIdForRMObject(block);
+			if(nodeId==null) {
+				nodeId="NULL";
+			} else {
+				nodeId="'"+nodeId+"'";
+			}
 			Map<SEQLPathComponent,SingleAttributeObjectBlock> childRMObjects=this.referenceModelManager.splitForRMObjectVsDataObject(block);
 			//Now we can insert our object, child objects have been removed
 			String serializedObject=this.dadlManager.serialize(block);
-			String query="INSERT INTO reference_model_objects VALUES (NULL,'"+objectClass+"',NULL,NULL,NULL,NULL,\'"+serializedObject+"\');";
+			String query="INSERT INTO reference_model_objects VALUES (NULL,'"+objectClass+"',"+archetypeId+","+nodeId+",NULL,NULL,NULL,NULL,\'"+serializedObject+"\');";
 			System.out.println("Ready to run query: "+query);
 			ResultSet rs=this.doUpdateWithGeneratedKeys(query);
 			System.out.println("Query executed. Retrieving generated keys...");
@@ -84,16 +100,32 @@ public class SQLPersistenceManager implements PersistenceManager {
 				long oid=rs.getLong(1);
 				SEQLPath newPath=(SEQLPath)path.clone();
 				newPath.addPathComponent(oid+"");
-				System.out.println("Unique object id is: "+oid+". Updating  absolute path to: "+newPath+" and reference model path to "+sparent.getReferenceModelPath());
+				System.out.println("Unique object id is: "+oid+". Updating  absolute path to: "+newPath+" and reference model path to "+sparent.getReferenceModelPath()+" and archetype path to "+sparent.getArchetypePath());
 				//Update
-				query="UPDATE reference_model_objects SET unique_id_path='"+newPath.toString()+"', reference_model_path='"+sparent.getReferenceModelPath()+"' where id="+oid;
+				query="UPDATE reference_model_objects SET unique_id_path='"+newPath.toString()+"', reference_model_path='"+sparent.getReferenceModelPath()+"', archetype_path='"+sparent.getArchetypePath()+"', depth="+newPath.getPathComponents().size()+" where id="+oid;
 				System.out.println("Query: "+query);
 				this.doUpdate(query);
 				//Recurse for childs 
 				for(SEQLPathComponent key : childRMObjects.keySet()) {
 					SEQLPath newReferenceModelPath=(SEQLPath)sparent.getReferenceModelPath().clone();
 					newReferenceModelPath.addPathComponent(key);
-					this.saveSingleAttributeObjectBlockForParent(childRMObjects.get(key), new SQLReferenceModelObjectId(null,newPath,newReferenceModelPath,null));
+					SEQLPath archetypePath=(SEQLPath)sparent.getArchetypePath().clone();
+					String className=this.referenceModelManager.getReferenceModelClassName(childRMObjects.get(key));
+					Class<?> rmClass=this.referenceModelManager.referenceModelClassFromString(className);
+					String archetype_id=null;
+					String node_id=null;
+					if(this.referenceModelManager.isArchetypedClass(rmClass)) {
+						archetype_id=this.referenceModelManager.getArchetypeIdForRMObject(childRMObjects.get(key));
+						node_id=this.referenceModelManager.getArchetypeNodeIdForRMObject(childRMObjects.get(key));
+					}
+					if(node_id==null) { //Not assigned to an archetype meaning
+						archetypePath.addPathComponent(key.getPathIdentifier());
+					} else {
+						archetypePath.addPathComponent(key.getPathIdentifier()+"["+node_id+"]");
+					}
+					//Save the archetype model path, that is, the archetype id and the archetype node id
+					//Note that in the reference model objects that are not rmobjets do not have these values. Sorry
+					this.saveSingleAttributeObjectBlockForParent(childRMObjects.get(key), new SQLReferenceModelObjectId(null,newPath,newReferenceModelPath,archetypePath));
 				}
 			} catch(SQLException e) {
 				e.printStackTrace();
@@ -139,9 +171,11 @@ public class SQLPersistenceManager implements PersistenceManager {
 				"id INTEGER NOT NULL PRIMARY KEY GENERATED BY DEFAULT AS IDENTITY (START WITH 1, INCREMENT BY 1),"+
 				"reference_model_class_name VARCHAR(100) NOT NULL,"+
 				"archetype_id VARCHAR(100),"+
-				"node_id CHAR(6),"+
+				"node_id VARCHAR(100),"+
 				"unique_id_path VARCHAR(1000),"+
 				"reference_model_path VARCHAR(1000),"+
+				"archetype_path VARCHAR(1000),"+
+				"depth INTEGER,"+
 				"serialized VARCHAR(10000)"+
 			");",
 		};
@@ -175,4 +209,131 @@ public class SQLPersistenceManager implements PersistenceManager {
 	public void setDADLManager(DADLManager manager) {
 		this.dadlManager=manager;
 	}
+	public List<ReferenceModelObjectId> getDeepestRMObjectsForParentAndPath(ReferenceModelObjectId parent, List<SEQLPathComponent> components) throws PersistenceException{
+		//Find the deepest object that is independently serialized to test in-memory
+		List<ReferenceModelObjectId> ret=new ArrayList<ReferenceModelObjectId>();
+		List<SEQLPathComponent> toRemove=new ArrayList<SEQLPathComponent>();
+
+		if(!(parent instanceof SQLReferenceModelObjectId)) {
+			throw new PersistenceException("Incompatible reference model object id: "+parent);
+		} else {
+			SEQLPath buildingPath=new SEQLPath((String)null);
+			Class<?> ptype;
+			SQLReferenceModelObjectId sparent=(SQLReferenceModelObjectId) parent;
+			for(SEQLPathComponent component : components) {
+				buildingPath.addPathComponent(component);
+				ptype=this.referenceModelManager.getPathType(sparent.getObjectClass().getSimpleName().toLowerCase(), buildingPath);
+				//Else we need to solve the path components. The first test is if the goal path is a real object or not
+				if(this.referenceModelManager.isRMObjectClass(ptype)) {
+					toRemove.add(component);
+				}   else {
+					buildingPath=buildingPath.removeLastPathComponent();
+					break;
+				}
+			}
+			//For the identified variable
+			buildingPath=buildingPath.removeFirstPathComponent();
+			if(buildingPath.getPathComponents()==null || buildingPath.getPathComponents().size()==0)  {
+				ret.add(sparent);
+			} else {
+				//Use the building path to retrieve a, for certain, rmobject
+				ret=this.selectObjectsMatchingPathFromParent(parent,buildingPath);
+			}
+		}
+		components.removeAll(toRemove);
+		return ret;
+	}
+	public List<ReferenceModelObjectId> selectObjectsMatchingPathFromParent(ReferenceModelObjectId parent,SEQLPath subpath) throws PersistenceException{
+		//Get the parent reference model path
+		List<ReferenceModelObjectId> toRet=new ArrayList<ReferenceModelObjectId>();
+		if(!(parent instanceof SQLReferenceModelObjectId)) {
+			throw new PersistenceException("Incompatible reference model object id: "+parent);
+		} else {
+			SQLReferenceModelObjectId sparent=(SQLReferenceModelObjectId) parent;
+			SEQLPath referenceModelPath=(SEQLPath)sparent.getReferenceModelPath().clone();
+			SEQLPath archetypePath=(SEQLPath)sparent.getArchetypePath().clone();
+
+			for(SEQLPathComponent subComponent : subpath.getPathComponents()) {
+				referenceModelPath.addPathComponent(subComponent.toReferenceModelPathComponent());
+				archetypePath.addPathComponent(subComponent.toNodeIDPath());
+			}
+			StringBuilder pathBuilder=new StringBuilder(referenceModelPath.getFullPath());
+			pathBuilder.deleteCharAt(pathBuilder.length()-1);
+			String query=null;
+			query="SELECT unique_id_path, reference_model_path, archetype_path, reference_model_class_name FROM reference_model_objects WHERE reference_model_path LIKE'"+pathBuilder.toString()+"%' AND archetype_path='"+archetypePath.toString()+"' AND depth="+(referenceModelPath.getPathComponents().size()+1);
+			query+=";";
+			System.out.println(query);
+			ResultSet rs=this.doQuery(query);
+			try {
+				while(rs.next()) {
+					SQLReferenceModelObjectId newObjectId=new SQLReferenceModelObjectId();
+					newObjectId.setUniqueIdPath(new SEQLPath(rs.getString(1)));
+					newObjectId.setReferenceModelPath(new SEQLPath(rs.getString(2)));
+					newObjectId.setArchetypePath(new SEQLPath(rs.getString(3)));
+					newObjectId.setObjectClass(this.referenceModelManager.referenceModelClassFromString(Utils.toUppercaseNotation(rs.getString(4))));
+					toRet.add(newObjectId);
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return toRet;
+	}
+	public ContentObject selectFromReferenceModelObjectId(ReferenceModelObjectId id) throws PersistenceException {
+		if(!(id instanceof SQLReferenceModelObjectId)) {
+			throw new PersistenceException("Incompatible reference model object id: "+id);
+		} else {
+			SQLReferenceModelObjectId sid=(SQLReferenceModelObjectId)id;
+			String query="SELECT serialized  FROM reference_model_objects WHERE unique_id_path='"+sid.getUniqueIdPath()+"'";
+			query+=";";
+			ResultSet rs=this.doQuery(query);
+			try {
+				while(rs.next()) {
+					String dadl="<"+rs.getString(1)+">";
+					return this.dadlManager.parseDADL(new ByteArrayInputStream(dadl.getBytes()));
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
+				throw new PersistenceException(e.getMessage());
+			}
+		}
+		return null;
+	}
+	@Override
+	public List<ReferenceModelObjectId> selectMatchingObjectsForComponentAndParent(
+			String referenceModelClass, String archetypeId,
+			ReferenceModelObjectId parent) throws PersistenceException {
+		List<ReferenceModelObjectId> toRet=new ArrayList<ReferenceModelObjectId>();
+		String query="SELECT unique_id_path, reference_model_path, archetype_path, reference_model_class_name FROM reference_model_objects WHERE reference_model_class_name='"+Utils.toUppercaseNotation(referenceModelClass).toLowerCase()+"'";
+		if(archetypeId!=null) {
+			query+=" AND archetype_id='"+archetypeId+"' ";
+		}
+		if(parent!=null) {
+			//Use the unique id path to test the parent... must match the whole string but the last component
+			SQLReferenceModelObjectId sparent=(SQLReferenceModelObjectId) parent;
+			query+=" AND unique_id_path LIKE '"+sparent.getUniqueIdPath()+"%' AND unique_id_path != '"+sparent.getUniqueIdPath()+"'";
+		}
+		query+=";";
+		ResultSet rs=this.doQuery(query);
+		try {
+			while(rs.next()) {
+				SQLReferenceModelObjectId newObjectId=new SQLReferenceModelObjectId();
+				newObjectId.setUniqueIdPath(new SEQLPath(rs.getString(1)));
+				newObjectId.setReferenceModelPath(new SEQLPath(rs.getString(2)));
+				newObjectId.setArchetypePath(new SEQLPath(rs.getString(3)));
+				newObjectId.setObjectClass(this.referenceModelManager.referenceModelClassFromString(Utils.toUppercaseNotation(rs.getString(4))));
+				toRet.add(newObjectId);
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e.getMessage());
+		}
+		return toRet;
+	}
+	@Override
+	public ReferenceModelObjectId getReferenceModelRoot() {
+		return new SQLReferenceModelObjectId(null,new SEQLPath("/"),new SEQLPath("/"),new SEQLPath("/"));
+	}
+ 
 }

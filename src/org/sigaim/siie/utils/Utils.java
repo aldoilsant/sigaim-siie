@@ -26,4 +26,13 @@ public class Utils {
 		}
 		return fullPath.toString();
 	}
+	public static String unquote(String string) {
+		StringBuilder builder=new StringBuilder(string);
+		if(string.charAt(0)=='"' && string.charAt(string.length()-1)=='"') {
+			builder.deleteCharAt(0);
+			builder.deleteCharAt(builder.length()-1);
+		}
+		return builder.toString();
+		
+	}
 }

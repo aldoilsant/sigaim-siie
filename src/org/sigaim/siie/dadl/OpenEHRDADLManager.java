@@ -50,6 +50,7 @@ public class OpenEHRDADLManager implements DADLManager {
 	}
 	private String serializePrimitiveObjectBlock(PrimitiveObjectBlock block) {
 		String ret="";
+		if(block==null) return ret;
 		if(block.getSimpleIntervalValue()!=null) {
 			ret+=this.serializeSimpleIntervalValue(block.getSimpleIntervalValue());
 		} else if(block.getSimpleListValue()!=null) {

@@ -13,8 +13,13 @@ public class SEQLPath implements SEQLEvaluable {
 	private List<SEQLPathComponent> pathComponents;
 	
 	public SEQLPath(String path) {
-		this.fullPath=path;
+		if(path==null) this.fullPath="";
+		else this.fullPath=path;
 		this.compile();
+	}
+	public SEQLPath(List<SEQLPathComponent> components) {
+		this.fullPath="";
+		this.addPathComponents(components);
 	}
 	protected void compile() {
 		if(fullPath.startsWith("/")) {
@@ -28,11 +33,21 @@ public class SEQLPath implements SEQLEvaluable {
 		}
 	}
 	public void addPathComponent(String pathComponent) {
+		if(this.fullPath.length()>0 && this.fullPath.charAt(this.fullPath.length()-1)!='/') {
+			StringBuilder builder=new StringBuilder(this.fullPath);
+			builder.append('/');
+			this.fullPath=builder.toString();
+		}
 		this.fullPath+=pathComponent+"/";
 		this.compile();
 	}
 	public void addPathComponent(SEQLPathComponent component) {
-		this.fullPath+=component.toString()+"/";
+		this.addPathComponent(component.toString());
+ 	}
+	public void addPathComponents(List<SEQLPathComponent> components) {
+		for(SEQLPathComponent component : components) {
+			this.addPathComponent(component);
+		}
 	}
 	public SEQLPath toUppercaseNotation() {
 		return new SEQLPath(Utils.toUppercaseNotation(this.getFullPath()));
@@ -55,10 +70,25 @@ public class SEQLPath implements SEQLEvaluable {
 	public SEQLPathComponent getFirstPathComponent() {
 		return pathComponents.get(0);
 	}
+	public SEQLPathComponent getLastPathComponent() {
+		return pathComponents.get(pathComponents.size()-1);
+	}
 	@Override public String toString() {
 		return fullPath;
 	}
 	@Override public Object clone() {
 		return new SEQLPath(this.fullPath);
+	}
+	public SEQLPath removeLastPathComponent() {
+		List<SEQLPathComponent> newComponents=new ArrayList<SEQLPathComponent>();
+		newComponents.addAll(this.getPathComponents());
+		newComponents.remove(newComponents.size()-1);
+		return new SEQLPath(newComponents);
+	}
+	public SEQLPath removeFirstPathComponent() {
+		List<SEQLPathComponent> newComponents=new ArrayList<SEQLPathComponent>();
+		newComponents.addAll(this.getPathComponents());
+		newComponents.remove(0);
+		return new SEQLPath(newComponents);
 	}
 }

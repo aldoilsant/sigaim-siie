@@ -1,13 +1,13 @@
-// Generated from SEQL.g4 by ANTLR 4.2.2
+// Generated from SEQL.g4 by ANTLR 4.2
 package org.sigaim.siie.seql.parser.generated;
 
-import org.sigaim.siie.seql.parser.model.SEQLFromCondition.SEQLFromComponent;
+import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
 import org.sigaim.siie.seql.parser.model.SEQLOperation;
 import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
 import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
 import org.sigaim.siie.seql.parser.model.SEQLPath;
-
-
+import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
+import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -271,17 +271,6 @@ public interface SEQLListener extends ParseTreeListener {
 	void exitOperand(@NotNull SEQLParser.OperandContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link SEQLParser#nodePredicate}.
-	 * @param ctx the parse tree
-	 */
-	void enterNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SEQLParser#nodePredicate}.
-	 * @param ctx the parse tree
-	 */
-	void exitNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx);
-
-	/**
 	 * Enter a parse tree produced by {@link SEQLParser#identifiedExpr}.
 	 * @param ctx the parse tree
 	 */
@@ -293,6 +282,17 @@ public interface SEQLListener extends ParseTreeListener {
 	void exitIdentifiedExpr(@NotNull SEQLParser.IdentifiedExprContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link SEQLParser#nodePredicate}.
+	 * @param ctx the parse tree
+	 */
+	void enterNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SEQLParser#nodePredicate}.
+	 * @param ctx the parse tree
+	 */
+	void exitNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link SEQLParser#identifiedEquality}.
 	 * @param ctx the parse tree
 	 */
@@ -302,6 +302,17 @@ public interface SEQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIdentifiedEquality(@NotNull SEQLParser.IdentifiedEqualityContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link SEQLParser#predicateOperand}.
+	 * @param ctx the parse tree
+	 */
+	void enterPredicateOperand(@NotNull SEQLParser.PredicateOperandContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SEQLParser#predicateOperand}.
+	 * @param ctx the parse tree
+	 */
+	void exitPredicateOperand(@NotNull SEQLParser.PredicateOperandContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link SEQLParser#archetypePredicate}.

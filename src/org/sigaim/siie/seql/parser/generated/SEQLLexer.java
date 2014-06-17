@@ -1,13 +1,13 @@
-// Generated from SEQL.g4 by ANTLR 4.2.2
+// Generated from SEQL.g4 by ANTLR 4.2
 package org.sigaim.siie.seql.parser.generated;
 
-import org.sigaim.siie.seql.parser.model.SEQLFromCondition.SEQLFromComponent;
+import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
 import org.sigaim.siie.seql.parser.model.SEQLOperation;
 import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
 import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
 import org.sigaim.siie.seql.parser.model.SEQLPath;
-
-
+import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
+import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
 
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;

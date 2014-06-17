@@ -13,18 +13,25 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.openehr.am.archetype.Archetype;
 import org.openehr.am.parser.ContentObject;
 import org.openehr.am.parser.DADLParser;
+import org.openehr.am.parser.ObjectBlock;
 import org.openehr.am.parser.ParseException;
+import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.sigaim.siie.archetypes.FileArchetypeManager;
 import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.dadl.OpenEHRDADLManager;
 import org.sigaim.siie.db.sql.SQLPersistenceManager;
 import org.sigaim.siie.rm.ReflectorReferenceModelManager;
+import org.sigaim.siie.seql.engine.SEQLPipeEngine;
+import org.sigaim.siie.seql.engine.exceptions.SEQLException;
+import org.sigaim.siie.seql.engine.execution.SEQLExecutionMemorySolverStage;
+import org.sigaim.siie.seql.engine.preprocessing.SEQLPreprocessingValidateIdentifiedVariablesStage;
 import org.sigaim.siie.seql.parser.SEQLErrorListener;
 import org.sigaim.siie.seql.parser.SEQLModelListener;
 import org.sigaim.siie.seql.parser.generated.SEQLLexer;
 import org.sigaim.siie.seql.parser.generated.SEQLParser;
 import org.sigaim.siie.seql.parser.model.SEQLPath;
 import org.sigaim.siie.seql.parser.model.SEQLQuery;
+import org.sigaim.siie.seql.parser.model.SEQLResultSet;
 
 
 public class SEQLMonitor {
@@ -39,8 +46,14 @@ public class SEQLMonitor {
 		FileArchetypeManager mgr=new FileArchetypeManager();
 		Archetype arq=mgr.getArquetypeById("CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1");
 
-		is=SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/ehr_001.dadl");
-		ContentObject unbinded=dmng.parseDADL(is);
+
+		/*Object binded=mng.bind(unbinded);
+		unbinded=mng.unbind(binded);
+		String result=dmng.serialize(unbinded, false);*/
+		/*String serialized=dmng.serialize(unbinded,false);
+		System.out.println(serialized);*/
+		/*String archetype_id=mng.getArchetypeIdForRMObject((SingleAttributeObjectBlock)unbinded.getComplexObjectBlock());
+		String node_id=mng.getArchetypeNodeIdForRMObject((SingleAttributeObjectBlock)unbinded.getComplexObjectBlock());*/
 		SQLPersistenceManager pmngr=new SQLPersistenceManager();
 		pmngr.setDADLManager(dmng);
 		pmngr.setReferenceModelManager(mng);
@@ -51,10 +64,18 @@ public class SEQLMonitor {
 		pmngr.reset();
 		System.out.println("Done");
 		
-		pmngr.saveReferenceModelObjectFromContentObject(unbinded);
-		/*String serialized=dmng.serialize(dmng.parseDADL(is),false);
-		serialized=dmng.serialize(dmng.parseDADL(new ByteArrayInputStream(serialized.getBytes())),false);
-		System.out.println(serialized);
+		//For stress test
+		for(int i=0;i<1;i++) {
+			is=SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_001.dadl");
+			ContentObject unbinded=dmng.parseDADL(is);
+			pmngr.saveReferenceModelObjectFromContentObject(unbinded);
+		}
+		SEQLExecutionMemorySolverStage stage=new SEQLExecutionMemorySolverStage(pmngr,mng);
+		SEQLPipeEngine engine=new SEQLPipeEngine();
+		engine.addPreprocessStage(new SEQLPreprocessingValidateIdentifiedVariablesStage());
+		engine.addExecutionStage(stage);
+		
+		/*
 		ContentObject obj=dmng.parseDADL(new ByteArrayInputStream(serialized.getBytes()));
 		Object binded=mng.bind(obj);
 		obj=mng.unbind(binded);
@@ -100,6 +121,22 @@ public class SEQLMonitor {
 			    } else {
 			    	SEQLQuery query=listener.getQuery();
 			    	System.out.println("Sintactically valid query accepted:"+query.toString());
+			    	try {
+			    		SEQLResultSet rs=engine.runQuery(query);
+			    		if(rs!=null) {
+			    			int nrow=0;
+							while(rs.nextRow()) {
+								for(int i=0;i<rs.getNumberOfColumns();i++) {
+									ContentObject cellObject=rs.getColumn(i);
+									String serialized=dmng.serialize(cellObject, true);
+									System.out.println("Row "+(nrow)+", Column "+i+": "+serialized);
+								}
+								nrow++;
+							}
+			    		}
+			    	} catch(SEQLException e) {
+			    		System.out.println("ERROR: "+e.getMessage());
+			    	}
 			    }
 			    command="";
 			} else {

@@ -3,7 +3,7 @@
 	ehr_id = <
 		reference_model_class_name = <"II">
 		root = <"somerootvalue">
-		extension = <"00001">
+		extension = <"1">
 	>
 	all_compositions = <
 		[0]=<
@@ -14,9 +14,44 @@
 				extension = <"00003">
 				scope= <"BUSN">
 			>
+			archetype_id= <
+				reference_model_class_name = <"II">
+				root = <"ISO13606">
+				extension = <"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1.adl">
+				scope= <"BUSN">
+			>
+			content=<
+				[0]=<
+					reference_model_class_name = <"section">
+					archetype_id=<"some_archetype_id">
+					meaning=<
+						reference_model_class_name = <"CDCV">
+						id=<"clust_id_1">
+					>
+				>
+			>
+		>
+		[1]=<
+			reference_model_class_name = <"composition">
+			contribution_id = <
+				reference_model_class_name = <"II">
+				root = <"somerootvalue">
+				extension = <"00005">
+				scope= <"BUSN">
+			>
+			archetype_id=<"some_archetype_id">
+			meaning=<
+				reference_model_class_name = <"CDCV">
+				id=<"comp_id_2">
+			>
 			content=<
 				[0]=<
 					reference_model_class_name = <"cluster">
+					archetype_id=<"some_archetype_id_2">
+					meaning=<
+						reference_model_class_name = <"CDCV">
+						id=<"clust_id_2">
+					>
 				>
 			>
 		>

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openehr.am.parser.ContentObject;
+import org.openehr.am.parser.ObjectBlock;
 import org.openehr.am.parser.SimpleValue;
 import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.sigaim.siie.dadl.exceptions.SemanticDADLException;
@@ -17,5 +18,12 @@ public interface ReferenceModelManager {
 	Object bind(ContentObject obj) throws SemanticDADLException, ReferenceModelException;
 	ContentObject unbind(Object root) throws ReferenceModelException;
 	Map<SEQLPathComponent,SingleAttributeObjectBlock>  splitForRMObjectVsDataObject(SingleAttributeObjectBlock block) throws SemanticDADLException, ReferenceModelException;
-	public String getReferenceModelClassName(SingleAttributeObjectBlock block) throws SemanticDADLException;
+	String getReferenceModelClassName(SingleAttributeObjectBlock block) throws SemanticDADLException;
+	ObjectBlock solveReferenceModelPath(SingleAttributeObjectBlock block, List<SEQLPathComponent> components) throws ReferenceModelException;
+	String getArchetypeIdForRMObject(SingleAttributeObjectBlock block)  throws ReferenceModelException;
+	String getArchetypeNodeIdForRMObject(SingleAttributeObjectBlock block)  throws ReferenceModelException;
+	Class<?> getRootClass();
+	boolean isRMObjectClass(Class<?> tclass);
+	boolean isArchetypedClass(Class<?> tclass);
+	SingleAttributeObjectBlock getSingleAttributeObjectBlockFromContentObject(ContentObject obj) throws SemanticDADLException;
 }

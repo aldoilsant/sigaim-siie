@@ -43,4 +43,7 @@ public class SQLReferenceModelObjectId implements ReferenceModelObjectId{
 	public void setArchetypePath(SEQLPath path) {
 		this.archetypePath=path;
 	}
+	@Override public String toString() {
+		return this.objectClass+"::"+this.getUniqueIdPath();
+	}
 }

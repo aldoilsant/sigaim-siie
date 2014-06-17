@@ -25,6 +25,7 @@ import org.openehr.am.parser.KeyedObject;
 import org.openehr.am.parser.MultipleAttributeObjectBlock;
 import org.openehr.am.parser.ObjectBlock;
 import org.openehr.am.parser.PrimitiveObjectBlock;
+import org.openehr.am.parser.RealValue;
 import org.openehr.am.parser.SimpleValue;
 import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.openehr.am.parser.StringValue;
@@ -41,7 +42,7 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 	private Class<?> root;
 	private DADLManager dadlManager;
 	
-	private boolean isRMObjectClass(Class<?> tclass) {
+	public boolean isRMObjectClass(Class<?> tclass) {
 		return rmObjects.contains(tclass);
 	}
 	/**
@@ -149,6 +150,49 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 		}
 		return ret;
 	}
+	@Override
+	public ObjectBlock solveReferenceModelPath(SingleAttributeObjectBlock block, List<SEQLPathComponent> components) throws ReferenceModelException { 
+		//Use the path components to solve the serialized value 
+		if(components.size()==0) return block;
+		List<SEQLPathComponent> subComponents=new ArrayList<SEQLPathComponent>(components);
+		SEQLPathComponent component=subComponents.remove(0);
+		String attributeName=component.getPathIdentifier().toLowerCase();
+		for(AttributeValue value : block.getAttributeValues()) {
+			if(value.getId().equals(attributeName)) {
+				ObjectBlock child=value.getValue();
+				if(child instanceof SingleAttributeObjectBlock) {
+					//recurse
+					return this.solveReferenceModelPath((SingleAttributeObjectBlock)child, subComponents);
+				} else if(child instanceof MultipleAttributeObjectBlock) {
+					//Use the predicate as key of the collection
+					MultipleAttributeObjectBlock mblock=(MultipleAttributeObjectBlock)child;
+					//Iterate over the key objects and find the correct key
+					for(KeyedObject keyedObject: mblock.getKeyObjects()) {
+						String key=this.dadlManager.serializeSimpleValue(keyedObject.getKey());
+						if(key.equals(component.getPathPredicate().getKey2())) {
+							ObjectBlock kvalue=keyedObject.getObject();
+							if(kvalue instanceof SingleAttributeObjectBlock) {
+								return this.solveReferenceModelPath((SingleAttributeObjectBlock)kvalue, subComponents);
+							} else { //Primitive
+								if(subComponents.size()>0) {
+									throw new ReferenceModelException("Found path dereferencing primitive object block");
+								}
+								return kvalue;
+							}
+						}
+					}
+					throw new ReferenceModelException("Unable to solve path "+component+" for block "+block);
+				} else if (child instanceof PrimitiveObjectBlock) {
+					if(subComponents.size()>0) {
+						throw new ReferenceModelException("Found path dereferencing primitive object block");
+					}
+					return child;
+				}
+			}
+		}
+		return null;
+		//throw new ReferenceModelException("Unknown path component "+attributeName+" for block "+block);
+	}
 	private Class<?> getPathTypeForComponent(Class<?> referenceModelClass, List<SEQLPathComponent> components) {
 		if(components.size()==0) return referenceModelClass;
 		List<SEQLPathComponent> subComponents=new ArrayList<SEQLPathComponent>(components);
@@ -181,12 +225,12 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 				}
 			}
 		} catch(Exception e) {
-			
+			e.printStackTrace();
 		}
 		return null;
 	}
+	
 	public Class<?> getPathType(String sreferenceModelClass, SEQLPath path) {
-		path=path.toUppercaseNotation();
 		Class<?> referenceModelClass=null;
 		boolean isAbsolute=false;
 		if(sreferenceModelClass==null) {
@@ -196,6 +240,11 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 			referenceModelClass=this.referenceModelClassFromString(sreferenceModelClass);
 		}
 		List<SEQLPathComponent> components=path.getPathComponents();
+		if(components==null || components.size()==0) {
+			return this.referenceModelClassFromString(sreferenceModelClass);
+		}
+		path=path.toUppercaseNotation();
+		components=path.getPathComponents();
 		if(!isAbsolute) { //remove identifiedVariable
 			components.remove(0);
 		}
@@ -212,7 +261,7 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 			ArrayList multipleValue=new ArrayList();
 			for(KeyedObject obj : block.getKeyObjects()) {
 				Object value=this.bindObjectBlock(obj.getObject());
-				int key=((IntegerValue)obj.getKey()).getValue().intValue();
+				int key=((IntegerValue)obj.getKey()).getValue().intValue()-1; //Note indexes start with 1
 				multipleValue.add(key,value);
 			}
 			return multipleValue;
@@ -253,23 +302,27 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 			if(value.getId().equals("reference_model_class_name")) {
 				try {
 					PrimitiveObjectBlock pblock=(PrimitiveObjectBlock)value.getValue();
-					referenceModelClassName=pblock.getSimpleValue().getValue().toString().toLowerCase();
+					referenceModelClassName=Utils.toUppercaseNotation(pblock.getSimpleValue().getValue().toString().toLowerCase());
 				} catch(Exception e) {
 					throw new SemanticDADLException("Invalid value for referenceModelClassName");
 				}
 				break;
 			}
 		}
-		if(referenceModelClassName==null) {
+		/*if(referenceModelClassName==null) {
 			throw new SemanticDADLException("Missing reference model class name for block: "+block);
-		}
+		}*/
 		return referenceModelClassName;
 	}
 	private Object bindSingleAttributeObjectBlock(SingleAttributeObjectBlock block)  throws SemanticDADLException, ReferenceModelException{
 		//Attempt to get the reference model class name
-		String referenceModelClassName=this.getReferenceModelClassName(block);
+		String referenceModelClassName=null;
+		try {
+			referenceModelClassName=this.getReferenceModelClassName(block);
+		} catch(Exception e) {}
 		if(referenceModelClassName==null) {
-			throw new SemanticDADLException("Object blocks must have the mandatory field referenceModelClassName");
+			return null;
+			//throw new SemanticDADLException("Object blocks must have the mandatory field referenceModelClassName");
 		}
 		Class<?> objectClass=this.referenceModelClassFromString(referenceModelClassName);
 		if(objectClass==null) {
@@ -288,6 +341,7 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 				String id=Utils.toUppercaseNotation(value.getId()).toLowerCase();
 				if(!id.equals("referencemodelclassname")) {
 					Object setterParameter=this.bindObjectBlock(value.getValue());
+					if(setterParameter==null) continue;
 					//Attempt to find the property setter
 					PropertyDescriptor[] descriptors=Introspector.getBeanInfo(objectClass).getPropertyDescriptors();
 					boolean found=false;
@@ -326,8 +380,11 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 										throw new ReferenceModelException("Unable to bind object for attribute"+value.getId());
 									}
 									if(!method.getParameterTypes()[0].isAssignableFrom(setterParameter.getClass())) {
-										//Attempt enumeration binding
-										if(setterParameter instanceof String) {
+										//Attempt primitive to object binding
+										if(setterParameter instanceof Boolean && method.getParameterTypes()[0].equals(boolean.class)) {
+											//Use autoboxing
+											method.invoke(instance, setterParameter);
+										} else if(setterParameter instanceof String) {
 											Class<?> parameterType=method.getParameterTypes()[0];
 											if(parameterType.isEnum()) {
 												try {
@@ -382,7 +439,21 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 	private PrimitiveObjectBlock createSingleValuePrimitiveObjectBlock(SimpleValue value) {
 		return new PrimitiveObjectBlock(null,value,null,null,null,null);
 	}
-	
+	public SingleAttributeObjectBlock getSingleAttributeObjectBlockFromContentObject(ContentObject obj) throws SemanticDADLException{
+		if(obj.getAttributeValues()!=null) {
+			throw new SemanticDADLException("Root  must be an object block");
+		} else {
+			ComplexObjectBlock block=obj.getComplexObjectBlock();
+			//Find the reference model class
+			if(!(block instanceof SingleAttributeObjectBlock)) {
+				throw new SemanticDADLException("Root must be a single attribute object block");
+			} else {
+				SingleAttributeObjectBlock sblock=(SingleAttributeObjectBlock) block;
+				return sblock;
+			}
+		}
+		
+	}
 	private SimpleValue unbindSimpleValue(Object obj) throws ReferenceModelException  {
 		if(obj instanceof Boolean) {
 			return  new BooleanValue((Boolean)obj);
@@ -390,6 +461,14 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 			return new CharacterValue((Character)obj);
 		} else if(obj instanceof Integer) {
 			return  new IntegerValue((Integer)obj);
+		} else if(obj instanceof Double) {
+			return new RealValue((Double) obj);
+		} else if(obj instanceof Float) {
+			//Without precision loss
+			Float f=(Float) obj;
+			float fv=f.floatValue();
+			double dv=(double)fv;
+			return new RealValue(dv); //autoboxing
 		} else if(obj instanceof String) {
 			return new StringValue(""+obj);
 		} else if(obj instanceof Enum) {
@@ -503,6 +582,10 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 					//Object, directly test for rmobject class
 					SingleAttributeObjectBlock sblock=(SingleAttributeObjectBlock) atvalue;
 					String referenceModelClassName=this.getReferenceModelClassName(sblock);
+					if(referenceModelClassName==null) {
+						//Continue: missing value;
+						continue;
+					}
 					Class<?> referenceModelClass=this.referenceModelClassFromString(referenceModelClassName);
 					if(this.isRMObjectClass(referenceModelClass)) {
 						toRemove.add(value);
@@ -512,16 +595,18 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 				} else { //MultipleAttributeObjectBlock, collection
 					MultipleAttributeObjectBlock mblock=(MultipleAttributeObjectBlock) atvalue;
 					//Test if this is a primitive collection or a rmobject collection
-					ComplexObjectBlock tblock=(ComplexObjectBlock)mblock.getKeyObjects().get(0).getObject();
-					if(tblock instanceof SingleAttributeObjectBlock) {
-						SingleAttributeObjectBlock sblock=(SingleAttributeObjectBlock) tblock;
-						String referenceModelClassName=this.getReferenceModelClassName(sblock);
-						Class<?> referenceModelClass=this.referenceModelClassFromString(referenceModelClassName);
-						if(this.isRMObjectClass(referenceModelClass)) {
-							toRemove.add(value);
-							//Iterate the collection and create the paths
-							for(KeyedObject keyedObject : mblock.getKeyObjects()) {
-								ret.put(this.createPathComponentFromSingleAttributeObjectBlock(value.getId(),sblock, keyedObject.getKey()),sblock);
+					if(mblock.getKeyObjects().size()>0) {
+						ComplexObjectBlock tblock=(ComplexObjectBlock)mblock.getKeyObjects().get(0).getObject();
+						if(tblock instanceof SingleAttributeObjectBlock) {
+							SingleAttributeObjectBlock sblock=(SingleAttributeObjectBlock) tblock;
+							String referenceModelClassName=this.getReferenceModelClassName(sblock);
+							Class<?> referenceModelClass=this.referenceModelClassFromString(referenceModelClassName);
+							if(this.isRMObjectClass(referenceModelClass)) {
+								toRemove.add(value);
+								//Iterate the collection and create the paths
+								for(KeyedObject keyedObject : mblock.getKeyObjects()) {
+									ret.put(this.createPathComponentFromSingleAttributeObjectBlock(value.getId(),sblock, keyedObject.getKey()),(SingleAttributeObjectBlock)keyedObject.getObject());
+								}
 							}
 						}
 					}
@@ -530,5 +615,45 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 		}
 		block.getAttributeValues().removeAll(toRemove);
 		return ret;
+	}
+	protected SEQLPath getArchetypeIdPath() {
+		return  new SEQLPath("meaning/code_system_name");
+	}
+
+	protected SEQLPath getArchetypeNodePath() {
+		return new SEQLPath("meaning/code");
+	}
+	public String getArchetypeIdForRMObject(SingleAttributeObjectBlock block) throws ReferenceModelException {
+		ObjectBlock oblock=this.solveReferenceModelPath(block, this.getArchetypeIdPath().getPathComponents());
+		if(oblock==null) return null;
+		if(!(oblock instanceof PrimitiveObjectBlock)) {
+			throw new ReferenceModelException("Archetype id path is not a primitive object block");
+		}
+		PrimitiveObjectBlock pblock=(PrimitiveObjectBlock) oblock;
+		SimpleValue value=pblock.getSimpleValue();
+		if(value==null) {
+			throw new ReferenceModelException("Invalid primitive object block for archetype id");
+		}
+		return value.getValue().toString();
+	}
+	public String getArchetypeNodeIdForRMObject(SingleAttributeObjectBlock block) throws ReferenceModelException {
+		ObjectBlock oblock=this.solveReferenceModelPath(block, this.getArchetypeNodePath().getPathComponents());
+		if(oblock==null) return null;
+		if(!(oblock instanceof PrimitiveObjectBlock)) {
+			throw new ReferenceModelException("Archetype id path is not a primitive object block");
+		}
+		PrimitiveObjectBlock pblock=(PrimitiveObjectBlock) oblock;
+		SimpleValue value=pblock.getSimpleValue();
+		if(value==null) {
+			throw new ReferenceModelException("Invalid primitive object block for archetype id");
+		}
+		return value.getValue().toString();
+	}
+	@Override
+	public Class<?> getRootClass() {
+		return org.sigaim.siie.iso13606.rm.EHRExtract.class;
+	}
+	public boolean isArchetypedClass(Class<?> tclass) {
+		return org.sigaim.siie.iso13606.rm.RecordComponent.class.isAssignableFrom(tclass);
 	}
 }

@@ -1,13 +1,13 @@
-// Generated from SEQL.g4 by ANTLR 4.2.2
+// Generated from SEQL.g4 by ANTLR 4.2
 package org.sigaim.siie.seql.parser.generated;
 
-import org.sigaim.siie.seql.parser.model.SEQLFromCondition.SEQLFromComponent;
+import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
 import org.sigaim.siie.seql.parser.model.SEQLOperation;
 import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
 import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
 import org.sigaim.siie.seql.parser.model.SEQLPath;
-
-
+import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
+import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -38,19 +38,19 @@ public class SEQLParser extends Parser {
 		RULE_query = 0, RULE_select = 1, RULE_top = 2, RULE_selectExpr = 3, RULE_identifiedPathSeq = 4, 
 		RULE_selectVar = 5, RULE_asIdentifier = 6, RULE_identifiedPath = 7, RULE_objectPath = 8, 
 		RULE_pathPart = 9, RULE_nodePredicate = 10, RULE_nodePredicateOr = 11, 
-		RULE_nodePredicateAnd = 12, RULE_nodePredicateComparable = 13, RULE_from = 14, 
-		RULE_containsExpr = 15, RULE_contains = 16, RULE_containExpressionBool = 17, 
-		RULE_boolOp = 18, RULE_simpleClassExpr = 19, RULE_archetypedClassExpr = 20, 
-		RULE_archetypePredicate = 21, RULE_where = 22, RULE_identifiedExpr = 23, 
-		RULE_orOp = 24, RULE_identifiedExprAnd = 25, RULE_identifiedEquality = 26, 
-		RULE_identifiedOperand = 27, RULE_operand = 28;
+		RULE_nodePredicateAnd = 12, RULE_nodePredicateComparable = 13, RULE_predicateOperand = 14, 
+		RULE_from = 15, RULE_containsExpr = 16, RULE_contains = 17, RULE_containExpressionBool = 18, 
+		RULE_boolOp = 19, RULE_simpleClassExpr = 20, RULE_archetypedClassExpr = 21, 
+		RULE_archetypePredicate = 22, RULE_where = 23, RULE_identifiedExpr = 24, 
+		RULE_orOp = 25, RULE_identifiedExprAnd = 26, RULE_identifiedEquality = 27, 
+		RULE_identifiedOperand = 28, RULE_operand = 29;
 	public static final String[] ruleNames = {
 		"query", "select", "top", "selectExpr", "identifiedPathSeq", "selectVar", 
 		"asIdentifier", "identifiedPath", "objectPath", "pathPart", "nodePredicate", 
-		"nodePredicateOr", "nodePredicateAnd", "nodePredicateComparable", "from", 
-		"containsExpr", "contains", "containExpressionBool", "boolOp", "simpleClassExpr", 
-		"archetypedClassExpr", "archetypePredicate", "where", "identifiedExpr", 
-		"orOp", "identifiedExprAnd", "identifiedEquality", "identifiedOperand", 
+		"nodePredicateOr", "nodePredicateAnd", "nodePredicateComparable", "predicateOperand", 
+		"from", "containsExpr", "contains", "containExpressionBool", "boolOp", 
+		"simpleClassExpr", "archetypedClassExpr", "archetypePredicate", "where", 
+		"identifiedExpr", "orOp", "identifiedExprAnd", "identifiedEquality", "identifiedOperand", 
 		"operand"
 	};
 
@@ -104,17 +104,17 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(58); select();
-			setState(59); from();
-			setState(61);
+			setState(60); select();
+			setState(61); from();
+			setState(63);
 			_la = _input.LA(1);
 			if (_la==WHERE) {
 				{
-				setState(60); where();
+				setState(62); where();
 				}
 			}
 
-			setState(63); match(4);
+			setState(65); match(4);
 			}
 		}
 		catch (RecognitionException re) {
@@ -157,16 +157,16 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(65); match(SELECT);
-			setState(67);
+			setState(67); match(SELECT);
+			setState(69);
 			_la = _input.LA(1);
 			if (_la==TOP) {
 				{
-				setState(66); top();
+				setState(68); top();
 				}
 			}
 
-			setState(69); selectExpr();
+			setState(71); selectExpr();
 			}
 		}
 		catch (RecognitionException re) {
@@ -204,18 +204,18 @@ public class SEQLParser extends Parser {
 		enterRule(_localctx, 4, RULE_top);
 		int _la;
 		try {
-			setState(79);
+			setState(81);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(71); match(TOP);
-				setState(72); match(INTEGER);
-				setState(74);
+				setState(73); match(TOP);
+				setState(74); match(INTEGER);
+				setState(76);
 				_la = _input.LA(1);
 				if (_la==FORWARD) {
 					{
-					setState(73); match(FORWARD);
+					setState(75); match(FORWARD);
 					}
 				}
 
@@ -225,9 +225,9 @@ public class SEQLParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(76); match(TOP);
-				setState(77); match(INTEGER);
-				setState(78); match(BACKWARD);
+				setState(78); match(TOP);
+				setState(79); match(INTEGER);
+				setState(80); match(BACKWARD);
 				}
 				break;
 			}
@@ -267,7 +267,7 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(81); identifiedPathSeq();
+			setState(83); identifiedPathSeq();
 			}
 		}
 		catch (RecognitionException re) {
@@ -309,18 +309,18 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(83); selectVar();
-			setState(88);
+			setState(85); selectVar();
+			setState(90);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==COMMA) {
 				{
 				{
-				setState(84); match(COMMA);
-				setState(85); selectVar();
+				setState(86); match(COMMA);
+				setState(87); selectVar();
 				}
 				}
-				setState(90);
+				setState(92);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -365,12 +365,12 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(91); identifiedPath();
-			setState(93);
+			setState(93); identifiedPath();
+			setState(95);
 			_la = _input.LA(1);
 			if (_la==AS) {
 				{
-				setState(92); asIdentifier();
+				setState(94); asIdentifier();
 				}
 			}
 
@@ -410,8 +410,8 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(95); match(AS);
-			setState(96); match(IDENTIFIER);
+			setState(97); match(AS);
+			setState(98); match(IDENTIFIER);
 			}
 		}
 		catch (RecognitionException re) {
@@ -455,21 +455,21 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(98); match(IDENTIFIER);
-			setState(100);
+			setState(100); match(IDENTIFIER);
+			setState(102);
 			_la = _input.LA(1);
 			if (_la==OPENBRACKET) {
 				{
-				setState(99); nodePredicate();
+				setState(101); nodePredicate();
 				}
 			}
 
-			setState(104);
+			setState(106);
 			_la = _input.LA(1);
 			if (_la==3) {
 				{
-				setState(102); match(3);
-				setState(103); objectPath();
+				setState(104); match(3);
+				setState(105); objectPath();
 				}
 			}
 
@@ -487,6 +487,7 @@ public class SEQLParser extends Parser {
 	}
 
 	public static class ObjectPathContext extends ParserRuleContext {
+		public SEQLPath path;
 		public PathPartContext pathPart(int i) {
 			return getRuleContext(PathPartContext.class,i);
 		}
@@ -514,18 +515,18 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(106); pathPart();
-			setState(111);
+			setState(108); pathPart();
+			setState(113);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==3) {
 				{
 				{
-				setState(107); match(3);
-				setState(108); pathPart();
+				setState(109); match(3);
+				setState(110); pathPart();
 				}
 				}
-				setState(113);
+				setState(115);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -543,6 +544,7 @@ public class SEQLParser extends Parser {
 	}
 
 	public static class PathPartContext extends ParserRuleContext {
+		public SEQLPathComponent pathComponent;
 		public TerminalNode IDENTIFIER() { return getToken(SEQLParser.IDENTIFIER, 0); }
 		public NodePredicateContext nodePredicate() {
 			return getRuleContext(NodePredicateContext.class,0);
@@ -568,12 +570,12 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(114); match(IDENTIFIER);
-			setState(116);
+			setState(116); match(IDENTIFIER);
+			setState(118);
 			_la = _input.LA(1);
 			if (_la==OPENBRACKET) {
 				{
-				setState(115); nodePredicate();
+				setState(117); nodePredicate();
 				}
 			}
 
@@ -591,6 +593,7 @@ public class SEQLParser extends Parser {
 	}
 
 	public static class NodePredicateContext extends ParserRuleContext {
+		public SEQLPathPredicate pathPredicate;
 		public TerminalNode OPENBRACKET() { return getToken(SEQLParser.OPENBRACKET, 0); }
 		public TerminalNode CLOSEBRACKET() { return getToken(SEQLParser.CLOSEBRACKET, 0); }
 		public NodePredicateOrContext nodePredicateOr() {
@@ -616,9 +619,9 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(118); match(OPENBRACKET);
-			setState(119); nodePredicateOr();
-			setState(120); match(CLOSEBRACKET);
+			setState(120); match(OPENBRACKET);
+			setState(121); nodePredicateOr();
+			setState(122); match(CLOSEBRACKET);
 			}
 		}
 		catch (RecognitionException re) {
@@ -633,6 +636,7 @@ public class SEQLParser extends Parser {
 	}
 
 	public static class NodePredicateOrContext extends ParserRuleContext {
+		public SEQLEvaluable evaluable;
 		public NodePredicateAndContext nodePredicateAnd(int i) {
 			return getRuleContext(NodePredicateAndContext.class,i);
 		}
@@ -664,18 +668,18 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(122); nodePredicateAnd();
-			setState(127);
+			setState(124); nodePredicateAnd();
+			setState(129);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==OR) {
 				{
 				{
-				setState(123); match(OR);
-				setState(124); nodePredicateAnd();
+				setState(125); match(OR);
+				setState(126); nodePredicateAnd();
 				}
 				}
-				setState(129);
+				setState(131);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -693,6 +697,7 @@ public class SEQLParser extends Parser {
 	}
 
 	public static class NodePredicateAndContext extends ParserRuleContext {
+		public SEQLEvaluable evaluable;
 		public List<TerminalNode> AND() { return getTokens(SEQLParser.AND); }
 		public List<NodePredicateComparableContext> nodePredicateComparable() {
 			return getRuleContexts(NodePredicateComparableContext.class);
@@ -724,18 +729,18 @@ public class SEQLParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(130); nodePredicateComparable();
-			setState(135);
+			setState(132); nodePredicateComparable();
+			setState(137);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==AND) {
 				{
 				{
-				setState(131); match(AND);
-				setState(132); nodePredicateComparable();
+				setState(133); match(AND);
+				setState(134); nodePredicateComparable();
 				}
 				}
-				setState(137);
+				setState(139);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -753,10 +758,18 @@ public class SEQLParser extends Parser {
 	}
 
 	public static class NodePredicateComparableContext extends ParserRuleContext {
+		public SEQLEvaluable evaluable;
+		public TerminalNode COMPARABLEOPERATOR() { return getToken(SEQLParser.COMPARABLEOPERATOR, 0); }
 		public TerminalNode ARCHETYPEID() { return getToken(SEQLParser.ARCHETYPEID, 0); }
 		public TerminalNode NODEID() { return getToken(SEQLParser.NODEID, 0); }
+		public List<PredicateOperandContext> predicateOperand() {
+			return getRuleContexts(PredicateOperandContext.class);
+		}
 		public TerminalNode COMMA() { return getToken(SEQLParser.COMMA, 0); }
 		public TerminalNode STRING() { return getToken(SEQLParser.STRING, 0); }
+		public PredicateOperandContext predicateOperand(int i) {
+			return getRuleContext(PredicateOperandContext.class,i);
+		}
 		public NodePredicateComparableContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -776,19 +789,19 @@ public class SEQLParser extends Parser {
 		enterRule(_localctx, 26, RULE_nodePredicateComparable);
 		int _la;
 		try {
-			setState(148);
+			setState(158);
 			switch (_input.LA(1)) {
 			case NODEID:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(138); match(NODEID);
-				setState(141);
+				setState(140); match(NODEID);
+				setState(143);
 				_la = _input.LA(1);
 				if (_la==COMMA) {
 					{
-					setState(139); match(COMMA);
+					setState(141); match(COMMA);
 					{
-					setState(140); match(STRING);
+					setState(142); match(STRING);
 					}
 					}
 				}
@@ -798,18 +811,107 @@ public class SEQLParser extends Parser {
 			case ARCHETYPEID:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(143); match(ARCHETYPEID);
-				setState(146);
+				setState(145); match(ARCHETYPEID);
+				setState(148);
 				_la = _input.LA(1);
 				if (_la==COMMA) {
 					{
-					setState(144); match(COMMA);
+					setState(146); match(COMMA);
 					{
-					setState(145); match(STRING);
+					setState(147); match(STRING);
 					}
 					}
 				}
 
+				}
+				break;
+			case COMMA:
+			case AND:
+			case OR:
+			case CLOSEBRACKET:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(152);
+				_la = _input.LA(1);
+				if (_la==COMMA) {
+					{
+					setState(150); match(COMMA);
+					{
+					setState(151); match(STRING);
+					}
+					}
+				}
+
+				}
+				break;
+			case INTEGER:
+			case BOOLEAN:
+			case STRING:
+			case IDENTIFIER:
+				enterOuterAlt(_localctx, 4);
+				{
+				setState(154); predicateOperand();
+				{
+				setState(155); match(COMPARABLEOPERATOR);
+				setState(156); predicateOperand();
+				}
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class PredicateOperandContext extends ParserRuleContext {
+		public SEQLEvaluable evaluable;
+		public ObjectPathContext objectPath() {
+			return getRuleContext(ObjectPathContext.class,0);
+		}
+		public OperandContext operand() {
+			return getRuleContext(OperandContext.class,0);
+		}
+		public PredicateOperandContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_predicateOperand; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof SEQLListener ) ((SEQLListener)listener).enterPredicateOperand(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof SEQLListener ) ((SEQLListener)listener).exitPredicateOperand(this);
+		}
+	}
+
+	public final PredicateOperandContext predicateOperand() throws RecognitionException {
+		PredicateOperandContext _localctx = new PredicateOperandContext(_ctx, getState());
+		enterRule(_localctx, 28, RULE_predicateOperand);
+		try {
+			setState(162);
+			switch (_input.LA(1)) {
+			case IDENTIFIER:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(160); objectPath();
+				}
+				break;
+			case INTEGER:
+			case BOOLEAN:
+			case STRING:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(161); operand();
 				}
 				break;
 			default:
@@ -830,6 +932,7 @@ public class SEQLParser extends Parser {
 	public static class FromContext extends ParserRuleContext {
 		public TerminalNode CONTAINS() { return getToken(SEQLParser.CONTAINS, 0); }
 		public TerminalNode EHR() { return getToken(SEQLParser.EHR, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(SEQLParser.IDENTIFIER, 0); }
 		public ContainsExprContext containsExpr() {
 			return getRuleContext(ContainsExprContext.class,0);
 		}
@@ -850,14 +953,37 @@ public class SEQLParser extends Parser {
 
 	public final FromContext from() throws RecognitionException {
 		FromContext _localctx = new FromContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_from);
+		enterRule(_localctx, 30, RULE_from);
+		int _la;
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(150); match(FROM);
-			setState(151); match(EHR);
-			setState(152); match(CONTAINS);
-			setState(153); containsExpr();
+			setState(174);
+			switch ( getInterpreter().adaptivePredict(_input,18,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(164); match(FROM);
+				setState(165); match(EHR);
+				setState(166); match(IDENTIFIER);
+				}
+				break;
+
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(167); match(FROM);
+				setState(168); match(EHR);
+				setState(170);
+				_la = _input.LA(1);
+				if (_la==IDENTIFIER) {
+					{
+					setState(169); match(IDENTIFIER);
+					}
+				}
+
+				setState(172); match(CONTAINS);
+				setState(173); containsExpr();
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -898,17 +1024,17 @@ public class SEQLParser extends Parser {
 
 	public final ContainsExprContext containsExpr() throws RecognitionException {
 		ContainsExprContext _localctx = new ContainsExprContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_containsExpr);
+		enterRule(_localctx, 32, RULE_containsExpr);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(155); containExpressionBool();
-			setState(159);
-			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
+			setState(176); containExpressionBool();
+			setState(180);
+			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
 			case 1:
 				{
-				setState(156); boolOp();
-				setState(157); containsExpr();
+				setState(177); boolOp();
+				setState(178); containsExpr();
 				}
 				break;
 			}
@@ -950,18 +1076,18 @@ public class SEQLParser extends Parser {
 
 	public final ContainsContext contains() throws RecognitionException {
 		ContainsContext _localctx = new ContainsContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_contains);
+		enterRule(_localctx, 34, RULE_contains);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(161); simpleClassExpr();
-			setState(164);
+			setState(182); simpleClassExpr();
+			setState(185);
 			_la = _input.LA(1);
 			if (_la==CONTAINS) {
 				{
-				setState(162); match(CONTAINS);
-				setState(163); containsExpr();
+				setState(183); match(CONTAINS);
+				setState(184); containsExpr();
 				}
 			}
 
@@ -1002,22 +1128,22 @@ public class SEQLParser extends Parser {
 
 	public final ContainExpressionBoolContext containExpressionBool() throws RecognitionException {
 		ContainExpressionBoolContext _localctx = new ContainExpressionBoolContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_containExpressionBool);
+		enterRule(_localctx, 36, RULE_containExpressionBool);
 		try {
-			setState(171);
+			setState(192);
 			switch (_input.LA(1)) {
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(166); contains();
+				setState(187); contains();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(167); match(2);
-				setState(168); containsExpr();
-				setState(169); match(1);
+				setState(188); match(2);
+				setState(189); containsExpr();
+				setState(190); match(1);
 				}
 				break;
 			default:
@@ -1055,12 +1181,12 @@ public class SEQLParser extends Parser {
 
 	public final BoolOpContext boolOp() throws RecognitionException {
 		BoolOpContext _localctx = new BoolOpContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_boolOp);
+		enterRule(_localctx, 38, RULE_boolOp);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(173);
+			setState(194);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << AND) | (1L << OR) | (1L << XOR))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1104,20 +1230,20 @@ public class SEQLParser extends Parser {
 
 	public final SimpleClassExprContext simpleClassExpr() throws RecognitionException {
 		SimpleClassExprContext _localctx = new SimpleClassExprContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_simpleClassExpr);
+		enterRule(_localctx, 40, RULE_simpleClassExpr);
 		int _la;
 		try {
-			setState(180);
-			switch ( getInterpreter().adaptivePredict(_input,19,_ctx) ) {
+			setState(201);
+			switch ( getInterpreter().adaptivePredict(_input,23,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(175); match(IDENTIFIER);
-				setState(177);
+				setState(196); match(IDENTIFIER);
+				setState(198);
 				_la = _input.LA(1);
 				if (_la==IDENTIFIER) {
 					{
-					setState(176); match(IDENTIFIER);
+					setState(197); match(IDENTIFIER);
 					}
 				}
 
@@ -1127,7 +1253,7 @@ public class SEQLParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(179); archetypedClassExpr();
+				setState(200); archetypedClassExpr();
 				}
 				break;
 			}
@@ -1167,21 +1293,21 @@ public class SEQLParser extends Parser {
 
 	public final ArchetypedClassExprContext archetypedClassExpr() throws RecognitionException {
 		ArchetypedClassExprContext _localctx = new ArchetypedClassExprContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_archetypedClassExpr);
+		enterRule(_localctx, 42, RULE_archetypedClassExpr);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(182); match(IDENTIFIER);
-			setState(184);
+			setState(203); match(IDENTIFIER);
+			setState(205);
 			_la = _input.LA(1);
 			if (_la==IDENTIFIER) {
 				{
-				setState(183); match(IDENTIFIER);
+				setState(204); match(IDENTIFIER);
 				}
 			}
 
-			setState(186); archetypePredicate();
+			setState(207); archetypePredicate();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1215,13 +1341,13 @@ public class SEQLParser extends Parser {
 
 	public final ArchetypePredicateContext archetypePredicate() throws RecognitionException {
 		ArchetypePredicateContext _localctx = new ArchetypePredicateContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_archetypePredicate);
+		enterRule(_localctx, 44, RULE_archetypePredicate);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(188); match(OPENBRACKET);
-			setState(189); match(ARCHETYPEID);
-			setState(190); match(CLOSEBRACKET);
+			setState(209); match(OPENBRACKET);
+			setState(210); match(ARCHETYPEID);
+			setState(211); match(CLOSEBRACKET);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1256,12 +1382,12 @@ public class SEQLParser extends Parser {
 
 	public final WhereContext where() throws RecognitionException {
 		WhereContext _localctx = new WhereContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_where);
+		enterRule(_localctx, 46, RULE_where);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(192); match(WHERE);
-			setState(193); identifiedExpr();
+			setState(213); match(WHERE);
+			setState(214); identifiedExpr();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1305,23 +1431,23 @@ public class SEQLParser extends Parser {
 
 	public final IdentifiedExprContext identifiedExpr() throws RecognitionException {
 		IdentifiedExprContext _localctx = new IdentifiedExprContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_identifiedExpr);
+		enterRule(_localctx, 48, RULE_identifiedExpr);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(195); identifiedExprAnd();
-			setState(201);
+			setState(216); identifiedExprAnd();
+			setState(222);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==OR || _la==XOR) {
 				{
 				{
-				setState(196); orOp();
-				setState(197); identifiedExprAnd();
+				setState(217); orOp();
+				setState(218); identifiedExprAnd();
 				}
 				}
-				setState(203);
+				setState(224);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1357,12 +1483,12 @@ public class SEQLParser extends Parser {
 
 	public final OrOpContext orOp() throws RecognitionException {
 		OrOpContext _localctx = new OrOpContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_orOp);
+		enterRule(_localctx, 50, RULE_orOp);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(204);
+			setState(225);
 			_la = _input.LA(1);
 			if ( !(_la==OR || _la==XOR) ) {
 			_errHandler.recoverInline(this);
@@ -1409,23 +1535,23 @@ public class SEQLParser extends Parser {
 
 	public final IdentifiedExprAndContext identifiedExprAnd() throws RecognitionException {
 		IdentifiedExprAndContext _localctx = new IdentifiedExprAndContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_identifiedExprAnd);
+		enterRule(_localctx, 52, RULE_identifiedExprAnd);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(206); identifiedEquality();
-			setState(211);
+			setState(227); identifiedEquality();
+			setState(232);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while (_la==AND) {
 				{
 				{
-				setState(207); match(AND);
-				setState(208); identifiedEquality();
+				setState(228); match(AND);
+				setState(229); identifiedEquality();
 				}
 				}
-				setState(213);
+				setState(234);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -1478,9 +1604,9 @@ public class SEQLParser extends Parser {
 
 	public final IdentifiedEqualityContext identifiedEquality() throws RecognitionException {
 		IdentifiedEqualityContext _localctx = new IdentifiedEqualityContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_identifiedEquality);
+		enterRule(_localctx, 54, RULE_identifiedEquality);
 		try {
-			setState(226);
+			setState(247);
 			switch (_input.LA(1)) {
 			case INTEGER:
 			case BOOLEAN:
@@ -1488,31 +1614,31 @@ public class SEQLParser extends Parser {
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(214); identifiedOperand();
-				setState(215); match(COMPARABLEOPERATOR);
-				setState(216); identifiedOperand();
+				setState(235); identifiedOperand();
+				setState(236); match(COMPARABLEOPERATOR);
+				setState(237); identifiedOperand();
 				}
 				break;
 			case EXISTS:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(218); match(EXISTS);
-				setState(219); identifiedPath();
+				setState(239); match(EXISTS);
+				setState(240); identifiedPath();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(220); match(2);
-				setState(221); identifiedExpr();
-				setState(222); match(1);
+				setState(241); match(2);
+				setState(242); identifiedExpr();
+				setState(243); match(1);
 				}
 				break;
 			case NOT:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(224); match(NOT);
-				setState(225); identifiedEquality();
+				setState(245); match(NOT);
+				setState(246); identifiedEquality();
 				}
 				break;
 			default:
@@ -1554,22 +1680,22 @@ public class SEQLParser extends Parser {
 
 	public final IdentifiedOperandContext identifiedOperand() throws RecognitionException {
 		IdentifiedOperandContext _localctx = new IdentifiedOperandContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_identifiedOperand);
+		enterRule(_localctx, 56, RULE_identifiedOperand);
 		try {
-			setState(230);
+			setState(251);
 			switch (_input.LA(1)) {
 			case INTEGER:
 			case BOOLEAN:
 			case STRING:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(228); operand();
+				setState(249); operand();
 				}
 				break;
 			case IDENTIFIER:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(229); identifiedPath();
+				setState(250); identifiedPath();
 				}
 				break;
 			default:
@@ -1608,12 +1734,12 @@ public class SEQLParser extends Parser {
 
 	public final OperandContext operand() throws RecognitionException {
 		OperandContext _localctx = new OperandContext(_ctx, getState());
-		enterRule(_localctx, 56, RULE_operand);
+		enterRule(_localctx, 58, RULE_operand);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(232);
+			setState(253);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << INTEGER) | (1L << BOOLEAN) | (1L << STRING))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -1633,81 +1759,91 @@ public class SEQLParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\37\u00ed\4\2\t\2"+
+		"\3\u0430\ud6d1\u8206\uad2d\u4417\uaef1\u8d80\uaadd\3\37\u0102\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
-		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\3\2\3\2\3\2\5\2@\n"+
-		"\2\3\2\3\2\3\3\3\3\5\3F\n\3\3\3\3\3\3\4\3\4\3\4\5\4M\n\4\3\4\3\4\3\4\5"+
-		"\4R\n\4\3\5\3\5\3\6\3\6\3\6\7\6Y\n\6\f\6\16\6\\\13\6\3\7\3\7\5\7`\n\7"+
-		"\3\b\3\b\3\b\3\t\3\t\5\tg\n\t\3\t\3\t\5\tk\n\t\3\n\3\n\3\n\7\np\n\n\f"+
-		"\n\16\ns\13\n\3\13\3\13\5\13w\n\13\3\f\3\f\3\f\3\f\3\r\3\r\3\r\7\r\u0080"+
-		"\n\r\f\r\16\r\u0083\13\r\3\16\3\16\3\16\7\16\u0088\n\16\f\16\16\16\u008b"+
-		"\13\16\3\17\3\17\3\17\5\17\u0090\n\17\3\17\3\17\3\17\5\17\u0095\n\17\5"+
-		"\17\u0097\n\17\3\20\3\20\3\20\3\20\3\20\3\21\3\21\3\21\3\21\5\21\u00a2"+
-		"\n\21\3\22\3\22\3\22\5\22\u00a7\n\22\3\23\3\23\3\23\3\23\3\23\5\23\u00ae"+
-		"\n\23\3\24\3\24\3\25\3\25\5\25\u00b4\n\25\3\25\5\25\u00b7\n\25\3\26\3"+
-		"\26\5\26\u00bb\n\26\3\26\3\26\3\27\3\27\3\27\3\27\3\30\3\30\3\30\3\31"+
-		"\3\31\3\31\3\31\7\31\u00ca\n\31\f\31\16\31\u00cd\13\31\3\32\3\32\3\33"+
-		"\3\33\3\33\7\33\u00d4\n\33\f\33\16\33\u00d7\13\33\3\34\3\34\3\34\3\34"+
-		"\3\34\3\34\3\34\3\34\3\34\3\34\3\34\3\34\5\34\u00e5\n\34\3\35\3\35\5\35"+
-		"\u00e9\n\35\3\36\3\36\3\36\2\2\37\2\4\6\b\n\f\16\20\22\24\26\30\32\34"+
-		"\36 \"$&(*,.\60\62\64\668:\2\5\3\2\24\26\3\2\25\26\4\2\22\23\33\33\u00ea"+
-		"\2<\3\2\2\2\4C\3\2\2\2\6Q\3\2\2\2\bS\3\2\2\2\nU\3\2\2\2\f]\3\2\2\2\16"+
-		"a\3\2\2\2\20d\3\2\2\2\22l\3\2\2\2\24t\3\2\2\2\26x\3\2\2\2\30|\3\2\2\2"+
-		"\32\u0084\3\2\2\2\34\u0096\3\2\2\2\36\u0098\3\2\2\2 \u009d\3\2\2\2\"\u00a3"+
-		"\3\2\2\2$\u00ad\3\2\2\2&\u00af\3\2\2\2(\u00b6\3\2\2\2*\u00b8\3\2\2\2,"+
-		"\u00be\3\2\2\2.\u00c2\3\2\2\2\60\u00c5\3\2\2\2\62\u00ce\3\2\2\2\64\u00d0"+
-		"\3\2\2\2\66\u00e4\3\2\2\28\u00e8\3\2\2\2:\u00ea\3\2\2\2<=\5\4\3\2=?\5"+
-		"\36\20\2>@\5.\30\2?>\3\2\2\2?@\3\2\2\2@A\3\2\2\2AB\7\6\2\2B\3\3\2\2\2"+
-		"CE\7\13\2\2DF\5\6\4\2ED\3\2\2\2EF\3\2\2\2FG\3\2\2\2GH\5\b\5\2H\5\3\2\2"+
-		"\2IJ\7\21\2\2JL\7\22\2\2KM\7\17\2\2LK\3\2\2\2LM\3\2\2\2MR\3\2\2\2NO\7"+
-		"\21\2\2OP\7\22\2\2PR\7\20\2\2QI\3\2\2\2QN\3\2\2\2R\7\3\2\2\2ST\5\n\6\2"+
-		"T\t\3\2\2\2UZ\5\f\7\2VW\7\16\2\2WY\5\f\7\2XV\3\2\2\2Y\\\3\2\2\2ZX\3\2"+
-		"\2\2Z[\3\2\2\2[\13\3\2\2\2\\Z\3\2\2\2]_\5\20\t\2^`\5\16\b\2_^\3\2\2\2"+
-		"_`\3\2\2\2`\r\3\2\2\2ab\7\30\2\2bc\7\35\2\2c\17\3\2\2\2df\7\35\2\2eg\5"+
-		"\26\f\2fe\3\2\2\2fg\3\2\2\2gj\3\2\2\2hi\7\5\2\2ik\5\22\n\2jh\3\2\2\2j"+
-		"k\3\2\2\2k\21\3\2\2\2lq\5\24\13\2mn\7\5\2\2np\5\24\13\2om\3\2\2\2ps\3"+
-		"\2\2\2qo\3\2\2\2qr\3\2\2\2r\23\3\2\2\2sq\3\2\2\2tv\7\35\2\2uw\5\26\f\2"+
-		"vu\3\2\2\2vw\3\2\2\2w\25\3\2\2\2xy\7\36\2\2yz\5\30\r\2z{\7\37\2\2{\27"+
-		"\3\2\2\2|\u0081\5\32\16\2}~\7\25\2\2~\u0080\5\32\16\2\177}\3\2\2\2\u0080"+
-		"\u0083\3\2\2\2\u0081\177\3\2\2\2\u0081\u0082\3\2\2\2\u0082\31\3\2\2\2"+
-		"\u0083\u0081\3\2\2\2\u0084\u0089\5\34\17\2\u0085\u0086\7\24\2\2\u0086"+
-		"\u0088\5\34\17\2\u0087\u0085\3\2\2\2\u0088\u008b\3\2\2\2\u0089\u0087\3"+
-		"\2\2\2\u0089\u008a\3\2\2\2\u008a\33\3\2\2\2\u008b\u0089\3\2\2\2\u008c"+
-		"\u008f\7\b\2\2\u008d\u008e\7\16\2\2\u008e\u0090\7\33\2\2\u008f\u008d\3"+
-		"\2\2\2\u008f\u0090\3\2\2\2\u0090\u0097\3\2\2\2\u0091\u0094\7\34\2\2\u0092"+
-		"\u0093\7\16\2\2\u0093\u0095\7\33\2\2\u0094\u0092\3\2\2\2\u0094\u0095\3"+
-		"\2\2\2\u0095\u0097\3\2\2\2\u0096\u008c\3\2\2\2\u0096\u0091\3\2\2\2\u0097"+
-		"\35\3\2\2\2\u0098\u0099\7\t\2\2\u0099\u009a\7\r\2\2\u009a\u009b\7\n\2"+
-		"\2\u009b\u009c\5 \21\2\u009c\37\3\2\2\2\u009d\u00a1\5$\23\2\u009e\u009f"+
-		"\5&\24\2\u009f\u00a0\5 \21\2\u00a0\u00a2\3\2\2\2\u00a1\u009e\3\2\2\2\u00a1"+
-		"\u00a2\3\2\2\2\u00a2!\3\2\2\2\u00a3\u00a6\5(\25\2\u00a4\u00a5\7\n\2\2"+
-		"\u00a5\u00a7\5 \21\2\u00a6\u00a4\3\2\2\2\u00a6\u00a7\3\2\2\2\u00a7#\3"+
-		"\2\2\2\u00a8\u00ae\5\"\22\2\u00a9\u00aa\7\4\2\2\u00aa\u00ab\5 \21\2\u00ab"+
-		"\u00ac\7\3\2\2\u00ac\u00ae\3\2\2\2\u00ad\u00a8\3\2\2\2\u00ad\u00a9\3\2"+
-		"\2\2\u00ae%\3\2\2\2\u00af\u00b0\t\2\2\2\u00b0\'\3\2\2\2\u00b1\u00b3\7"+
-		"\35\2\2\u00b2\u00b4\7\35\2\2\u00b3\u00b2\3\2\2\2\u00b3\u00b4\3\2\2\2\u00b4"+
-		"\u00b7\3\2\2\2\u00b5\u00b7\5*\26\2\u00b6\u00b1\3\2\2\2\u00b6\u00b5\3\2"+
-		"\2\2\u00b7)\3\2\2\2\u00b8\u00ba\7\35\2\2\u00b9\u00bb\7\35\2\2\u00ba\u00b9"+
-		"\3\2\2\2\u00ba\u00bb\3\2\2\2\u00bb\u00bc\3\2\2\2\u00bc\u00bd\5,\27\2\u00bd"+
-		"+\3\2\2\2\u00be\u00bf\7\36\2\2\u00bf\u00c0\7\34\2\2\u00c0\u00c1\7\37\2"+
-		"\2\u00c1-\3\2\2\2\u00c2\u00c3\7\f\2\2\u00c3\u00c4\5\60\31\2\u00c4/\3\2"+
-		"\2\2\u00c5\u00cb\5\64\33\2\u00c6\u00c7\5\62\32\2\u00c7\u00c8\5\64\33\2"+
-		"\u00c8\u00ca\3\2\2\2\u00c9\u00c6\3\2\2\2\u00ca\u00cd\3\2\2\2\u00cb\u00c9"+
-		"\3\2\2\2\u00cb\u00cc\3\2\2\2\u00cc\61\3\2\2\2\u00cd\u00cb\3\2\2\2\u00ce"+
-		"\u00cf\t\3\2\2\u00cf\63\3\2\2\2\u00d0\u00d5\5\66\34\2\u00d1\u00d2\7\24"+
-		"\2\2\u00d2\u00d4\5\66\34\2\u00d3\u00d1\3\2\2\2\u00d4\u00d7\3\2\2\2\u00d5"+
-		"\u00d3\3\2\2\2\u00d5\u00d6\3\2\2\2\u00d6\65\3\2\2\2\u00d7\u00d5\3\2\2"+
-		"\2\u00d8\u00d9\58\35\2\u00d9\u00da\7\31\2\2\u00da\u00db\58\35\2\u00db"+
-		"\u00e5\3\2\2\2\u00dc\u00dd\7\32\2\2\u00dd\u00e5\5\20\t\2\u00de\u00df\7"+
-		"\4\2\2\u00df\u00e0\5\60\31\2\u00e0\u00e1\7\3\2\2\u00e1\u00e5\3\2\2\2\u00e2"+
-		"\u00e3\7\27\2\2\u00e3\u00e5\5\66\34\2\u00e4\u00d8\3\2\2\2\u00e4\u00dc"+
-		"\3\2\2\2\u00e4\u00de\3\2\2\2\u00e4\u00e2\3\2\2\2\u00e5\67\3\2\2\2\u00e6"+
-		"\u00e9\5:\36\2\u00e7\u00e9\5\20\t\2\u00e8\u00e6\3\2\2\2\u00e8\u00e7\3"+
-		"\2\2\2\u00e99\3\2\2\2\u00ea\u00eb\t\4\2\2\u00eb;\3\2\2\2\33?ELQZ_fjqv"+
-		"\u0081\u0089\u008f\u0094\u0096\u00a1\u00a6\u00ad\u00b3\u00b6\u00ba\u00cb"+
-		"\u00d5\u00e4\u00e8";
+		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\3\2\3\2\3"+
+		"\2\5\2B\n\2\3\2\3\2\3\3\3\3\5\3H\n\3\3\3\3\3\3\4\3\4\3\4\5\4O\n\4\3\4"+
+		"\3\4\3\4\5\4T\n\4\3\5\3\5\3\6\3\6\3\6\7\6[\n\6\f\6\16\6^\13\6\3\7\3\7"+
+		"\5\7b\n\7\3\b\3\b\3\b\3\t\3\t\5\ti\n\t\3\t\3\t\5\tm\n\t\3\n\3\n\3\n\7"+
+		"\nr\n\n\f\n\16\nu\13\n\3\13\3\13\5\13y\n\13\3\f\3\f\3\f\3\f\3\r\3\r\3"+
+		"\r\7\r\u0082\n\r\f\r\16\r\u0085\13\r\3\16\3\16\3\16\7\16\u008a\n\16\f"+
+		"\16\16\16\u008d\13\16\3\17\3\17\3\17\5\17\u0092\n\17\3\17\3\17\3\17\5"+
+		"\17\u0097\n\17\3\17\3\17\5\17\u009b\n\17\3\17\3\17\3\17\3\17\5\17\u00a1"+
+		"\n\17\3\20\3\20\5\20\u00a5\n\20\3\21\3\21\3\21\3\21\3\21\3\21\5\21\u00ad"+
+		"\n\21\3\21\3\21\5\21\u00b1\n\21\3\22\3\22\3\22\3\22\5\22\u00b7\n\22\3"+
+		"\23\3\23\3\23\5\23\u00bc\n\23\3\24\3\24\3\24\3\24\3\24\5\24\u00c3\n\24"+
+		"\3\25\3\25\3\26\3\26\5\26\u00c9\n\26\3\26\5\26\u00cc\n\26\3\27\3\27\5"+
+		"\27\u00d0\n\27\3\27\3\27\3\30\3\30\3\30\3\30\3\31\3\31\3\31\3\32\3\32"+
+		"\3\32\3\32\7\32\u00df\n\32\f\32\16\32\u00e2\13\32\3\33\3\33\3\34\3\34"+
+		"\3\34\7\34\u00e9\n\34\f\34\16\34\u00ec\13\34\3\35\3\35\3\35\3\35\3\35"+
+		"\3\35\3\35\3\35\3\35\3\35\3\35\3\35\5\35\u00fa\n\35\3\36\3\36\5\36\u00fe"+
+		"\n\36\3\37\3\37\3\37\2\2 \2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&"+
+		"(*,.\60\62\64\668:<\2\5\3\2\24\26\3\2\25\26\4\2\22\23\33\33\u0104\2>\3"+
+		"\2\2\2\4E\3\2\2\2\6S\3\2\2\2\bU\3\2\2\2\nW\3\2\2\2\f_\3\2\2\2\16c\3\2"+
+		"\2\2\20f\3\2\2\2\22n\3\2\2\2\24v\3\2\2\2\26z\3\2\2\2\30~\3\2\2\2\32\u0086"+
+		"\3\2\2\2\34\u00a0\3\2\2\2\36\u00a4\3\2\2\2 \u00b0\3\2\2\2\"\u00b2\3\2"+
+		"\2\2$\u00b8\3\2\2\2&\u00c2\3\2\2\2(\u00c4\3\2\2\2*\u00cb\3\2\2\2,\u00cd"+
+		"\3\2\2\2.\u00d3\3\2\2\2\60\u00d7\3\2\2\2\62\u00da\3\2\2\2\64\u00e3\3\2"+
+		"\2\2\66\u00e5\3\2\2\28\u00f9\3\2\2\2:\u00fd\3\2\2\2<\u00ff\3\2\2\2>?\5"+
+		"\4\3\2?A\5 \21\2@B\5\60\31\2A@\3\2\2\2AB\3\2\2\2BC\3\2\2\2CD\7\6\2\2D"+
+		"\3\3\2\2\2EG\7\13\2\2FH\5\6\4\2GF\3\2\2\2GH\3\2\2\2HI\3\2\2\2IJ\5\b\5"+
+		"\2J\5\3\2\2\2KL\7\21\2\2LN\7\22\2\2MO\7\17\2\2NM\3\2\2\2NO\3\2\2\2OT\3"+
+		"\2\2\2PQ\7\21\2\2QR\7\22\2\2RT\7\20\2\2SK\3\2\2\2SP\3\2\2\2T\7\3\2\2\2"+
+		"UV\5\n\6\2V\t\3\2\2\2W\\\5\f\7\2XY\7\16\2\2Y[\5\f\7\2ZX\3\2\2\2[^\3\2"+
+		"\2\2\\Z\3\2\2\2\\]\3\2\2\2]\13\3\2\2\2^\\\3\2\2\2_a\5\20\t\2`b\5\16\b"+
+		"\2a`\3\2\2\2ab\3\2\2\2b\r\3\2\2\2cd\7\30\2\2de\7\35\2\2e\17\3\2\2\2fh"+
+		"\7\35\2\2gi\5\26\f\2hg\3\2\2\2hi\3\2\2\2il\3\2\2\2jk\7\5\2\2km\5\22\n"+
+		"\2lj\3\2\2\2lm\3\2\2\2m\21\3\2\2\2ns\5\24\13\2op\7\5\2\2pr\5\24\13\2q"+
+		"o\3\2\2\2ru\3\2\2\2sq\3\2\2\2st\3\2\2\2t\23\3\2\2\2us\3\2\2\2vx\7\35\2"+
+		"\2wy\5\26\f\2xw\3\2\2\2xy\3\2\2\2y\25\3\2\2\2z{\7\36\2\2{|\5\30\r\2|}"+
+		"\7\37\2\2}\27\3\2\2\2~\u0083\5\32\16\2\177\u0080\7\25\2\2\u0080\u0082"+
+		"\5\32\16\2\u0081\177\3\2\2\2\u0082\u0085\3\2\2\2\u0083\u0081\3\2\2\2\u0083"+
+		"\u0084\3\2\2\2\u0084\31\3\2\2\2\u0085\u0083\3\2\2\2\u0086\u008b\5\34\17"+
+		"\2\u0087\u0088\7\24\2\2\u0088\u008a\5\34\17\2\u0089\u0087\3\2\2\2\u008a"+
+		"\u008d\3\2\2\2\u008b\u0089\3\2\2\2\u008b\u008c\3\2\2\2\u008c\33\3\2\2"+
+		"\2\u008d\u008b\3\2\2\2\u008e\u0091\7\b\2\2\u008f\u0090\7\16\2\2\u0090"+
+		"\u0092\7\33\2\2\u0091\u008f\3\2\2\2\u0091\u0092\3\2\2\2\u0092\u00a1\3"+
+		"\2\2\2\u0093\u0096\7\34\2\2\u0094\u0095\7\16\2\2\u0095\u0097\7\33\2\2"+
+		"\u0096\u0094\3\2\2\2\u0096\u0097\3\2\2\2\u0097\u00a1\3\2\2\2\u0098\u0099"+
+		"\7\16\2\2\u0099\u009b\7\33\2\2\u009a\u0098\3\2\2\2\u009a\u009b\3\2\2\2"+
+		"\u009b\u00a1\3\2\2\2\u009c\u009d\5\36\20\2\u009d\u009e\7\31\2\2\u009e"+
+		"\u009f\5\36\20\2\u009f\u00a1\3\2\2\2\u00a0\u008e\3\2\2\2\u00a0\u0093\3"+
+		"\2\2\2\u00a0\u009a\3\2\2\2\u00a0\u009c\3\2\2\2\u00a1\35\3\2\2\2\u00a2"+
+		"\u00a5\5\22\n\2\u00a3\u00a5\5<\37\2\u00a4\u00a2\3\2\2\2\u00a4\u00a3\3"+
+		"\2\2\2\u00a5\37\3\2\2\2\u00a6\u00a7\7\t\2\2\u00a7\u00a8\7\r\2\2\u00a8"+
+		"\u00b1\7\35\2\2\u00a9\u00aa\7\t\2\2\u00aa\u00ac\7\r\2\2\u00ab\u00ad\7"+
+		"\35\2\2\u00ac\u00ab\3\2\2\2\u00ac\u00ad\3\2\2\2\u00ad\u00ae\3\2\2\2\u00ae"+
+		"\u00af\7\n\2\2\u00af\u00b1\5\"\22\2\u00b0\u00a6\3\2\2\2\u00b0\u00a9\3"+
+		"\2\2\2\u00b1!\3\2\2\2\u00b2\u00b6\5&\24\2\u00b3\u00b4\5(\25\2\u00b4\u00b5"+
+		"\5\"\22\2\u00b5\u00b7\3\2\2\2\u00b6\u00b3\3\2\2\2\u00b6\u00b7\3\2\2\2"+
+		"\u00b7#\3\2\2\2\u00b8\u00bb\5*\26\2\u00b9\u00ba\7\n\2\2\u00ba\u00bc\5"+
+		"\"\22\2\u00bb\u00b9\3\2\2\2\u00bb\u00bc\3\2\2\2\u00bc%\3\2\2\2\u00bd\u00c3"+
+		"\5$\23\2\u00be\u00bf\7\4\2\2\u00bf\u00c0\5\"\22\2\u00c0\u00c1\7\3\2\2"+
+		"\u00c1\u00c3\3\2\2\2\u00c2\u00bd\3\2\2\2\u00c2\u00be\3\2\2\2\u00c3\'\3"+
+		"\2\2\2\u00c4\u00c5\t\2\2\2\u00c5)\3\2\2\2\u00c6\u00c8\7\35\2\2\u00c7\u00c9"+
+		"\7\35\2\2\u00c8\u00c7\3\2\2\2\u00c8\u00c9\3\2\2\2\u00c9\u00cc\3\2\2\2"+
+		"\u00ca\u00cc\5,\27\2\u00cb\u00c6\3\2\2\2\u00cb\u00ca\3\2\2\2\u00cc+\3"+
+		"\2\2\2\u00cd\u00cf\7\35\2\2\u00ce\u00d0\7\35\2\2\u00cf\u00ce\3\2\2\2\u00cf"+
+		"\u00d0\3\2\2\2\u00d0\u00d1\3\2\2\2\u00d1\u00d2\5.\30\2\u00d2-\3\2\2\2"+
+		"\u00d3\u00d4\7\36\2\2\u00d4\u00d5\7\34\2\2\u00d5\u00d6\7\37\2\2\u00d6"+
+		"/\3\2\2\2\u00d7\u00d8\7\f\2\2\u00d8\u00d9\5\62\32\2\u00d9\61\3\2\2\2\u00da"+
+		"\u00e0\5\66\34\2\u00db\u00dc\5\64\33\2\u00dc\u00dd\5\66\34\2\u00dd\u00df"+
+		"\3\2\2\2\u00de\u00db\3\2\2\2\u00df\u00e2\3\2\2\2\u00e0\u00de\3\2\2\2\u00e0"+
+		"\u00e1\3\2\2\2\u00e1\63\3\2\2\2\u00e2\u00e0\3\2\2\2\u00e3\u00e4\t\3\2"+
+		"\2\u00e4\65\3\2\2\2\u00e5\u00ea\58\35\2\u00e6\u00e7\7\24\2\2\u00e7\u00e9"+
+		"\58\35\2\u00e8\u00e6\3\2\2\2\u00e9\u00ec\3\2\2\2\u00ea\u00e8\3\2\2\2\u00ea"+
+		"\u00eb\3\2\2\2\u00eb\67\3\2\2\2\u00ec\u00ea\3\2\2\2\u00ed\u00ee\5:\36"+
+		"\2\u00ee\u00ef\7\31\2\2\u00ef\u00f0\5:\36\2\u00f0\u00fa\3\2\2\2\u00f1"+
+		"\u00f2\7\32\2\2\u00f2\u00fa\5\20\t\2\u00f3\u00f4\7\4\2\2\u00f4\u00f5\5"+
+		"\62\32\2\u00f5\u00f6\7\3\2\2\u00f6\u00fa\3\2\2\2\u00f7\u00f8\7\27\2\2"+
+		"\u00f8\u00fa\58\35\2\u00f9\u00ed\3\2\2\2\u00f9\u00f1\3\2\2\2\u00f9\u00f3"+
+		"\3\2\2\2\u00f9\u00f7\3\2\2\2\u00fa9\3\2\2\2\u00fb\u00fe\5<\37\2\u00fc"+
+		"\u00fe\5\20\t\2\u00fd\u00fb\3\2\2\2\u00fd\u00fc\3\2\2\2\u00fe;\3\2\2\2"+
+		"\u00ff\u0100\t\4\2\2\u0100=\3\2\2\2\37AGNS\\ahlsx\u0083\u008b\u0091\u0096"+
+		"\u009a\u00a0\u00a4\u00ac\u00b0\u00b6\u00bb\u00c2\u00c8\u00cb\u00cf\u00e0"+
+		"\u00ea\u00f9\u00fd";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

@@ -7,16 +7,14 @@ import org.sigaim.siie.seql.parser.generated.SEQLBaseListener;
 import org.sigaim.siie.seql.parser.generated.SEQLParser;
 import org.sigaim.siie.seql.parser.generated.SEQLParser.ArchetypedClassExprContext;
 import org.sigaim.siie.seql.parser.generated.SEQLParser.AsIdentifierContext;
-import org.sigaim.siie.seql.parser.generated.SEQLParser.ContainExpressionBoolContext;
-import org.sigaim.siie.seql.parser.generated.SEQLParser.ContainsExprContext;
 import org.sigaim.siie.seql.parser.generated.SEQLParser.IdentifiedPathSeqContext;
 import org.sigaim.siie.seql.parser.generated.SEQLParser.SelectVarContext;
+import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
 import org.sigaim.siie.seql.parser.model.SEQLOperation;
 import org.sigaim.siie.seql.parser.model.SEQLOperation.SEQLBooleanOperator;
-import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
-import org.sigaim.siie.seql.parser.model.SEQLFromCondition;
-import org.sigaim.siie.seql.parser.model.SEQLFromCondition.SEQLFromComponent;
 import org.sigaim.siie.seql.parser.model.SEQLPath;
+import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
+import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
 import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
 import org.sigaim.siie.seql.parser.model.SEQLQuery;
 
@@ -46,11 +44,17 @@ public class SEQLModelListener extends SEQLBaseListener {
  
 	@Override public void exitFrom(@NotNull SEQLParser.FromContext ctx) {
 		//create EHR entry
-		SEQLFromComponent ehrComponent=query.getFromCondition().createFromComponent("ehr_extract",null,null);
+		String ehrIdentifiedVariable=null;
+		if(ctx.IDENTIFIER()!=null && ctx.IDENTIFIER().getText()!=null) {
+			ehrIdentifiedVariable=ctx.IDENTIFIER().getText();
+		}
+		SEQLFromComponent ehrComponent=query.getFromCondition().createFromComponent("ehr_extract",ehrIdentifiedVariable,null);
 		SEQLOperation op=new SEQLOperation();
 		op.setOperator(SEQLBooleanOperator.CONTAINS);
 		op.setLeftOperand(ehrComponent);
-		op.setRightOperand(ctx.containsExpr().operation);
+		if(ctx.containsExpr()!=null) {
+			op.setRightOperand(ctx.containsExpr().operation);
+		}
 		query.getFromCondition().setRoot(op);
 	}
  
@@ -110,7 +114,15 @@ public class SEQLModelListener extends SEQLBaseListener {
 		ctx.component=this.fromComponentFromContext(ctx);
 	}
 	@Override public void exitIdentifiedPath(@NotNull SEQLParser.IdentifiedPathContext ctx) { 
-		ctx.path=new SEQLPath(ctx.getText());
+		ctx.path=new SEQLPath(ctx.IDENTIFIER().getText());
+		if(ctx.nodePredicate()!=null) {
+			ctx.path.getFirstPathComponent().setPathPredicate(ctx.nodePredicate().pathPredicate);
+		}
+		if(ctx.objectPath()!=null) {
+			for(SEQLPathComponent component : ctx.objectPath().path.getPathComponents()) {
+				ctx.path.addPathComponent(component);
+			}
+		}
 	}
 	@Override public void exitOperand(@NotNull SEQLParser.OperandContext ctx) { 
 		ctx.primitive=new SEQLPrimitive(ctx.getText());
@@ -122,24 +134,29 @@ public class SEQLModelListener extends SEQLBaseListener {
 			ctx.evaluable=ctx.identifiedPath().path;
 		}
 	}
+	protected SEQLBooleanOperator booleanOperatorFromString(String operator) {
+		SEQLBooleanOperator eop=SEQLBooleanOperator.EQUALITY;
+		if(operator.equals("=")) {
+			eop=SEQLBooleanOperator.EQUALITY;
+		} else if(operator.equals("!=")) {
+			eop=SEQLBooleanOperator.INEQUALITY;
+		} else if (operator.equals(">")) {
+			eop=SEQLBooleanOperator.GT;
+		}  else if (operator.equals(">=")) {
+			eop=SEQLBooleanOperator.GE;
+		} else if (operator.equals("<")) {
+			eop=SEQLBooleanOperator.LT;
+		} else {
+			eop=SEQLBooleanOperator.LE;
+		}
+		return eop;
+	}
 	@Override public void exitIdentifiedEquality(@NotNull SEQLParser.IdentifiedEqualityContext ctx) { 
 		if(ctx.COMPARABLEOPERATOR()!=null) {
 			SEQLOperation op=new SEQLOperation();
 			String operator=ctx.COMPARABLEOPERATOR().getText();
 			SEQLBooleanOperator eop=SEQLBooleanOperator.EQUALITY;
-			if(operator.equals("=")) {
-				eop=SEQLBooleanOperator.EQUALITY;
-			} else if(operator.equals("!=")) {
-				eop=SEQLBooleanOperator.INEQUALITY;
-			} else if (operator.equals(">")) {
-				eop=SEQLBooleanOperator.GT;
-			}  else if (operator.equals(">=")) {
-				eop=SEQLBooleanOperator.GE;
-			} else if (operator.equals("<")) {
-				eop=SEQLBooleanOperator.LT;
-			} else {
-				eop=SEQLBooleanOperator.LE;
-			}
+			eop=this.booleanOperatorFromString(operator);
 			op.setOperator(eop);
 			op.setLeftOperand(ctx.identifiedOperand().get(0).evaluable);
 			op.setRightOperand(ctx.identifiedOperand().get(1).evaluable);
@@ -208,7 +225,105 @@ public class SEQLModelListener extends SEQLBaseListener {
 	@Override public void exitWhere(@NotNull SEQLParser.WhereContext ctx) { 
 		query.getWhereCondition().setRoot(ctx.identifiedExpr().operation);
 	}
+	@Override public void exitNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx) {
+		if(ctx.nodePredicateOr().evaluable instanceof SEQLPathPredicate) {
+			ctx.pathPredicate=(SEQLPathPredicate)ctx.nodePredicateOr().evaluable;
+		} else {
+			ctx.pathPredicate=new SEQLPathPredicate((SEQLOperation)ctx.nodePredicateOr().evaluable);
+		}
+	}
+	@Override public void exitNodePredicateOr(@NotNull SEQLParser.NodePredicateOrContext ctx) {
+		if(ctx.OR().size()>0) {
+			SEQLOperation previousOp=null;
+			for(int i=0;i<ctx.OR().size();i++) {
+				SEQLOperation op=new SEQLOperation();
+				op.setOperator(SEQLBooleanOperator.AND);
+				if(previousOp==null) {
+					op.setLeftOperand(ctx.nodePredicateAnd().get(i).evaluable);
+					op.setRightOperand(ctx.nodePredicateAnd().get(i+1).evaluable);	
+					previousOp=op;
+				} else {
+					op.setLeftOperand(previousOp);
+					op.setRightOperand(ctx.nodePredicateAnd().get(i+1).evaluable);
+					previousOp=op;
+				}
+			}
+			ctx.evaluable=previousOp;
+		} else {
+			ctx.evaluable=ctx.nodePredicateAnd().get(0).evaluable;
+		}
+	}
+	@Override public void exitNodePredicateAnd(@NotNull SEQLParser.NodePredicateAndContext ctx) {
+		if(ctx.AND().size()>0) {
+			SEQLOperation previousOp=null;
+			for(int i=0;i<ctx.AND().size();i++) {
+				SEQLOperation op=new SEQLOperation();
+				op.setOperator(SEQLBooleanOperator.AND);
+				if(previousOp==null) {
+					op.setLeftOperand(ctx.nodePredicateComparable().get(i).evaluable);
+					op.setRightOperand(ctx.nodePredicateComparable().get(i+1).evaluable);	
+					previousOp=op;
+				} else {
+					op.setLeftOperand(previousOp);
+					op.setRightOperand(ctx.nodePredicateComparable().get(i+1).evaluable);
+					previousOp=op;
+				}
+			}
+			ctx.evaluable=previousOp;
+		} else {
+			ctx.evaluable=ctx.nodePredicateComparable().get(0).evaluable;
+		}
+	}
+	@Override public void exitNodePredicateComparable(@NotNull SEQLParser.NodePredicateComparableContext ctx) {
+		if(ctx.NODEID()!=null && ctx.NODEID().getText()!=null) {
+			SEQLPathPredicate predicate;
+			if(ctx.STRING()!=null && ctx.STRING().getText()!=null) {
+				predicate= new SEQLPathPredicate(ctx.NODEID().getText(),ctx.STRING().getText());
+			} else {
+				predicate= new SEQLPathPredicate(ctx.NODEID().getText(),null);
+			}
+			ctx.evaluable=predicate;
+		} else if(ctx.ARCHETYPEID()!=null && ctx.ARCHETYPEID().getText()!=null) {
+			SEQLPathPredicate predicate;
+			if(ctx.STRING()!=null && ctx.STRING().getText()!=null) {
+				predicate= new SEQLPathPredicate(ctx.ARCHETYPEID().getText(),ctx.STRING().getText());
+			} else {
+				predicate= new SEQLPathPredicate(ctx.ARCHETYPEID().getText(),null);
+			}
+			ctx.evaluable=predicate;
+		} else if (ctx.STRING()!=null && ctx.STRING().getText()!=null){
+			ctx.evaluable=new SEQLPathPredicate(null,ctx.STRING().getText());
+		} else { 
+			SEQLOperation operation= new SEQLOperation();
+			operation.setOperator(this.booleanOperatorFromString(ctx.COMPARABLEOPERATOR().getText()));
+			operation.setLeftOperand(ctx.predicateOperand().get(0).evaluable);
+			operation.setLeftOperand(ctx.predicateOperand().get(1).evaluable);
+			ctx.evaluable=operation;
+		}
+	}
+	@Override public void exitPredicateOperand(@NotNull SEQLParser.PredicateOperandContext ctx) {
+		if(ctx.operand()!=null) {
+			ctx.evaluable=ctx.operand().primitive;
+		} else {
+			ctx.evaluable=ctx.objectPath().path;
+		}
+	}
 	public SEQLQuery getQuery() {
 		return query;
+	}
+	@Override public void exitObjectPath(@NotNull SEQLParser.ObjectPathContext ctx) {  
+		SEQLPath path=new SEQLPath((String)null);
+		for(SEQLParser.PathPartContext pctx: ctx.pathPart()) {
+			path.addPathComponent(pctx.pathComponent);
+		}
+		ctx.path=path;
+		
+	}
+	@Override public void exitPathPart(@NotNull SEQLParser.PathPartContext ctx) {
+		SEQLPathComponent component=new SEQLPathComponent(ctx.IDENTIFIER().getText());
+		if(ctx.nodePredicate()!=null) {
+			component.setPathPredicate(ctx.nodePredicate().pathPredicate);
+		}
+		ctx.pathComponent=component;
 	}
 }

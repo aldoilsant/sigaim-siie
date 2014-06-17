@@ -1,13 +1,13 @@
-// Generated from SEQL.g4 by ANTLR 4.2.2
+// Generated from SEQL.g4 by ANTLR 4.2
 package org.sigaim.siie.seql.parser.generated;
 
-import org.sigaim.siie.seql.parser.model.SEQLFromCondition.SEQLFromComponent;
+import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
 import org.sigaim.siie.seql.parser.model.SEQLOperation;
 import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
 import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
 import org.sigaim.siie.seql.parser.model.SEQLPath;
-
-
+import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
+import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -325,19 +325,6 @@ public class SEQLBaseListener implements SEQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterIdentifiedExpr(@NotNull SEQLParser.IdentifiedExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -351,6 +338,19 @@ public class SEQLBaseListener implements SEQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIdentifiedEquality(@NotNull SEQLParser.IdentifiedEqualityContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -358,6 +358,19 @@ public class SEQLBaseListener implements SEQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIdentifiedEquality(@NotNull SEQLParser.IdentifiedEqualityContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPredicateOperand(@NotNull SEQLParser.PredicateOperandContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPredicateOperand(@NotNull SEQLParser.PredicateOperandContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
