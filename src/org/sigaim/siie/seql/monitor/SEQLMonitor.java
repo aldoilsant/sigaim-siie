@@ -25,6 +25,7 @@ import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.dadl.OpenEHRDADLManager;
 import org.sigaim.siie.db.sql.SQLPersistenceManager;
 import org.sigaim.siie.iso13606.rm.BL;
+import org.sigaim.siie.iso13606.rm.Composition;
 import org.sigaim.siie.iso13606.rm.EHRExtract;
 import org.sigaim.siie.rm.ReflectorReferenceModelManager;
 import org.sigaim.siie.seql.engine.SEQLPipeEngine;
@@ -52,7 +53,6 @@ public class SEQLMonitor {
 		System.out.println("Welcome to SEQLMON 0.1");
 		DADLManager dmng=new OpenEHRDADLManager();
 		ReflectorReferenceModelManager mng=new ReflectorReferenceModelManager(dmng);
-		Class<?> type=mng.getPathType("composition", new SEQLPath("c/content/items/structure_type"));
 		InputStream is;
 		FileArchetypeManager mgr=new FileArchetypeManager();
 		Archetype arq=mgr.getArquetypeById("CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1");
@@ -76,16 +76,19 @@ public class SEQLMonitor {
 		System.out.println("Done");
 		//For stress test
 		for(int i=0;i<1;i++) {
-			is=SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_002.dadl");
+			is=SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_007.dadl");
 			ContentObject unbinded=dmng.parseDADL(is);
-			EHRExtract extract=(EHRExtract)mng.bind(unbinded);
+			/*EHRExtract extract=(EHRExtract)mng.bind(unbinded);
 			GregorianCalendar gregorianCalendar = new GregorianCalendar();
 		    DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
 		    XMLGregorianCalendar now = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar);
 			extract.setTimeCreated(now);
-			unbinded=mng.unbind(extract);
-			extract=(EHRExtract)mng.bind(unbinded);
-			pmngr.saveReferenceModelObjectFromContentObject(unbinded);
+			unbinded=mng.unbind(extract);*/
+			String reserialized=dmng.serialize(unbinded, false);
+			unbinded=dmng.parseDADL(new ByteArrayInputStream(reserialized.getBytes()));
+			Composition comp=(Composition)mng.bind(unbinded);
+			//extract=(EHRExtract)mng.bind(unbinded);
+			//pmngr.saveReferenceModelObjectFromContentObject(unbinded);
 		}
 		SEQLExecutionMemorySolverStage stage=new SEQLExecutionMemorySolverStage(pmngr,mng);
 		SEQLPipeEngine engine=new SEQLPipeEngine();
