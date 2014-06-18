@@ -193,7 +193,9 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 				ContentObject obj=this.pmngr.selectFromReferenceModelObjectId(match);
 				SingleAttributeObjectBlock sblock=this.rmngr.getSingleAttributeObjectBlockFromContentObject(obj);
 				ObjectBlock finalMatch=this.rmngr.solveReferenceModelPath(sblock, pathComponents);
-				finalMatches.add(finalMatch);
+				if(finalMatch!=null) {
+					finalMatches.add(finalMatch);
+				}
 			}
 			return finalMatches;
 		} catch(Exception e) {

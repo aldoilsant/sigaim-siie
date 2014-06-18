@@ -1,6 +1,7 @@
 package org.sigaim.siie.dadl;
 
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.openehr.am.parser.AttributeValue;
@@ -43,6 +44,9 @@ public class OpenEHRDADLManager implements DADLManager {
 	public String serializeSimpleValue(SimpleValue value) {
 		if(value.getValue() instanceof String) {
 			return "\""+value.getValue().toString()+"\"";
+		} else if(value.getValue() instanceof Double) {
+			DecimalFormat df = new DecimalFormat("##.#######");
+			return df.format((Double)value.getValue());
 		} else return value.getValue().toString();
 	}
 	private String serializeSimpleIntervalValue(Interval<Comparable> interval) {

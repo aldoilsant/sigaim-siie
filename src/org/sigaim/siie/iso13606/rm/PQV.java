@@ -125,7 +125,7 @@ public class PQV
      *     {@link Integer }
      *     
      */
-    public int getPrecision() {
+    public Integer getPrecision() {
         if (precision == null) {
             return  0;
         } else {

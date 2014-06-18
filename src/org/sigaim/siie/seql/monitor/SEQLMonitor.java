@@ -40,6 +40,11 @@ import org.sigaim.siie.seql.parser.model.SEQLQuery;
 import org.sigaim.siie.seql.parser.model.SEQLResultSet;
 
 
+/* SENSIBLE QUERIES
+ * RETRIEVE ALL SYMPTOMS FOR EACH SUBJECT OF CARE BY NAME
+ * SELECT h/ehr_id/extension, e/value/display_name/value FROM EHR h CONTAINS ELEMENT e[CEN-EN13606-CLUSTER.Sintoma.v1] WHERE EXISTS e/value/display_name/value;
+ */
+
 public class SEQLMonitor {
 
 	public static void main(String[] args) throws Exception {
@@ -71,7 +76,7 @@ public class SEQLMonitor {
 		System.out.println("Done");
 		//For stress test
 		for(int i=0;i<1;i++) {
-			is=SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_001.dadl");
+			is=SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_002.dadl");
 			ContentObject unbinded=dmng.parseDADL(is);
 			EHRExtract extract=(EHRExtract)mng.bind(unbinded);
 			GregorianCalendar gregorianCalendar = new GregorianCalendar();

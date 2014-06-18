@@ -65,7 +65,7 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 	    List<File> dirs = new ArrayList<File>();
 	    while (resources.hasMoreElements()) {
 	        URL resource = resources.nextElement();
-	        dirs.add(new File(resource.getFile()));
+	        dirs.add(new File(resource.getFile().replace("%20", " ")));
 	    }
 	    HashMap<String,Class<?>> classes = new HashMap<String,Class<?>>();
 	    for (File directory : dirs) {
@@ -388,7 +388,13 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 										if(setterParameter instanceof Boolean && method.getParameterTypes()[0].equals(boolean.class)) {
 											//Use autoboxing
 											method.invoke(instance, setterParameter);
-										} //Shorcuts for StringValue unbinding
+										} else if(setterParameter instanceof Double && method.getParameterTypes()[0].equals(double.class)) {
+											//Use autoboxing
+											method.invoke(instance, setterParameter);
+										} else if(setterParameter instanceof Integer && method.getParameterTypes()[0].equals(int.class)) {
+											//Use autoboxing
+											method.invoke(instance, setterParameter);
+										} 
 										else if(setterParameter instanceof String && method.getParameterTypes()[0].equals(XMLGregorianCalendar.class)) {
 											XMLGregorianCalendar xgc=DatatypeFactory.newInstance().newXMLGregorianCalendar((String)setterParameter);
 											try {
@@ -421,7 +427,9 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 							}
 						}
 					}
-					if(!found) throw new ReferenceModelException("Unable to get setter for class "+objectClass.getName()+" and attribute "+value.getId() + " with value "+setterParameter);
+					if(!found) {
+						throw new ReferenceModelException("Unable to get setter for class "+objectClass.getName()+" and attribute "+value.getId() + " with value "+setterParameter);
+					}
 				}	
 			}
 		} 
@@ -644,7 +652,8 @@ public class ReflectorReferenceModelManager implements ReferenceModelManager{
 		return ret;
 	}
 	protected SEQLPath getArchetypeIdPath() {
-		return  new SEQLPath("meaning/code_system_name");
+		//return  new SEQLPath("meaning/code_system_name");
+		return  new SEQLPath("archetype_id/root");
 	}
 
 	protected SEQLPath getArchetypeNodePath() {
