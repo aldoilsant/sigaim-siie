@@ -12,6 +12,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.openehr.am.parser.AttributeValue;
 import org.openehr.am.parser.ComplexObjectBlock;
 import org.openehr.am.parser.ContentObject;
 import org.openehr.am.parser.IntegerValue;
@@ -174,6 +175,25 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 			InputStream dadl=saprm.analyzeText(textTranscription, rootArchetypeId);
 			//The SAPRM gives us a composition object. Parse it
 			ContentObject reportCompositionCo=dmngr.parseDADL(dadl);
+			//We no longer bind the composition for performance. Just unbind the properties and assign directly to the contentobject
+			
+			AuditInfo auditInfo=new AuditInfo();
+			//Set the ehr_system, commiter, version_status, reason_for_revision, version_set_id
+			auditInfo.setEhrSystem(this.ehrSystemId);
+			//Version status is always draft, given that the report has not been reviewed by the composer
+			auditInfo.setVersionStatus(VersionStatus.DRAFT);
+			GregorianCalendar gregorianCalendar = new GregorianCalendar();
+		    DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+		    XMLGregorianCalendar now = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar);
+			auditInfo.setTimeCommitted(now);
+			
+			SingleAttributeObjectBlock auditInfoUnbinded=this.rmngr.getSingleAttributeObjectBlockFromContentObject(this.rmngr.unbind(auditInfo));
+			SingleAttributeObjectBlock composerUnbinded=this.rmngr.getSingleAttributeObjectBlockFromContentObject(this.rmngr.unbind(composerId));
+			SingleAttributeObjectBlock compositionBlock=this.rmngr.getSingleAttributeObjectBlockFromContentObject(reportCompositionCo);
+			compositionBlock.getAttributeValues().add(new AttributeValue("committal",auditInfoUnbinded));
+			compositionBlock.getAttributeValues().add(new AttributeValue("composer",composerUnbinded));
+			
+			/*
 			Composition report=(Composition)rmngr.bind(reportCompositionCo);
 			//An EHR must already exist IF the subject of care exists
 			//The composer of the composition is the composer given in the input
@@ -190,7 +210,7 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 			auditInfo.setTimeCommitted(now);
 			//No reason for revision, as we are in the first commit
 			//For now, we do not set the commiter (same as composer).
-			report.setCommittal(auditInfo);
+			report.setCommittal(auditInfo);*/
 			//We do not need to set the version_set_id, it is not mandatory (given that is the same that the rc_id)
 
 			synchronized(createReportMutex) {
@@ -209,8 +229,8 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 				ReferenceModelObjectId root=pmngr.getReferenceModelRoot();
 				int id=pmngr.countObjectsMatchingPathFromParent(root, queryPath)+1;
 				SEQLPathComponent pathComponent=new SEQLPathComponent("all_compositions["+id+"]");
-				SingleAttributeObjectBlock unbinded=(SingleAttributeObjectBlock)rmngr.unbindGeneric(report);
-				ReferenceModelObjectId saved=pmngr.saveObjectToPathFromParentWithSerializer(unbinded, ehr, pathComponent,serializer);
+				//SingleAttributeObjectBlock unbinded=(SingleAttributeObjectBlock)rmngr.unbindGeneric(report);
+				ReferenceModelObjectId saved=pmngr.saveObjectToPathFromParentWithSerializer(compositionBlock, ehr, pathComponent,serializer);
 				//Retrieve the saved composition object (attributes only).
 				ContentObject savedObject=pmngr.selectFromReferenceModelObjectId(saved,false);
 				//ContentObject savedObject=pmngr.selectFromReferenceModelObjectId(saved);

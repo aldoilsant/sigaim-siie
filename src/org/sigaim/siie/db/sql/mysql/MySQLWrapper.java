@@ -23,7 +23,9 @@ public class MySQLWrapper implements SQLWrapper{
 		} catch(Exception e){
 				e.printStackTrace();;
 		}
-		conn = DriverManager.getConnection(connectionString,user,pass);
+		if(conn==null) {
+			conn = DriverManager.getConnection(connectionString,user,pass);
+		}
 	}
 
 	@Override
@@ -115,6 +117,11 @@ public class MySQLWrapper implements SQLWrapper{
 			} catch(Exception e) {
 			}
 		}		
+	}
+
+	@Override
+	public void setConnection(Connection conn) {
+		this.conn=conn;
 	} 
 
 }

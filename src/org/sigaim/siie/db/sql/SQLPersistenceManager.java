@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.sql.DataSource;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.openehr.am.parser.AttributeValue;
@@ -41,6 +43,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 	private SQLWrapper wrapper;
 	private ReferenceModelManager referenceModelManager;
 	private DADLManager dadlManager;
+	private DataSource source;
 	
 	private static org.apache.log4j.Logger log = Logger.getLogger(SQLPersistenceManager.class);
 	
@@ -55,6 +58,10 @@ public class SQLPersistenceManager implements PersistenceManager {
 		jdbcConnection="jdbc:mysql://localhost:8889/"+ dbName;
 		this.user="root";
 		this.pass="root";
+		this.start();
+	}
+	public SQLPersistenceManager(DataSource source) throws PersistenceException {
+		this.source=source;
 		this.start();
 	}
 	@Override
@@ -127,9 +134,13 @@ public class SQLPersistenceManager implements PersistenceManager {
 	}
 	@Override
 	public void start() throws PersistenceException {
-		wrapper=new MySQLWrapper();
-		wrapper.setConnection(this.jdbcConnection, this.user, this.pass);
 		try {
+			wrapper=new MySQLWrapper();
+			if(this.source!=null) {
+				wrapper.setConnection(this.source.getConnection());
+			} else {
+				wrapper.setConnection(this.jdbcConnection, this.user, this.pass);
+			}
 			wrapper.start();
 			this.initializeDB();
 		} catch(SQLException e) {

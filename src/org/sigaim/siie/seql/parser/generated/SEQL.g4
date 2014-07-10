@@ -99,7 +99,8 @@ predicateOperand locals [SEQLEvaluable evaluable]
 
 
 
-from    :  | FROM EHR SYSTEM IDENTIFIER
+from    :    FROM EHR SYSTEM IDENTIFIER
+		   | FROM EHR SYSTEM IDENTIFIER? CONTAINS containsExpr
 		   | FROM EHR IDENTIFIER
 		   | FROM EHR IDENTIFIER? CONTAINS containsExpr ;
 

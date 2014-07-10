@@ -258,7 +258,10 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 							finalMatches.add(new ContentObject(null,dummyBlock));
 						}
 					}
-					if(finalMatches.size()==1) {
+					if(finalMatches.size()==0) {
+						//null
+						return new ContentObject(null,new SingleAttributeObjectBlock(null,new ArrayList<AttributeValue>()));
+					} if(finalMatches.size()==1) {
 						return finalMatches.get(0);
 					} else {
 						List<KeyedObject> keyedObjects=new ArrayList<KeyedObject>();

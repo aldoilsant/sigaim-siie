@@ -113,5 +113,11 @@ public class HSQLWrapper implements SQLWrapper {
 		for(String query :queries) {
 			this.update(query);
 		}		
+	}
+
+	@Override
+	public void setConnection(Connection conn) {
+		// TODO Auto-generated method stub
+		
 	} 
 }
