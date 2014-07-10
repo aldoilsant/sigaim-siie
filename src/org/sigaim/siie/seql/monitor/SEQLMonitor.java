@@ -29,16 +29,16 @@ import org.sigaim.siie.iso13606.rm.Composition;
 import org.sigaim.siie.iso13606.rm.EHRExtract;
 import org.sigaim.siie.rm.ReflectorReferenceModelManager;
 import org.sigaim.siie.seql.engine.SEQLPipeEngine;
-import org.sigaim.siie.seql.engine.exceptions.SEQLException;
 import org.sigaim.siie.seql.engine.execution.SEQLExecutionMemorySolverStage;
 import org.sigaim.siie.seql.engine.preprocessing.SEQLPreprocessingValidateIdentifiedVariablesStage;
+import org.sigaim.siie.seql.model.SEQLException;
+import org.sigaim.siie.seql.model.SEQLPath;
+import org.sigaim.siie.seql.model.SEQLQuery;
+import org.sigaim.siie.seql.model.SEQLResultSet;
 import org.sigaim.siie.seql.parser.SEQLErrorListener;
 import org.sigaim.siie.seql.parser.SEQLModelListener;
 import org.sigaim.siie.seql.parser.generated.SEQLLexer;
 import org.sigaim.siie.seql.parser.generated.SEQLParser;
-import org.sigaim.siie.seql.parser.model.SEQLPath;
-import org.sigaim.siie.seql.parser.model.SEQLQuery;
-import org.sigaim.siie.seql.parser.model.SEQLResultSet;
 
 
 /* SENSIBLE QUERIES
@@ -54,56 +54,14 @@ public class SEQLMonitor {
 		DADLManager dmng=new OpenEHRDADLManager();
 		ReflectorReferenceModelManager mng=new ReflectorReferenceModelManager(dmng);
 		InputStream is;
-		FileArchetypeManager mgr=new FileArchetypeManager();
-		Archetype arq=mgr.getArquetypeById("CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1");
-
-
-		/*Object binded=mng.bind(unbinded);
-		unbinded=mng.unbind(binded);
-		String result=dmng.serialize(unbinded, false);*/
-		/*String serialized=dmng.serialize(unbinded,false);
-		System.out.println(serialized);*/
-		/*String archetype_id=mng.getArchetypeIdForRMObject((SingleAttributeObjectBlock)unbinded.getComplexObjectBlock());
-		String node_id=mng.getArchetypeNodeIdForRMObject((SingleAttributeObjectBlock)unbinded.getComplexObjectBlock());*/
 		SQLPersistenceManager pmngr=new SQLPersistenceManager();
 		pmngr.setDADLManager(dmng);
 		pmngr.setReferenceModelManager(mng);
-		System.out.print("Starting persistence manager...");
-		pmngr.start();
-		System.out.println("Done");
-		System.out.print("Ressetting database....");
-		pmngr.reset();
-		System.out.println("Done");
-		//For stress test
-		for(int i=0;i<1;i++) {
-			is=SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_007.dadl");
-			ContentObject unbinded=dmng.parseDADL(is);
-			/*EHRExtract extract=(EHRExtract)mng.bind(unbinded);
-			GregorianCalendar gregorianCalendar = new GregorianCalendar();
-		    DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
-		    XMLGregorianCalendar now = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar);
-			extract.setTimeCreated(now);
-			unbinded=mng.unbind(extract);*/
-			String reserialized=dmng.serialize(unbinded, false);
-			unbinded=dmng.parseDADL(new ByteArrayInputStream(reserialized.getBytes()));
-			Composition comp=(Composition)mng.bind(unbinded);
-			//extract=(EHRExtract)mng.bind(unbinded);
-			//pmngr.saveReferenceModelObjectFromContentObject(unbinded);
-		}
-		SEQLExecutionMemorySolverStage stage=new SEQLExecutionMemorySolverStage(pmngr,mng);
+		SEQLExecutionMemorySolverStage stage=new SEQLExecutionMemorySolverStage(pmngr,mng,dmng);
 		SEQLPipeEngine engine=new SEQLPipeEngine();
 		engine.addPreprocessStage(new SEQLPreprocessingValidateIdentifiedVariablesStage());
 		engine.addExecutionStage(stage);
 		
-		/*
-		ContentObject obj=dmng.parseDADL(new ByteArrayInputStream(serialized.getBytes()));
-		Object binded=mng.bind(obj);
-		obj=mng.unbind(binded);
-		System.out.println(dmng.serialize(obj,false));*/
-		//DADLParser dadlParser=new DADLParser(is);
-		//ContentObject obj=dadlParser.parse();
-		//String serialized=obj.toString();
-		//System.out.println(serialized);
 	    System.out.println();
 	    System.out.println();
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
@@ -148,8 +106,7 @@ public class SEQLMonitor {
 							while(rs.nextRow()) {
 								for(int i=0;i<rs.getNumberOfColumns();i++) {
 									ContentObject cellObject=rs.getColumn(i);
-									String serialized=dmng.serialize(cellObject, true);
-									System.out.println("Row "+(nrow)+", Column "+i+": "+serialized);
+									System.out.println("Row "+(nrow)+", Column "+i+": "+dmng.serialize(cellObject, false));
 								}
 								nrow++;
 							}

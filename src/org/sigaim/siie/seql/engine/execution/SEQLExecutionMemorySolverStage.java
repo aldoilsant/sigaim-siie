@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.openehr.am.parser.AttributeValue;
 import org.openehr.am.parser.ComplexObjectBlock;
 import org.openehr.am.parser.ContentObject;
+import org.openehr.am.parser.IntegerValue;
 import org.openehr.am.parser.KeyedObject;
 import org.openehr.am.parser.MultipleAttributeObjectBlock;
 import org.openehr.am.parser.ObjectBlock;
@@ -15,38 +17,51 @@ import org.openehr.am.parser.PrimitiveObjectBlock;
 import org.openehr.am.parser.SimpleValue;
 import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.openehr.am.parser.StringValue;
+import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.db.PersistenceManager;
 import org.sigaim.siie.db.ReferenceModelObjectId;
 import org.sigaim.siie.db.exceptions.PersistenceException;
 import org.sigaim.siie.rm.ReferenceModelManager;
+import org.sigaim.siie.rm.ReflectorReferenceModelManager;
 import org.sigaim.siie.seql.engine.SEQLQueryExecutionStage;
-import org.sigaim.siie.seql.engine.exceptions.SEQLException;
-import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
-import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
-import org.sigaim.siie.seql.parser.model.SEQLOperation;
-import org.sigaim.siie.seql.parser.model.SEQLOperation.SEQLBooleanOperator;
-import org.sigaim.siie.seql.parser.model.SEQLPath;
-import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
-import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
-import org.sigaim.siie.seql.parser.model.SEQLQuery;
-import org.sigaim.siie.seql.parser.model.SEQLResultSet;
-import org.sigaim.siie.seql.parser.model.SEQLSelectCondition;
+import org.sigaim.siie.seql.model.SEQLEvaluable;
+import org.sigaim.siie.seql.model.SEQLException;
+import org.sigaim.siie.seql.model.SEQLFromComponent;
+import org.sigaim.siie.seql.model.SEQLOperation;
+import org.sigaim.siie.seql.model.SEQLPath;
+import org.sigaim.siie.seql.model.SEQLPathComponent;
+import org.sigaim.siie.seql.model.SEQLPrimitive;
+import org.sigaim.siie.seql.model.SEQLQuery;
+import org.sigaim.siie.seql.model.SEQLResultSet;
+import org.sigaim.siie.seql.model.SEQLSelectCondition;
+import org.sigaim.siie.seql.model.SEQLOperation.SEQLBooleanOperator;
+import org.sigaim.siie.utils.Utils;
 
 
 
 public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
+	private static org.apache.log4j.Logger log = Logger.getLogger(SEQLExecutionMemorySolverStage.class);
 	private PersistenceManager pmngr;
 	private ReferenceModelManager rmngr;
-	public SEQLExecutionMemorySolverStage(PersistenceManager pmngr, ReferenceModelManager rmngr) {
+	private DADLManager dmngr;
+	
+	public SEQLExecutionMemorySolverStage(PersistenceManager pmngr, ReferenceModelManager rmngr, DADLManager dmngr) {
 		this.pmngr=pmngr;
 		this.rmngr=rmngr;
+		this.dmngr=dmngr;
 	}
 	protected void populateFromComponents(SEQLExecutionMemorySolverAssignationContext context, SEQLFromComponent parentComponent, ReferenceModelObjectId parentObject) throws PersistenceException{
 		List<SEQLFromComponent> childs=context.getChildsForComponent(parentComponent);
 		if(childs==null) return;
 		for(SEQLFromComponent child: childs) {
-			List<ReferenceModelObjectId> matches=this.pmngr.selectMatchingObjectsForComponentAndParent(child.getReferenceModelClass(), child.getArchetypeId(), parentObject);
-			context.addAssignation(child, parentObject, matches);
+			List<ReferenceModelObjectId> matches;
+			boolean isRoot=Utils.classNameEquals(child.getReferenceModelClass(), this.rmngr.getRootClass().getSimpleName());
+			if(isRoot) {
+				matches=this.pmngr.selectMatchingObjectsForComponentAndParent(child.getReferenceModelClass(), child.getArchetypeId(), null,child.getUseAllVersions());
+			} else {
+				matches=this.pmngr.selectMatchingObjectsForComponentAndParent(child.getReferenceModelClass(), child.getArchetypeId(), parentObject,child.getUseAllVersions());	
+			}
+			context.addAssignation(child, parentObject, matches);				
 			for(ReferenceModelObjectId match : matches) {
 				this.populateFromComponents(context, child, match);
 			}
@@ -190,7 +205,7 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 			List<ReferenceModelObjectId> matches=this.pmngr.getDeepestRMObjectsForParentAndPath(assignation, pathComponents);
 			List<Object> finalMatches=new ArrayList<Object>();
 			for(ReferenceModelObjectId match : matches) {
-				ContentObject obj=this.pmngr.selectFromReferenceModelObjectId(match);
+				ContentObject obj=this.pmngr.selectFromReferenceModelObjectId(match,false);
 				SingleAttributeObjectBlock sblock=this.rmngr.getSingleAttributeObjectBlockFromContentObject(obj);
 				ObjectBlock finalMatch=this.rmngr.solveReferenceModelPath(sblock, pathComponents);
 				if(finalMatch!=null) {
@@ -212,10 +227,11 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 				//Null value
 				return new ContentObject(null,new SingleAttributeObjectBlock(null,new ArrayList<AttributeValue>()));
 			}
+			Class<?> type=this.rmngr.getPathType(component.getReferenceModelClass(), path);
 			List<SEQLPathComponent> pathComponents= path.getPathComponents();
 			try {
 				List<ReferenceModelObjectId> matches=this.pmngr.getDeepestRMObjectsForParentAndPath(assignation, pathComponents);
-				System.out.println("Matches: "+matches);
+				log.debug("Matches: "+matches);
 				//Deserialize all matches
 				//Multiple matches have 2 possible meanings
 				//Meaning one is that there are indeed multiple matches of a single object 
@@ -224,7 +240,7 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 				try {
 					List<ContentObject> finalMatches=new ArrayList<ContentObject>();
 					for(ReferenceModelObjectId match : matches) {
-						ContentObject obj=this.pmngr.selectFromReferenceModelObjectId(match);
+						ContentObject obj=this.pmngr.selectFromReferenceModelObjectId(match,cond.getWithDescendants());
 						SingleAttributeObjectBlock sblock=this.rmngr.getSingleAttributeObjectBlockFromContentObject(obj);
 						ObjectBlock finalMatch=this.rmngr.solveReferenceModelPath(sblock, pathComponents);
 						if(finalMatch instanceof ComplexObjectBlock) {
@@ -248,7 +264,7 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 						List<KeyedObject> keyedObjects=new ArrayList<KeyedObject>();
 						int index=0;
 						for(ContentObject finalMatch : finalMatches) {
-							SimpleValue<String> key=new StringValue(""+index++);
+							SimpleValue<Integer> key=new IntegerValue(index++);
 							keyedObjects.add(new KeyedObject(key, finalMatch.getComplexObjectBlock()));
 						}
 						return new ContentObject(null,new MultipleAttributeObjectBlock(null,keyedObjects));
@@ -283,16 +299,16 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 				HashMap<SEQLFromComponent,ReferenceModelObjectId> mapping=new HashMap<SEQLFromComponent,ReferenceModelObjectId> ();
 				mapping.put(rootComponent, rootId);
 				List<HashMap<SEQLFromComponent,ReferenceModelObjectId>> interpretations=this.createInterpretations(context, rootComponent, rootId,mapping);
-				System.out.println("Number of interpretations: "+interpretations.size());
-				SEQLResultSet rs=new SEQLResultSet(query.getSelectConditions());
+				log.debug("Number of interpretations: "+interpretations.size());
+				SEQLResultSet rs=new SEQLResultSet(query.getSelectConditions().size());
 				for(Map<SEQLFromComponent,ReferenceModelObjectId> interpretation : interpretations) {
-					System.out.println("Interpretation: "+interpretation);
+					log.debug("Interpretation: "+interpretation);
 					//Check if the interpretation is a model
 					if(this.interpretationMatchesEvaluable(interpretation, context, query, evaluable)) {
-						System.out.println(">Interpretation is from clause model");
+						log.debug(">Interpretation is from clause model");
 						if(this.interpretationMatchesEvaluable(interpretation, context, query, query.getWhereCondition().getRoot())) {
 							//If we arrive here, now we can use the where clause to further eliminate interpretations
-							System.out.println(">>Interpretation is where clause model. Appending to result");
+							log.debug(">>Interpretation is where clause model. Appending to result");
 							rs.addRow();
 							for(SEQLSelectCondition scond : query.getSelectConditions()) {
 								ContentObject r=this.solveSelectConditionForInterpretation(query,scond,interpretation);

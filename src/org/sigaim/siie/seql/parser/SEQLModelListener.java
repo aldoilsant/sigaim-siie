@@ -3,20 +3,21 @@ import java.util.List;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import org.sigaim.siie.seql.model.SEQLFromComponent;
+import org.sigaim.siie.seql.model.SEQLOperation;
+import org.sigaim.siie.seql.model.SEQLPath;
+import org.sigaim.siie.seql.model.SEQLPathComponent;
+import org.sigaim.siie.seql.model.SEQLPathPredicate;
+import org.sigaim.siie.seql.model.SEQLPrimitive;
+import org.sigaim.siie.seql.model.SEQLQuery;
+import org.sigaim.siie.seql.model.SEQLOperation.SEQLBooleanOperator;
 import org.sigaim.siie.seql.parser.generated.SEQLBaseListener;
 import org.sigaim.siie.seql.parser.generated.SEQLParser;
 import org.sigaim.siie.seql.parser.generated.SEQLParser.ArchetypedClassExprContext;
 import org.sigaim.siie.seql.parser.generated.SEQLParser.AsIdentifierContext;
 import org.sigaim.siie.seql.parser.generated.SEQLParser.IdentifiedPathSeqContext;
 import org.sigaim.siie.seql.parser.generated.SEQLParser.SelectVarContext;
-import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
-import org.sigaim.siie.seql.parser.model.SEQLOperation;
-import org.sigaim.siie.seql.parser.model.SEQLOperation.SEQLBooleanOperator;
-import org.sigaim.siie.seql.parser.model.SEQLPath;
-import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
-import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
-import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
-import org.sigaim.siie.seql.parser.model.SEQLQuery;
+import org.sigaim.siie.seql.parser.generated.SEQLParser.WithDescendantsContext;
 
 public class SEQLModelListener extends SEQLBaseListener {
 	private SEQLQuery query=null;
@@ -32,23 +33,33 @@ public class SEQLModelListener extends SEQLBaseListener {
 		for(SelectVarContext vctx : lsvc) {
 			String name=null;
 			String path=null;
+			Boolean withDescendants=false;
 			//Retrieve the path and possibly the name. 
 			AsIdentifierContext namectx=vctx.asIdentifier();
 			if(namectx!=null) {
 				name=namectx.IDENTIFIER().getText();
 			}
+			WithDescendantsContext descendantsctx=vctx.withDescendants();
+			if(descendantsctx!= null && !descendantsctx.isEmpty()){
+				withDescendants=true;
+			}
 			path=vctx.identifiedPath().getText();
-			query.addSelectCondition(path, name);
+			query.addSelectCondition(path, name,withDescendants);
 		}
 	}
  
 	@Override public void exitFrom(@NotNull SEQLParser.FromContext ctx) {
 		//create EHR entry
-		String ehrIdentifiedVariable=null;
+		String topIdentifiedVariable=null;
 		if(ctx.IDENTIFIER()!=null && ctx.IDENTIFIER().getText()!=null) {
-			ehrIdentifiedVariable=ctx.IDENTIFIER().getText();
+			topIdentifiedVariable=ctx.IDENTIFIER().getText();
 		}
-		SEQLFromComponent ehrComponent=query.getFromCondition().createFromComponent("ehr_extract",ehrIdentifiedVariable,null);
+		SEQLFromComponent ehrComponent=null;
+		if(ctx.SYSTEM()!=null && ctx.IDENTIFIER().getText()!=null) {
+			ehrComponent=query.getFromCondition().createFromComponent("ehr_system",topIdentifiedVariable,null,false);
+		} else {
+			ehrComponent=query.getFromCondition().createFromComponent("ehr_extract",topIdentifiedVariable,null,false);
+		}
 		SEQLOperation op=new SEQLOperation();
 		op.setOperator(SEQLBooleanOperator.CONTAINS);
 		op.setLeftOperand(ehrComponent);
@@ -63,11 +74,15 @@ public class SEQLModelListener extends SEQLBaseListener {
 		String identifiedVariable=null;
 		String archetypeId=null;
 		List<TerminalNode> identifierNodes=null;
-		
+		Boolean useAllVersions=false;
+
 		if(ctx.archetypedClassExpr()!=null) {
 			ArchetypedClassExprContext actx=ctx.archetypedClassExpr();
 			identifierNodes=actx.IDENTIFIER();
 			archetypeId=actx.archetypePredicate().ARCHETYPEID().getText();
+			if(actx.allVersions()!=null && ! actx.allVersions().isEmpty()) {
+				useAllVersions=true;
+			}
 			
 		} else { //Not archetyped
 			identifierNodes=ctx.IDENTIFIER();
@@ -77,7 +92,10 @@ public class SEQLModelListener extends SEQLBaseListener {
 		if(identifierNodes.size()==2) { //Identified variable
 			identifiedVariable=identifierNodes.get(1).getText();
 		}
-		return query.getFromCondition().createFromComponent(referenceModelClass, identifiedVariable, archetypeId);
+		if(ctx.allVersions()!=null && ! ctx.allVersions().isEmpty()) {
+			useAllVersions=true;
+		}
+		return query.getFromCondition().createFromComponent(referenceModelClass, identifiedVariable, archetypeId,useAllVersions);
 		
 	}
 	@Override public void exitContainExpressionBool(@NotNull SEQLParser.ContainExpressionBoolContext ctx) {

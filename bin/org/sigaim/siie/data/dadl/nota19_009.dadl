@@ -1,0 +1,2365 @@
+<
+	reference_model_class_name = <"ehr_extract">
+	ehr_id = <
+		reference_model_class_name = <"II">
+		root = <"somerootvalue">
+		extension = <"1">
+	>
+	all_compositions = <
+	[1]=<
+	reference_model_class_name = 
+	<
+		"Composition"
+	>
+	archetype_id = 
+	<
+		reference_model_class_name = 
+		<
+			"II"
+		>
+		root = 
+		<
+			"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+		>
+		
+	>
+	attestations = 
+	<
+		
+	>
+	content = 
+	<
+		[1]=
+		<
+			reference_model_class_name = 
+			<
+				"Section"
+			>
+			archetype_id = 
+			<
+				reference_model_class_name = 
+				<
+					"II"
+				>
+				root = 
+				<
+					"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+				>
+				
+			>
+			links = 
+			<
+				
+			>
+			meaning = 
+			<
+				reference_model_class_name = 
+				<
+					"CDCV"
+				>
+				code = 
+				<
+					"at0003"
+				>
+				code_system_name = 
+				<
+					"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+				>
+				coding_rationale = 
+				<
+					
+				>
+				translation = 
+				<
+					
+				>
+				
+			>
+			members = 
+			<
+				[1]=
+				<
+					reference_model_class_name = 
+					<
+						"Section"
+					>
+					archetype_id = 
+					<
+						reference_model_class_name = 
+						<
+							"II"
+						>
+						root = 
+						<
+							"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+						>
+						
+					>
+					links = 
+					<
+						
+					>
+					meaning = 
+					<
+						reference_model_class_name = 
+						<
+							"CDCV"
+						>
+						code = 
+						<
+							"at0012"
+						>
+						code_system_name = 
+						<
+							"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+						>
+						coding_rationale = 
+						<
+							
+						>
+						translation = 
+						<
+							
+						>
+						
+					>
+					members = 
+					<
+						[1]=
+						<
+							reference_model_class_name = 
+							<
+								"Entry"
+							>
+							archetype_id = 
+							<
+								reference_model_class_name = 
+								<
+									"II"
+								>
+								root = 
+								<
+									"CEN-EN13606-SECTION.Subjetivo.v1"
+								>
+								
+							>
+							items = 
+							<
+								[1]=
+								<
+									reference_model_class_name = 
+									<
+										"Cluster"
+									>
+									archetype_id = 
+									<
+										reference_model_class_name = 
+										<
+											"II"
+										>
+										root = 
+										<
+											"CEN-EN13606-SECTION.Subjetivo.v1"
+										>
+										
+									>
+									links = 
+									<
+										
+									>
+									meaning = 
+									<
+										reference_model_class_name = 
+										<
+											"CDCV"
+										>
+										code = 
+										<
+											"at0005"
+										>
+										code_system_name = 
+										<
+											"CEN-EN13606-SECTION.Subjetivo.v1"
+										>
+										coding_rationale = 
+										<
+											
+										>
+										translation = 
+										<
+											
+										>
+										
+									>
+									name = 
+									<
+										reference_model_class_name = 
+										<
+											"CDCV"
+										>
+										coding_rationale = 
+										<
+											
+										>
+										display_name = 
+										<
+											reference_model_class_name = 
+											<
+												"ST"
+											>
+											translation = 
+											<
+												
+											>
+											value = 
+											<
+												"S�ntoma"
+											>
+											
+										>
+										translation = 
+										<
+											
+										>
+										
+									>
+									parts = 
+									<
+										[1]=
+										<
+											reference_model_class_name = 
+											<
+												"Element"
+											>
+											archetype_id = 
+											<
+												reference_model_class_name = 
+												<
+													"II"
+												>
+												root = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												
+											>
+											links = 
+											<
+												
+											>
+											meaning = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"at0017"
+												>
+												code_system_name = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											name = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"52101004"
+												>
+												code_system_name = 
+												<
+													"SNOMED-CT"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												display_name = 
+												<
+													reference_model_class_name = 
+													<
+														"ST"
+													>
+													translation = 
+													<
+														
+													>
+													value = 
+													<
+														"Presencia"
+													>
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											policy_ids = 
+											<
+												
+											>
+											synthesised = 
+											<
+												false
+											>
+											value = 
+											<
+												reference_model_class_name = 
+												<
+													"BL"
+												>
+												value = 
+												<
+													false
+												>
+												
+											>
+											
+										>
+										[2]=
+										<
+											reference_model_class_name = 
+											<
+												"Element"
+											>
+											archetype_id = 
+											<
+												reference_model_class_name = 
+												<
+													"II"
+												>
+												root = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												
+											>
+											links = 
+											<
+												
+											>
+											meaning = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"at0002"
+												>
+												code_system_name = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											name = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"19019007"
+												>
+												code_system_name = 
+												<
+													"SNOMED-CT"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												display_name = 
+												<
+													reference_model_class_name = 
+													<
+														"ST"
+													>
+													translation = 
+													<
+														
+													>
+													value = 
+													<
+														"Nombre del s�ntoma"
+													>
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											policy_ids = 
+											<
+												
+											>
+											synthesised = 
+											<
+												false
+											>
+											value = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												display_name = 
+												<
+													reference_model_class_name = 
+													<
+														"ST"
+													>
+													translation = 
+													<
+														
+													>
+													value = 
+													<
+														"sensación distérmica"
+													>
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											
+										>
+										[3]=
+										<
+											reference_model_class_name = 
+											<
+												"Element"
+											>
+											archetype_id = 
+											<
+												reference_model_class_name = 
+												<
+													"II"
+												>
+												root = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												
+											>
+											links = 
+											<
+												
+											>
+											meaning = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"at0006"
+												>
+												code_system_name = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											name = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"162442009"
+												>
+												code_system_name = 
+												<
+													"SNOMED-CT"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												display_name = 
+												<
+													reference_model_class_name = 
+													<
+														"ST"
+													>
+													translation = 
+													<
+														
+													>
+													value = 
+													<
+														"Duracion"
+													>
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											policy_ids = 
+											<
+												
+											>
+											synthesised = 
+											<
+												false
+											>
+											value = 
+											<
+												reference_model_class_name = 
+												<
+													"PQ"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												precision = 
+												<
+													0
+												>
+												translation = 
+												<
+													
+												>
+												unit = 
+												<
+													"dias"
+												>
+												value = 
+												<
+													3.0
+												>
+												
+											>
+											
+										>
+										
+									>
+									policy_ids = 
+									<
+										
+									>
+									synthesised = 
+									<
+										false
+									>
+									
+								>
+								[2]=
+								<
+									reference_model_class_name = 
+									<
+										"Cluster"
+									>
+									archetype_id = 
+									<
+										reference_model_class_name = 
+										<
+											"II"
+										>
+										root = 
+										<
+											"CEN-EN13606-SECTION.Subjetivo.v1"
+										>
+										
+									>
+									links = 
+									<
+										
+									>
+									meaning = 
+									<
+										reference_model_class_name = 
+										<
+											"CDCV"
+										>
+										code = 
+										<
+											"at0005"
+										>
+										code_system_name = 
+										<
+											"CEN-EN13606-SECTION.Subjetivo.v1"
+										>
+										coding_rationale = 
+										<
+											
+										>
+										translation = 
+										<
+											
+										>
+										
+									>
+									name = 
+									<
+										reference_model_class_name = 
+										<
+											"CDCV"
+										>
+										coding_rationale = 
+										<
+											
+										>
+										display_name = 
+										<
+											reference_model_class_name = 
+											<
+												"ST"
+											>
+											translation = 
+											<
+												
+											>
+											value = 
+											<
+												"S�ntoma"
+											>
+											
+										>
+										translation = 
+										<
+											
+										>
+										
+									>
+									parts = 
+									<
+										[1]=
+										<
+											reference_model_class_name = 
+											<
+												"Element"
+											>
+											archetype_id = 
+											<
+												reference_model_class_name = 
+												<
+													"II"
+												>
+												root = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												
+											>
+											links = 
+											<
+												
+											>
+											meaning = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"at0017"
+												>
+												code_system_name = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											name = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"52101004"
+												>
+												code_system_name = 
+												<
+													"SNOMED-CT"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												display_name = 
+												<
+													reference_model_class_name = 
+													<
+														"ST"
+													>
+													translation = 
+													<
+														
+													>
+													value = 
+													<
+														"Presencia"
+													>
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											policy_ids = 
+											<
+												
+											>
+											synthesised = 
+											<
+												false
+											>
+											value = 
+											<
+												reference_model_class_name = 
+												<
+													"BL"
+												>
+												value = 
+												<
+													true
+												>
+												
+											>
+											
+										>
+										[2]=
+										<
+											reference_model_class_name = 
+											<
+												"Element"
+											>
+											archetype_id = 
+											<
+												reference_model_class_name = 
+												<
+													"II"
+												>
+												root = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												
+											>
+											links = 
+											<
+												
+											>
+											meaning = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"at0002"
+												>
+												code_system_name = 
+												<
+													"CEN-EN13606-CLUSTER.Sintoma.v1"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											name = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"19019007"
+												>
+												code_system_name = 
+												<
+													"SNOMED-CT"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												display_name = 
+												<
+													reference_model_class_name = 
+													<
+														"ST"
+													>
+													translation = 
+													<
+														
+													>
+													value = 
+													<
+														"Nombre del s�ntoma"
+													>
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											policy_ids = 
+											<
+												
+											>
+											synthesised = 
+											<
+												false
+											>
+											value = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												display_name = 
+												<
+													reference_model_class_name = 
+													<
+														"ST"
+													>
+													translation = 
+													<
+														
+													>
+													value = 
+													<
+														"molestias faríngeas"
+													>
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											
+										>
+										
+									>
+									policy_ids = 
+									<
+										
+									>
+									synthesised = 
+									<
+										false
+									>
+									
+								>
+								
+							>
+							links = 
+							<
+								
+							>
+							meaning = 
+							<
+								reference_model_class_name = 
+								<
+									"CDCV"
+								>
+								code = 
+								<
+									"at0004"
+								>
+								code_system_name = 
+								<
+									"CEN-EN13606-SECTION.Subjetivo.v1"
+								>
+								coding_rationale = 
+								<
+									
+								>
+								translation = 
+								<
+									
+								>
+								
+							>
+							name = 
+							<
+								reference_model_class_name = 
+								<
+									"CDCV"
+								>
+								coding_rationale = 
+								<
+									
+								>
+								display_name = 
+								<
+									reference_model_class_name = 
+									<
+										"ST"
+									>
+									translation = 
+									<
+										
+									>
+									value = 
+									<
+										"S�ntoma"
+									>
+									
+								>
+								translation = 
+								<
+									
+								>
+								
+							>
+							other_participations = 
+							<
+								
+							>
+							policy_ids = 
+							<
+								
+							>
+							synthesised = 
+							<
+								false
+							>
+							uncertainty_expressed = 
+							<
+								false
+							>
+							
+						>
+						
+					>
+					name = 
+					<
+						reference_model_class_name = 
+						<
+							"CDCV"
+						>
+						coding_rationale = 
+						<
+							
+						>
+						display_name = 
+						<
+							reference_model_class_name = 
+							<
+								"ST"
+							>
+							translation = 
+							<
+								
+							>
+							value = 
+							<
+								"S"
+							>
+							
+						>
+						translation = 
+						<
+							
+						>
+						
+					>
+					policy_ids = 
+					<
+						
+					>
+					synthesised = 
+					<
+						false
+					>
+					
+				>
+				[2]=
+				<
+					reference_model_class_name = 
+					<
+						"Section"
+					>
+					archetype_id = 
+					<
+						reference_model_class_name = 
+						<
+							"II"
+						>
+						root = 
+						<
+							"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+						>
+						
+					>
+					links = 
+					<
+						
+					>
+					meaning = 
+					<
+						reference_model_class_name = 
+						<
+							"CDCV"
+						>
+						code = 
+						<
+							"at0003"
+						>
+						code_system_name = 
+						<
+							"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+						>
+						coding_rationale = 
+						<
+							
+						>
+						translation = 
+						<
+							
+						>
+						
+					>
+					members = 
+					<
+						[1]=
+						<
+							reference_model_class_name = 
+							<
+								"Section"
+							>
+							archetype_id = 
+							<
+								reference_model_class_name = 
+								<
+									"II"
+								>
+								root = 
+								<
+									"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+								>
+								
+							>
+							links = 
+							<
+								
+							>
+							meaning = 
+							<
+								reference_model_class_name = 
+								<
+									"CDCV"
+								>
+								code = 
+								<
+									"at0013"
+								>
+								code_system_name = 
+								<
+									"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+								>
+								coding_rationale = 
+								<
+									
+								>
+								translation = 
+								<
+									
+								>
+								
+							>
+							members = 
+							<
+								[1]=
+								<
+									reference_model_class_name = 
+									<
+										"Section"
+									>
+									archetype_id = 
+									<
+										reference_model_class_name = 
+										<
+											"II"
+										>
+										root = 
+										<
+											"CEN-EN13606-SECTION.Objetivo.v1"
+										>
+										
+									>
+									links = 
+									<
+										
+									>
+									meaning = 
+									<
+										reference_model_class_name = 
+										<
+											"CDCV"
+										>
+										code = 
+										<
+											"at0001"
+										>
+										code_system_name = 
+										<
+											"CEN-EN13606-SECTION.Objetivo.v1"
+										>
+										coding_rationale = 
+										<
+											
+										>
+										translation = 
+										<
+											
+										>
+										
+									>
+									members = 
+									<
+										[1]=
+										<
+											reference_model_class_name = 
+											<
+												"Section"
+											>
+											archetype_id = 
+											<
+												reference_model_class_name = 
+												<
+													"II"
+												>
+												root = 
+												<
+													"CEN-EN13606-SECTION.ExploracionFisica.v1"
+												>
+												
+											>
+											links = 
+											<
+												
+											>
+											meaning = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"at0001"
+												>
+												code_system_name = 
+												<
+													"CEN-EN13606-SECTION.ExploracionFisica.v1"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											members = 
+											<
+												[1]=
+												<
+													reference_model_class_name = 
+													<
+														"Entry"
+													>
+													archetype_id = 
+													<
+														reference_model_class_name = 
+														<
+															"II"
+														>
+														root = 
+														<
+															"CEN-EN13606-SECTION.ExploracionAspectoGeneral.v1"
+														>
+														
+													>
+													items = 
+													<
+														[1]=
+														<
+															reference_model_class_name = 
+															<
+																"Element"
+															>
+															archetype_id = 
+															<
+																reference_model_class_name = 
+																<
+																	"II"
+																>
+																root = 
+																<
+																	"CEN-EN13606-SECTION.ExploracionAspectoGeneral.v1"
+																>
+																
+															>
+															links = 
+															<
+																
+															>
+															meaning = 
+															<
+																reference_model_class_name = 
+																<
+																	"CDCV"
+																>
+																code = 
+																<
+																	"at0043"
+																>
+																code_system_name = 
+																<
+																	"CEN-EN13606-SECTION.ExploracionAspectoGeneral.v1"
+																>
+																coding_rationale = 
+																<
+																	
+																>
+																translation = 
+																<
+																	
+																>
+																
+															>
+															name = 
+															<
+																reference_model_class_name = 
+																<
+																	"CDCV"
+																>
+																code = 
+																<
+																	"278844005"
+																>
+																code_system_name = 
+																<
+																	"SNOMED-CT"
+																>
+																coding_rationale = 
+																<
+																	
+																>
+																display_name = 
+																<
+																	reference_model_class_name = 
+																	<
+																		"ST"
+																	>
+																	translation = 
+																	<
+																		
+																	>
+																	value = 
+																	<
+																		"Estado general"
+																	>
+																	
+																>
+																translation = 
+																<
+																	
+																>
+																
+															>
+															policy_ids = 
+															<
+																
+															>
+															synthesised = 
+															<
+																false
+															>
+															value = 
+															<
+																reference_model_class_name = 
+																<
+																	"CDCV"
+																>
+																code = 
+																<
+																	"135815002"
+																>
+																code_system_name = 
+																<
+																	"SNOMED-CT"
+																>
+																coding_rationale = 
+																<
+																	
+																>
+																translation = 
+																<
+																	
+																>
+																
+															>
+															
+														>
+														
+													>
+													links = 
+													<
+														
+													>
+													meaning = 
+													<
+														reference_model_class_name = 
+														<
+															"CDCV"
+														>
+														code = 
+														<
+															"at0016"
+														>
+														code_system_name = 
+														<
+															"CEN-EN13606-SECTION.ExploracionAspectoGeneral.v1"
+														>
+														coding_rationale = 
+														<
+															
+														>
+														translation = 
+														<
+															
+														>
+														
+													>
+													name = 
+													<
+														reference_model_class_name = 
+														<
+															"CDCV"
+														>
+														coding_rationale = 
+														<
+															
+														>
+														display_name = 
+														<
+															reference_model_class_name = 
+															<
+																"ST"
+															>
+															translation = 
+															<
+																
+															>
+															value = 
+															<
+																"Afirmaciones generales"
+															>
+															
+														>
+														translation = 
+														<
+															
+														>
+														
+													>
+													other_participations = 
+													<
+														
+													>
+													policy_ids = 
+													<
+														
+													>
+													synthesised = 
+													<
+														false
+													>
+													uncertainty_expressed = 
+													<
+														false
+													>
+													
+												>
+												
+											>
+											name = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												display_name = 
+												<
+													reference_model_class_name = 
+													<
+														"ST"
+													>
+													translation = 
+													<
+														
+													>
+													value = 
+													<
+														"Aspecto general"
+													>
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											policy_ids = 
+											<
+												
+											>
+											synthesised = 
+											<
+												false
+											>
+											
+										>
+										
+									>
+									name = 
+									<
+										reference_model_class_name = 
+										<
+											"CDCV"
+										>
+										coding_rationale = 
+										<
+											
+										>
+										display_name = 
+										<
+											reference_model_class_name = 
+											<
+												"ST"
+											>
+											translation = 
+											<
+												
+											>
+											value = 
+											<
+												"Exploración física"
+											>
+											
+										>
+										translation = 
+										<
+											
+										>
+										
+									>
+									policy_ids = 
+									<
+										
+									>
+									synthesised = 
+									<
+										false
+									>
+									
+								>
+								
+							>
+							name = 
+							<
+								reference_model_class_name = 
+								<
+									"CDCV"
+								>
+								coding_rationale = 
+								<
+									
+								>
+								display_name = 
+								<
+									reference_model_class_name = 
+									<
+										"ST"
+									>
+									translation = 
+									<
+										
+									>
+									value = 
+									<
+										"O"
+									>
+									
+								>
+								translation = 
+								<
+									
+								>
+								
+							>
+							policy_ids = 
+							<
+								
+							>
+							synthesised = 
+							<
+								false
+							>
+							
+						>
+						
+					>
+					name = 
+					<
+						reference_model_class_name = 
+						<
+							"CDCV"
+						>
+						coding_rationale = 
+						<
+							
+						>
+						display_name = 
+						<
+							reference_model_class_name = 
+							<
+								"ST"
+							>
+							translation = 
+							<
+								
+							>
+							value = 
+							<
+								"Datos clínicos"
+							>
+							
+						>
+						translation = 
+						<
+							
+						>
+						
+					>
+					policy_ids = 
+					<
+						
+					>
+					synthesised = 
+					<
+						false
+					>
+					
+				>
+				[3]=
+				<
+					reference_model_class_name = 
+					<
+						"Section"
+					>
+					archetype_id = 
+					<
+						reference_model_class_name = 
+						<
+							"II"
+						>
+						root = 
+						<
+							"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+						>
+						
+					>
+					links = 
+					<
+						
+					>
+					meaning = 
+					<
+						reference_model_class_name = 
+						<
+							"CDCV"
+						>
+						code = 
+						<
+							"at0003"
+						>
+						code_system_name = 
+						<
+							"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+						>
+						coding_rationale = 
+						<
+							
+						>
+						translation = 
+						<
+							
+						>
+						
+					>
+					members = 
+					<
+						[1]=
+						<
+							reference_model_class_name = 
+							<
+								"Section"
+							>
+							archetype_id = 
+							<
+								reference_model_class_name = 
+								<
+									"II"
+								>
+								root = 
+								<
+									"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+								>
+								
+							>
+							links = 
+							<
+								
+							>
+							meaning = 
+							<
+								reference_model_class_name = 
+								<
+									"CDCV"
+								>
+								code = 
+								<
+									"at0013"
+								>
+								code_system_name = 
+								<
+									"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+								>
+								coding_rationale = 
+								<
+									
+								>
+								translation = 
+								<
+									
+								>
+								
+							>
+							members = 
+							<
+								[1]=
+								<
+									reference_model_class_name = 
+									<
+										"Section"
+									>
+									archetype_id = 
+									<
+										reference_model_class_name = 
+										<
+											"II"
+										>
+										root = 
+										<
+											"CEN-EN13606-SECTION.Objetivo.v1"
+										>
+										
+									>
+									links = 
+									<
+										
+									>
+									meaning = 
+									<
+										reference_model_class_name = 
+										<
+											"CDCV"
+										>
+										code = 
+										<
+											"at0001"
+										>
+										code_system_name = 
+										<
+											"CEN-EN13606-SECTION.Objetivo.v1"
+										>
+										coding_rationale = 
+										<
+											
+										>
+										translation = 
+										<
+											
+										>
+										
+									>
+									members = 
+									<
+										[1]=
+										<
+											reference_model_class_name = 
+											<
+												"Section"
+											>
+											archetype_id = 
+											<
+												reference_model_class_name = 
+												<
+													"II"
+												>
+												root = 
+												<
+													"CEN-EN13606-SECTION.ExploracionFisica.v1"
+												>
+												
+											>
+											links = 
+											<
+												
+											>
+											meaning = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												code = 
+												<
+													"at0001"
+												>
+												code_system_name = 
+												<
+													"CEN-EN13606-SECTION.ExploracionFisica.v1"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											members = 
+											<
+												[1]=
+												<
+													reference_model_class_name = 
+													<
+														"Entry"
+													>
+													archetype_id = 
+													<
+														reference_model_class_name = 
+														<
+															"II"
+														>
+														root = 
+														<
+															"CEN-EN13606-SECTION.ExploracionAspectoGeneral.v1"
+														>
+														
+													>
+													items = 
+													<
+														[1]=
+														<
+															reference_model_class_name = 
+															<
+																"Element"
+															>
+															archetype_id = 
+															<
+																reference_model_class_name = 
+																<
+																	"II"
+																>
+																root = 
+																<
+																	"CEN-EN13606-ENTRY.TemperaturaCorporal.v1"
+																>
+																
+															>
+															links = 
+															<
+																
+															>
+															meaning = 
+															<
+																reference_model_class_name = 
+																<
+																	"CDCV"
+																>
+																code = 
+																<
+																	"at0001"
+																>
+																code_system_name = 
+																<
+																	"CEN-EN13606-ENTRY.TemperaturaCorporal.v1"
+																>
+																coding_rationale = 
+																<
+																	
+																>
+																translation = 
+																<
+																	
+																>
+																
+															>
+															name = 
+															<
+																reference_model_class_name = 
+																<
+																	"CDCV"
+																>
+																code = 
+																<
+																	"301344003"
+																>
+																code_system_name = 
+																<
+																	"SNOMED-CT"
+																>
+																coding_rationale = 
+																<
+																	
+																>
+																display_name = 
+																<
+																	reference_model_class_name = 
+																	<
+																		"ST"
+																	>
+																	translation = 
+																	<
+																		
+																	>
+																	value = 
+																	<
+																		"Medida de la temperatura corporal"
+																	>
+																	
+																>
+																translation = 
+																<
+																	
+																>
+																
+															>
+															policy_ids = 
+															<
+																
+															>
+															synthesised = 
+															<
+																false
+															>
+															value = 
+															<
+																reference_model_class_name = 
+																<
+																	"PQR"
+																>
+																coding_rationale = 
+																<
+																	
+																>
+																precision = 
+																<
+																	0
+																>
+																unit = 
+																<
+																	reference_model_class_name = 
+																	<
+																		"CDCV"
+																	>
+																	code = 
+																	<
+																		"Cel"
+																	>
+																	coding_rationale = 
+																	<
+																		
+																	>
+																	translation = 
+																	<
+																		
+																	>
+																	
+																>
+																value = 
+																<
+																	36.3
+																>
+																
+															>
+															
+														>
+														
+													>
+													links = 
+													<
+														
+													>
+													meaning = 
+													<
+														reference_model_class_name = 
+														<
+															"CDCV"
+														>
+														code = 
+														<
+															"at0052"
+														>
+														code_system_name = 
+														<
+															"CEN-EN13606-SECTION.ExploracionAspectoGeneral.v1"
+														>
+														coding_rationale = 
+														<
+															
+														>
+														translation = 
+														<
+															
+														>
+														
+													>
+													name = 
+													<
+														reference_model_class_name = 
+														<
+															"CDCV"
+														>
+														coding_rationale = 
+														<
+															
+														>
+														display_name = 
+														<
+															reference_model_class_name = 
+															<
+																"ST"
+															>
+															translation = 
+															<
+																
+															>
+															value = 
+															<
+																"Temperatura corporal"
+															>
+															
+														>
+														translation = 
+														<
+															
+														>
+														
+													>
+													other_participations = 
+													<
+														
+													>
+													policy_ids = 
+													<
+														
+													>
+													synthesised = 
+													<
+														false
+													>
+													uncertainty_expressed = 
+													<
+														false
+													>
+													
+												>
+												
+											>
+											name = 
+											<
+												reference_model_class_name = 
+												<
+													"CDCV"
+												>
+												coding_rationale = 
+												<
+													
+												>
+												display_name = 
+												<
+													reference_model_class_name = 
+													<
+														"ST"
+													>
+													translation = 
+													<
+														
+													>
+													value = 
+													<
+														"Aspecto general"
+													>
+													
+												>
+												translation = 
+												<
+													
+												>
+												
+											>
+											policy_ids = 
+											<
+												
+											>
+											synthesised = 
+											<
+												false
+											>
+											
+										>
+										
+									>
+									name = 
+									<
+										reference_model_class_name = 
+										<
+											"CDCV"
+										>
+										coding_rationale = 
+										<
+											
+										>
+										display_name = 
+										<
+											reference_model_class_name = 
+											<
+												"ST"
+											>
+											translation = 
+											<
+												
+											>
+											value = 
+											<
+												"Exploración física"
+											>
+											
+										>
+										translation = 
+										<
+											
+										>
+										
+									>
+									policy_ids = 
+									<
+										
+									>
+									synthesised = 
+									<
+										false
+									>
+									
+								>
+								
+							>
+							name = 
+							<
+								reference_model_class_name = 
+								<
+									"CDCV"
+								>
+								coding_rationale = 
+								<
+									
+								>
+								display_name = 
+								<
+									reference_model_class_name = 
+									<
+										"ST"
+									>
+									translation = 
+									<
+										
+									>
+									value = 
+									<
+										"O"
+									>
+									
+								>
+								translation = 
+								<
+									
+								>
+								
+							>
+							policy_ids = 
+							<
+								
+							>
+							synthesised = 
+							<
+								false
+							>
+							
+						>
+						
+					>
+					name = 
+					<
+						reference_model_class_name = 
+						<
+							"CDCV"
+						>
+						coding_rationale = 
+						<
+							
+						>
+						display_name = 
+						<
+							reference_model_class_name = 
+							<
+								"ST"
+							>
+							translation = 
+							<
+								
+							>
+							value = 
+							<
+								"Datos clínicos"
+							>
+							
+						>
+						translation = 
+						<
+							
+						>
+						
+					>
+					policy_ids = 
+					<
+						
+					>
+					synthesised = 
+					<
+						false
+					>
+					
+				>
+				
+			>
+			name = 
+			<
+				reference_model_class_name = 
+				<
+					"CDCV"
+				>
+				coding_rationale = 
+				<
+					
+				>
+				display_name = 
+				<
+					reference_model_class_name = 
+					<
+						"ST"
+					>
+					translation = 
+					<
+						
+					>
+					value = 
+					<
+						"Datos clínicos"
+					>
+					
+				>
+				translation = 
+				<
+					
+				>
+				
+			>
+			policy_ids = 
+			<
+				
+			>
+			synthesised = 
+			<
+				false
+			>
+			
+		>
+		
+	>
+	links = 
+	<
+		
+	>
+	meaning = 
+	<
+		reference_model_class_name = 
+		<
+			"CDCV"
+		>
+		code = 
+		<
+			"at0000"
+		>
+		code_system_name = 
+		<
+			"CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1"
+		>
+		coding_rationale = 
+		<
+			
+		>
+		translation = 
+		<
+			
+		>
+		
+	>
+	name = 
+	<
+		reference_model_class_name = 
+		<
+			"CDCV"
+		>
+		coding_rationale = 
+		<
+			
+		>
+		display_name = 
+		<
+			reference_model_class_name = 
+			<
+				"ST"
+			>
+			translation = 
+			<
+				
+			>
+			value = 
+			<
+				"Informe Clinico Nota SOIP"
+			>
+			
+		>
+		translation = 
+		<
+			
+		>
+		
+	>
+	other_participations = 
+	<
+		
+	>
+	policy_ids = 
+	<
+		
+	>
+	synthesised = 
+	<
+		false
+	>
+	
+>
+>
+>

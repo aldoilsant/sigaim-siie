@@ -1,13 +1,13 @@
 // Generated from SEQL.g4 by ANTLR 4.2
 package org.sigaim.siie.seql.parser.generated;
 
-import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
-import org.sigaim.siie.seql.parser.model.SEQLOperation;
-import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
-import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
-import org.sigaim.siie.seql.parser.model.SEQLPath;
-import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
-import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
+import org.sigaim.siie.seql.model.SEQLFromComponent;
+import org.sigaim.siie.seql.model.SEQLOperation;
+import org.sigaim.siie.seql.model.SEQLEvaluable;
+import org.sigaim.siie.seql.model.SEQLPrimitive;
+import org.sigaim.siie.seql.model.SEQLPath;
+import org.sigaim.siie.seql.model.SEQLPathComponent;
+import org.sigaim.siie.seql.model.SEQLPathPredicate;
 
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -38,6 +38,17 @@ public interface SEQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBoolOp(@NotNull SEQLParser.BoolOpContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link SEQLParser#allVersions}.
+	 * @param ctx the parse tree
+	 */
+	void enterAllVersions(@NotNull SEQLParser.AllVersionsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SEQLParser#allVersions}.
+	 * @param ctx the parse tree
+	 */
+	void exitAllVersions(@NotNull SEQLParser.AllVersionsContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link SEQLParser#asIdentifier}.
@@ -258,6 +269,17 @@ public interface SEQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitObjectPath(@NotNull SEQLParser.ObjectPathContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link SEQLParser#withDescendants}.
+	 * @param ctx the parse tree
+	 */
+	void enterWithDescendants(@NotNull SEQLParser.WithDescendantsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SEQLParser#withDescendants}.
+	 * @param ctx the parse tree
+	 */
+	void exitWithDescendants(@NotNull SEQLParser.WithDescendantsContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link SEQLParser#operand}.

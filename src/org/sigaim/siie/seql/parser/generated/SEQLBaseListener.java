@@ -1,13 +1,13 @@
 // Generated from SEQL.g4 by ANTLR 4.2
 package org.sigaim.siie.seql.parser.generated;
 
-import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
-import org.sigaim.siie.seql.parser.model.SEQLOperation;
-import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
-import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
-import org.sigaim.siie.seql.parser.model.SEQLPath;
-import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
-import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
+import org.sigaim.siie.seql.model.SEQLFromComponent;
+import org.sigaim.siie.seql.model.SEQLOperation;
+import org.sigaim.siie.seql.model.SEQLEvaluable;
+import org.sigaim.siie.seql.model.SEQLPrimitive;
+import org.sigaim.siie.seql.model.SEQLPath;
+import org.sigaim.siie.seql.model.SEQLPathComponent;
+import org.sigaim.siie.seql.model.SEQLPathPredicate;
 
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -46,6 +46,19 @@ public class SEQLBaseListener implements SEQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBoolOp(@NotNull SEQLParser.BoolOpContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAllVersions(@NotNull SEQLParser.AllVersionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAllVersions(@NotNull SEQLParser.AllVersionsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -306,6 +319,19 @@ public class SEQLBaseListener implements SEQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitObjectPath(@NotNull SEQLParser.ObjectPathContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWithDescendants(@NotNull SEQLParser.WithDescendantsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWithDescendants(@NotNull SEQLParser.WithDescendantsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

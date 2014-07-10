@@ -1,7 +1,7 @@
 package org.sigaim.siie.db.sql;
 
 import org.sigaim.siie.db.ReferenceModelObjectId;
-import org.sigaim.siie.seql.parser.model.SEQLPath;
+import org.sigaim.siie.seql.model.SEQLPath;
 
 public class SQLReferenceModelObjectId implements ReferenceModelObjectId{
 	private Class<?> objectClass;
@@ -44,6 +44,9 @@ public class SQLReferenceModelObjectId implements ReferenceModelObjectId{
 		this.archetypePath=path;
 	}
 	@Override public String toString() {
-		return this.objectClass+"::"+this.getUniqueIdPath();
+		return this.objectClass+"::"+this.getUniqueIdPath()+"::"+this.getReferenceModelPath()+"::"+this.getArchetypePath();
+	}
+	public long getUniqueId() {
+		return Long.parseLong(this.getUniqueIdPath().getLastPathComponent().getPathIdentifier());
 	}
 }

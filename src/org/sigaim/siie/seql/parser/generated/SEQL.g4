@@ -1,13 +1,13 @@
 grammar SEQL;
 
 @header {
-import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
-import org.sigaim.siie.seql.parser.model.SEQLOperation;
-import org.sigaim.siie.seql.parser.model.SEQLEvaluable;
-import org.sigaim.siie.seql.parser.model.SEQLPrimitive;
-import org.sigaim.siie.seql.parser.model.SEQLPath;
-import org.sigaim.siie.seql.parser.model.SEQLPathComponent;
-import org.sigaim.siie.seql.parser.model.SEQLPathPredicate;
+import org.sigaim.siie.seql.model.SEQLFromComponent;
+import org.sigaim.siie.seql.model.SEQLOperation;
+import org.sigaim.siie.seql.model.SEQLEvaluable;
+import org.sigaim.siie.seql.model.SEQLPrimitive;
+import org.sigaim.siie.seql.model.SEQLPath;
+import org.sigaim.siie.seql.model.SEQLPathComponent;
+import org.sigaim.siie.seql.model.SEQLPathPredicate;
 }
 
 //Lexer
@@ -17,7 +17,8 @@ FROM: 'FROM';
 CONTAINS: 'CONTAINS';
 SELECT: 'SELECT';
 WHERE: 'WHERE';
-EHR : ('E'|'e')('H'|'h')('R'|'r');
+EHR : 'EHR';
+SYSTEM: 'SYSTEM';
 COMMA   :       ',';
 FORWARD : ('F'|'f')('O'|'o')('R'|'r')('W'|'w')('A'|'a')('R'|'r')('D'|'d') ;
 BACKWARD : ('B'|'b')('A'|'a')('C'|'c')('K'|'k')('W'|'w')('A'|'a')('R'|'r')('D'|'d') ;
@@ -30,6 +31,11 @@ OR : ('O'|'o')('R'|'r') ;
 XOR : ('X'|'x')('O'|'o')('R'|'r') ;
 NOT : ('N'|'n')('O'|'o')('T'|'t') ;
 AS : ('A'|'a')('S'|'s') ;
+ALL: 'ALL';
+VERSIONS: 'VERSIONS';
+OF: 'OF';
+WITH: 'WITH';
+DESCENDANTS: 'DESCENDANTS';
 
 COMPARABLEOPERATOR
         :       '=' | '!=' | '>' | '>=' | '<' | '<='
@@ -68,8 +74,9 @@ top : TOP INTEGER FORWARD? |
 
 selectExpr : identifiedPathSeq;
 identifiedPathSeq: selectVar (',' selectVar)*; 
-selectVar: identifiedPath asIdentifier?;
+selectVar: identifiedPath asIdentifier? withDescendants?;
 asIdentifier: AS IDENTIFIER;
+withDescendants: WITH DESCENDANTS;
 
 identifiedPath locals [SEQLPath path]: IDENTIFIER nodePredicate? ('/' objectPath)?; 
 
@@ -92,13 +99,17 @@ predicateOperand locals [SEQLEvaluable evaluable]
 
 
 
-from    :  FROM EHR IDENTIFIER
+from    :  | FROM EHR SYSTEM IDENTIFIER
+		   | FROM EHR IDENTIFIER
 		   | FROM EHR IDENTIFIER? CONTAINS containsExpr ;
 
  
 containsExpr locals[ SEQLOperation operation]: containExpressionBool (boolOp containsExpr)?;
 
 contains locals[SEQLOperation containsOperation] : simpleClassExpr (CONTAINS containsExpr)?;
+
+allVersions : ALL VERSIONS OF;
+
 
 containExpressionBool locals[ SEQLOperation operation] : contains | '(' containsExpr ')';
         
@@ -107,10 +118,10 @@ boolOp : AND | OR | XOR;
 
 
 simpleClassExpr locals[SEQLFromComponent component]
-        : IDENTIFIER IDENTIFIER?  
+        : allVersions? IDENTIFIER IDENTIFIER?  
         | archetypedClassExpr;
 archetypedClassExpr
-        : IDENTIFIER IDENTIFIER? archetypePredicate; 
+        : allVersions? IDENTIFIER IDENTIFIER? archetypePredicate; 
 archetypePredicate
         : OPENBRACKET ARCHETYPEID CLOSEBRACKET;
         

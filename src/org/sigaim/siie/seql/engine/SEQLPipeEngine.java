@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openehr.am.parser.ContentObject;
+import org.sigaim.siie.annotations.DADL;
 import org.sigaim.siie.db.exceptions.PersistenceException;
-import org.sigaim.siie.seql.annotations.DADL;
-import org.sigaim.siie.seql.engine.exceptions.SEQLException;
-import org.sigaim.siie.seql.parser.model.SEQLQuery;
-import org.sigaim.siie.seql.parser.model.SEQLResultSet;
+import org.sigaim.siie.seql.model.SEQLException;
+import org.sigaim.siie.seql.model.SEQLQuery;
+import org.sigaim.siie.seql.model.SEQLResultSet;
 
 public class SEQLPipeEngine implements SEQLEngine{
 	private List<SEQLQueryPreprocessStage> preprocessStages;

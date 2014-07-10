@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sigaim.siie.seql.engine.SEQLQueryPreprocessStage;
-import org.sigaim.siie.seql.engine.exceptions.SEQLException;
-import org.sigaim.siie.seql.parser.model.SEQLFromComponent;
-import org.sigaim.siie.seql.parser.model.SEQLQuery;
+import org.sigaim.siie.seql.model.SEQLException;
+import org.sigaim.siie.seql.model.SEQLFromComponent;
+import org.sigaim.siie.seql.model.SEQLQuery;
 
 
 public class SEQLPreprocessingValidateIdentifiedVariablesStage implements SEQLQueryPreprocessStage {

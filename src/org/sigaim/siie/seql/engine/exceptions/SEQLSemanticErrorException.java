@@ -1,5 +1,7 @@
 package org.sigaim.siie.seql.engine.exceptions;
 
+import org.sigaim.siie.seql.model.SEQLException;
+
 public class SEQLSemanticErrorException extends SEQLException {
 
 	/**

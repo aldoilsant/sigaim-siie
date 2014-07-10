@@ -1,8 +1,8 @@
 package org.sigaim.siie.seql.engine.preprocessing;
 
 import org.sigaim.siie.seql.engine.SEQLQueryPreprocessStage;
-import org.sigaim.siie.seql.engine.exceptions.SEQLException;
-import org.sigaim.siie.seql.parser.model.SEQLQuery;
+import org.sigaim.siie.seql.model.SEQLException;
+import org.sigaim.siie.seql.model.SEQLQuery;
 
 public class SEQLPrepreprocessingValidateArchetypeIdsStage implements SEQLQueryPreprocessStage {
 

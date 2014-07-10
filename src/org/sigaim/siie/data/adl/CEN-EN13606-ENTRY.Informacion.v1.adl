@@ -1,0 +1,219 @@
+archetype (adl_version=1.4)
+    CEN-EN13606-ENTRY.Informacion.v1
+
+concept
+    [at0000]
+
+language
+    original_language = <[ISO_639-1::es]>
+
+description
+    original_author = <
+        ["email"] = <"jesus.barros.castro@sergas.es">
+        ["organisation"] = <"ATIS - INIBIC">
+        ["name"] = <"Jesús Barros Castro">
+        ["date"] = <"20140619">
+    >
+    lifecycle_state = <"Draft">
+    details = <
+        ["es"] = <
+            language = <[ISO_639-1::es]>
+            purpose = <"Para registrar información adicional">
+            use = <"Usar para registrar información adicional">
+        >
+    >
+
+definition
+    ENTRY[at0000] occurrences matches {1..1} matches {  -- Información
+        items existence matches {0..1} cardinality matches {0..*; ordered} matches {
+            ELEMENT[at0001] occurrences matches {0..1} matches {  -- Texto original
+                value existence matches {0..1} matches {
+                    ST occurrences matches {0..1} matches {  -- ST
+                        value existence matches {0..1} matches {*}
+                    }
+                }
+            }
+            CLUSTER[at0002] occurrences matches {0..1} matches {  -- Zonas
+                parts existence matches {0..1} cardinality matches {1..4; ordered; unique} matches {
+                    ELEMENT[at0003] occurrences matches {1..1} matches {  -- Subjetivo
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0004] occurrences matches {0..1} matches {  -- Objetivo
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0005] occurrences matches {0..1} matches {  -- Impresión médica
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                    ELEMENT[at0006] occurrences matches {0..1} matches {  -- Plan terapéutico
+                        value existence matches {0..1} matches {
+                            ST occurrences matches {0..1} matches {  -- ST
+                                value existence matches {0..1} matches {*}
+                            }
+                        }
+                    }
+                }
+                structure_type existence matches {1..1} matches {
+                    STRUCTURE_TYPE occurrences matches {1..1} matches {  -- 
+                        value existence matches {0..1} matches {"list"}
+                    }
+                }
+            }
+            ELEMENT[at0007] occurrences matches {0..1} matches {  -- Audio
+                value existence matches {0..1} matches {
+                    ST occurrences matches {0..1} matches {  -- ST
+                        value existence matches {0..1} matches {*}
+                    }
+                }
+            }
+			CLUSTER[at0008] occurrences matches {0..1} matches {  -- Lista de elementos
+                parts existence matches {0..1} cardinality matches {0..*; ordered} matches {
+                    CLUSTER[at0009] occurrences matches {0..*} matches {  -- Elemento
+                        parts existence matches {0..1} cardinality matches {0..5; ordered; unique} matches {
+                            ELEMENT[at0010] occurrences matches {0..1} matches {  -- Código
+                                value existence matches {0..1} matches {
+                                    ST occurrences matches {0..1} matches {  
+                                        value existence matches {0..1} matches {*}
+                                    }
+                                }
+                            }
+                            ELEMENT[at0011] occurrences matches {0..1} matches {  -- Inicio
+                                value existence matches {0..1} matches {
+                                    INT occurrences matches {0..1} matches {  
+                                        value existence matches {1..1} matches {*}
+                                    }
+                                }
+                            }
+                            ELEMENT[at0012] occurrences matches {0..1} matches {  -- Fin
+                                value existence matches {0..1} matches {
+                                    INT occurrences matches {0..1} matches {  
+                                        value existence matches {1..1} matches {*}
+                                    }
+                                }
+                            }
+                            ELEMENT[at0013] occurrences matches {0..1} matches {  -- Path
+                                value existence matches {0..1} matches {
+                                    ST occurrences matches {0..1} matches {  -- ST
+                                        value existence matches {0..1} matches {*}
+                                    }
+                                }
+                            }
+                            ELEMENT[at0014] occurrences matches {0..1} matches {  -- Nodo
+                                value existence matches {0..1} matches {
+                                    ST occurrences matches {0..1} matches {  
+                                        value existence matches {0..1} matches {*}
+                                    }
+                                }
+                            }
+                            ELEMENT[at0015] occurrences matches {0..1} matches {  -- Terminología
+                                value existence matches {0..1} matches {
+                                    ST occurrences matches {0..1} matches {  
+                                        value existence matches {0..1} matches {*}
+                                    }
+                                }
+                            }
+                        }
+                        structure_type existence matches {1..1} matches {
+                            STRUCTURE_TYPE occurrences matches {1..1} matches {
+                                value existence matches {0..1} matches {"list"}
+                            }
+                        }
+                    }
+                }
+                structure_type existence matches {1..1} matches {
+                    STRUCTURE_TYPE occurrences matches {1..1} matches { 
+                        value existence matches {0..1} matches {"list"}
+                    }
+                }
+            }
+        }
+    }
+
+ontology
+    term_definitions = <
+        ["es"] = <
+            items = <
+                ["at0000"] = <
+                    text = <"Información">
+                    description = <"Información">
+                >
+                ["at0001"] = <
+                    text = <"Texto original">
+                    description = <"">
+                >
+                ["at0002"] = <
+                    text = <"Zonas">
+                    description = <"">
+                >
+                ["at0003"] = <
+                    text = <"Subjetivo">
+                    description = <"">
+                >
+                ["at0004"] = <
+                    text = <"Objetivo">
+                    description = <"">
+                >
+                ["at0005"] = <
+                    text = <"Impresión médica">
+                    description = <"">
+                >                
+                ["at0006"] = <
+                    text = <"Plan terapéutico">
+                    description = <"">
+                >
+                ["at0007"] = <
+                    text = <"Audio">
+                    description = <"">
+                >
+                ["at0008"] = <
+                    text = <"Elementos">
+                    description = <"">
+                >
+                ["at0009"] = <
+                    text = <"Lista de elementos">
+                    description = <"">
+                >
+                ["at0010"] = <
+                    text = <"Código">
+                    description = <"">
+                >
+                ["at0011"] = <
+                    text = <"Inicio">
+                    description = <"">
+                >
+                ["at0012"] = <
+                    text = <"Fin">
+                    description = <"">
+                >
+                ["at0013"] = <
+                    text = <"Path">
+                    description = <"">
+                >
+                ["at0014"] = <
+                    text = <"Nodo">
+                    description = <"">
+                >
+                ["at0015"] = <
+                    text = <"Terminología">
+                    description = <"">
+                >
+            >
+        >
+    >
+    constraint_definitions = <
+    >
+    term_binding = <
+    >
+    constraint_binding = <
+    >
