@@ -7,6 +7,7 @@ import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.db.DBSerializer;
 import org.sigaim.siie.iso13606.rm.II;
+import org.sigaim.siie.iso13606.rm.RecordComponent;
 import org.sigaim.siie.rm.ReferenceModelManager;
 import org.sigaim.siie.rm.exceptions.ReferenceModelException;
 import org.sigaim.siie.utils.Utils;
@@ -38,14 +39,17 @@ public class IDDBSerializer implements DBSerializer {
 			ii.setExtension(uniqueIdentifier+"");
 			AttributeValue av=new AttributeValue("ehr_id", this.referenceModelManager.unbindGeneric(ii));
 			block.getAttributeValues().add(av);
-		} else if(this.referenceModelManager.isRMObjectClass(this.referenceModelManager.referenceModelClassFromString(referenceModelClassName))) {
-			II ii= new II();
-			ii.setRoot("org.sigaim");
-			ii.setExtension(uniqueIdentifier+"");
-			AttributeValue av=new AttributeValue("rc_id", this.referenceModelManager.unbindGeneric(ii));
-			block.getAttributeValues().add(av);		
 		} else {
-			log.info("Class "+referenceModelClassName+" is not being assigned unique ids");
+			Class<?> rmClass=this.referenceModelManager.referenceModelClassFromString(referenceModelClassName);
+			if(this.referenceModelManager.isRMObjectClass(rmClass) && RecordComponent.class.isAssignableFrom(rmClass)) {
+				II ii= new II();
+				ii.setRoot("org.sigaim");
+				ii.setExtension(uniqueIdentifier+"");
+				AttributeValue av=new AttributeValue("rc_id", this.referenceModelManager.unbindGeneric(ii));
+				block.getAttributeValues().add(av);		
+			} else {
+				log.info("Class "+referenceModelClassName+" is not being assigned unique ids");
+			}
 		}
 		return this.dadlManager.serialize(block);
 	}
