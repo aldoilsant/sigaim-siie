@@ -184,6 +184,10 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 			auditInfo.setEhrSystem(this.ehrSystemId);
 			//Version status is always draft, given that the report has not been reviewed by the composer
 			auditInfo.setVersionStatus(VersionStatus.DRAFT);
+			GregorianCalendar gregorianCalendar = new GregorianCalendar();
+		    DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+		    XMLGregorianCalendar now = datatypeFactory.newXMLGregorianCalendar(gregorianCalendar);
+			auditInfo.setTimeCommitted(now);
 			//No reason for revision, as we are in the first commit
 			//For now, we do not set the commiter (same as composer).
 			report.setCommittal(auditInfo);
