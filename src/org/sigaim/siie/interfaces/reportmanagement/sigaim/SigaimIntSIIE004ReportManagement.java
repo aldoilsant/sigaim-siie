@@ -54,11 +54,6 @@ import org.sigaim.siie.seql.parser.generated.SEQLLexer;
 import org.sigaim.siie.seql.parser.generated.SEQLParser;
 
 public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagement {
-	private static Object createHealthcareMutex= new Object();
-	private static Object createPerformerMutex= new Object();
-	private static Object createSubjectOfCareMutex= new Object();
-	private static Object createReportMutex=new Object();
-	private static Object updateReportMutex=new Object();
 	private IDDBSerializer serializer;
 	private II ehrSystemId;
 	private PersistenceManager pmngr;
@@ -67,7 +62,7 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 	private INT004SIIESAPRMProxy saprm;
 	private SEQLEngine engine;
 
-public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModelManager rmngr, DADLManager dmngr, INT004SIIESAPRMProxy saprm, SEQLEngine engine) {
+	public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModelManager rmngr, DADLManager dmngr, INT004SIIESAPRMProxy saprm, SEQLEngine engine) {
 		this.pmngr=pmngr;
 		this.rmngr=rmngr;
 		this.dmngr=dmngr;
@@ -83,16 +78,15 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 			String requestId) throws RejectException {
 		//Create a healthcare facility and insert it into all_healthcare_facilities path
 		try {
-			synchronized(createHealthcareMutex) {
 				//Get the number of healthcare facilities
 				ReferenceModelObjectId root=pmngr.getReferenceModelRoot();
-				int id=pmngr.countObjectsMatchingPathFromParent(root, new SEQLPath("all_healthcare_facilities"))+1;
+				long id=pmngr.readAtomicIndex("all_healthcare_facilities");
+				//int id=pmngr.countObjectsMatchingPathFromParent(root, new SEQLPath("all_healthcare_facilities"))+1;
 				HealthcareFacility newFacility=new HealthcareFacility();
 				SEQLPathComponent healthcarePathComponent=new SEQLPathComponent("all_healthcare_facilities["+id+"]");
 				ReferenceModelObjectId saved=pmngr.saveObjectToPathFromParentWithSerializer((SingleAttributeObjectBlock)rmngr.unbindGeneric(newFacility), pmngr.getReferenceModelRoot(), healthcarePathComponent,serializer);
 				ContentObject savedObject=pmngr.selectFromReferenceModelObjectId(saved,false);
 				return new ReturnValueCreateHealthcareFacility(requestId,dmngr.serialize(savedObject,false));
-			}
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -105,10 +99,9 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 			throws RejectException {
 		// TODO Auto-generated method stub
 		try {
-			synchronized(createSubjectOfCareMutex) {
 				//Get the number of healthcare facilities
 				ReferenceModelObjectId root=pmngr.getReferenceModelRoot();
-				int id=pmngr.countObjectsMatchingPathFromParent(root, new SEQLPath("all_subjects_of_care"))+1;
+				long id=pmngr.readAtomicIndex("all_subjects_of_care");
 				SubjectOfCare newSubjectOfCare=new SubjectOfCare();
 				SEQLPathComponent healthcarePathComponent=new SEQLPathComponent("all_subjects_of_care["+id+"]");
 				ReferenceModelObjectId saved=pmngr.saveObjectToPathFromParentWithSerializer((SingleAttributeObjectBlock)rmngr.unbindGeneric(newSubjectOfCare), pmngr.getReferenceModelRoot(), healthcarePathComponent,serializer);
@@ -125,33 +118,32 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 				extract.setSubjectOfCare(bsc.getIdentifier());
 				//Save the ehr
 				root=pmngr.getReferenceModelRoot();
-				id=pmngr.countObjectsMatchingPathFromParent(root, new SEQLPath("all_ehrs"))+1;
+				id=pmngr.readAtomicIndex("all_ehrs");
 				SEQLPathComponent pathComponent=new SEQLPathComponent("all_ehrs["+id+"]");
+				//Declare an atomic index for the ehr
+				pmngr.declareAtomicIndex(pathComponent.toString());
 				saved=pmngr.saveObjectToPathFromParentWithSerializer((SingleAttributeObjectBlock)rmngr.unbindGeneric(extract), pmngr.getReferenceModelRoot(), pathComponent,serializer);
 				savedObject=pmngr.selectFromReferenceModelObjectId(saved,false);
 				//Return the EHR
-				return new ReturnValueCreateSubjectOfCare(requestId,dmngr.serialize(savedObject,false));
-			}
-			
+				return new ReturnValueCreateSubjectOfCare(requestId,dmngr.serialize(savedObject,false));			
 		} catch(Exception e) {
 			e.printStackTrace();
 			throw new RejectException(requestId,CSReason.REAS02);
-		}	}
+		}
+	}
 
 	@Override
 	public ReturnValueCreatePerformer createPerformer(String requestId)
 			throws RejectException {
 		try {
-			synchronized(createPerformerMutex) {
 				//Get the number of healthcare facilities
 				ReferenceModelObjectId root=pmngr.getReferenceModelRoot();
-				int id=pmngr.countObjectsMatchingPathFromParent(root, new SEQLPath("all_performers"))+1;
+				long id=pmngr.readAtomicIndex("all_performers");
 				Performer newPerformer=new Performer();
 				SEQLPathComponent healthcarePathComponent=new SEQLPathComponent("all_performers["+id+"]");
 				ReferenceModelObjectId saved=pmngr.saveObjectToPathFromParentWithSerializer((SingleAttributeObjectBlock)rmngr.unbindGeneric(newPerformer), pmngr.getReferenceModelRoot(), healthcarePathComponent,serializer);
 				ContentObject savedObject=pmngr.selectFromReferenceModelObjectId(saved,false);
 				return new ReturnValueCreatePerformer(requestId,dmngr.serialize(savedObject,false));
-			}
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -213,21 +205,14 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 			report.setCommittal(auditInfo);*/
 			//We do not need to set the version_set_id, it is not mandatory (given that is the same that the rc_id)
 
-			synchronized(createReportMutex) {
 				//Add the composition to the extract. We need to know which EHR extract matches the client
 				ReferenceModelObjectId ehr=pmngr.getReferenceModelObjectIdFromUniqueId(Long.parseLong(ehrId.getExtension()));
 				SEQLPath queryPath=(SEQLPath)pmngr.getReferenceModelPathFoRMObject(ehr).clone();
 				List<SEQLPathComponent> subComponents=queryPath.getPathComponents();
 				subComponents.remove(0);
 				SEQLPathComponent allEhrsComponent=subComponents.get(0);
+				long id=pmngr.readAtomicIndex(allEhrsComponent.toString());
 				allEhrsComponent=new SEQLPathComponent(allEhrsComponent.getPathIdentifier(), new SEQLPathPredicate("at0000",allEhrsComponent.getPathPredicate().getKey1()));
-				subComponents.remove(0);
-				subComponents.add(0, allEhrsComponent);
-				queryPath=new SEQLPath(subComponents);
-				queryPath.addPathComponent("all_compositions");
-				//For this, we need an EQL query... 
-				ReferenceModelObjectId root=pmngr.getReferenceModelRoot();
-				int id=pmngr.countObjectsMatchingPathFromParent(root, queryPath)+1;
 				SEQLPathComponent pathComponent=new SEQLPathComponent("all_compositions["+id+"]");
 				//SingleAttributeObjectBlock unbinded=(SingleAttributeObjectBlock)rmngr.unbindGeneric(report);
 				ReferenceModelObjectId saved=pmngr.saveObjectToPathFromParentWithSerializer(compositionBlock, ehr, pathComponent,serializer);
@@ -236,7 +221,6 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 				//ContentObject savedObject=pmngr.selectFromReferenceModelObjectId(saved);
 				//Return the Composition object (attributes only) or alternatively the EHR_ID using the reference model manager  
 				return new ReturnValueCreateReport(requestId,dmngr.serialize(savedObject,false));
-			}
 		} catch(Exception e) { 
 			e.printStackTrace();
 			throw new RejectException(requestId,CSReason.REAS02);
@@ -254,17 +238,9 @@ public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModel
 			//The rc_id is assigned by us so we can use the extension value as the unique object id in the database
 			long oid=Long.parseLong(reportId.getExtension());
 			ReferenceModelObjectId rmid=pmngr.getReferenceModelObjectIdFromUniqueId(oid);
-			
-			synchronized(updateReportMutex) {
-				//Get the number of healthcare facilities
-				ReferenceModelObjectId root=pmngr.getReferenceModelRoot();
-				int id=pmngr.countObjectsMatchingPathFromParent(root, new SEQLPath("all_ehrs"))+1;
-				SEQLPathComponent component=new SEQLPathComponent("all_ehrs["+id+"]");
-				//We need to: create a new Composition, probably copy most of the information
-				//Update the version set id attribute
-				//Update the version table. 
-				//T
-			}
+			//We need to: create a new Composition, probably copy most of the information
+			//Update the version set id attribute
+			//Update the version table. 
 			//Here, in the update report, we have a problem.
 			//First, what if the text has changed and the CDCV stuff has changed. 
 			//Second, what if the changes of the physician are relevant for the archetype values

@@ -18,6 +18,7 @@ public interface PersistenceManager {
 	 ReferenceModelObjectId saveReferenceModelObjectFromContentObjectWithSerializer(ContentObject cobj,DBSerializer serializer) throws PersistenceException,  SemanticDADLException, ReferenceModelException;
 	 ReferenceModelObjectId saveObjectToPathFromParent(SingleAttributeObjectBlock block, ReferenceModelObjectId parent, SEQLPathComponent component)  throws PersistenceException, SemanticDADLException, ReferenceModelException;
 	 ReferenceModelObjectId saveObjectToPathFromParentWithSerializer(SingleAttributeObjectBlock block, ReferenceModelObjectId parent, SEQLPathComponent component, DBSerializer serializer)  throws PersistenceException, SemanticDADLException, ReferenceModelException;
+	 
 	 //Management
 	 void reset() throws PersistenceException;
 	 void start() throws PersistenceException;
@@ -35,9 +36,13 @@ public interface PersistenceManager {
 	 List<ReferenceModelObjectId> selectObjectsMatchingPathFromParent(ReferenceModelObjectId parent,SEQLPath subpath) throws PersistenceException;
 	 int countObjectsMatchingPathFromParent(ReferenceModelObjectId parent,SEQLPath subpath) throws PersistenceException;
 
-	 //Retrieve actual content. Modify for with descendants
+	 //Retrieve actual content. 
 	 ContentObject selectFromReferenceModelObjectId(ReferenceModelObjectId id, Boolean deep) throws PersistenceException;
 
 	 //Versions
 	 void setAsNextVersionOf(ReferenceModelObjectId newVersion, ReferenceModelObjectId lastVersion) throws PersistenceException;
+	 
+	 //Atomic indexing
+	 long readAtomicIndex(String indexName) throws PersistenceException;
+	 void declareAtomicIndex(String indexName)  throws PersistenceException;
 }

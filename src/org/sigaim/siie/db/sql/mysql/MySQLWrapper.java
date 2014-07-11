@@ -2,39 +2,20 @@ package org.sigaim.siie.db.sql.mysql;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.log4j.Logger;
+import org.sigaim.siie.db.exceptions.PersistenceException;
 import org.sigaim.siie.db.sql.SQLWrapper;
 
 public class MySQLWrapper implements SQLWrapper{
-	private String connectionString="sigaim";
-	private String user;
-	private String pass;
-	private Connection conn;
 	private static org.apache.log4j.Logger log = Logger.getLogger(MySQLWrapper.class);
 	
 	@Override
-	public void start() throws SQLException {
-		try {
-			 Class.forName("org.hsqldb.jdbcDriver");
-		} catch(Exception e){
-				e.printStackTrace();;
-		}
-		if(conn==null) {
-			conn = DriverManager.getConnection(connectionString,user,pass);
-		}
-	}
-
-	@Override
-	public void stop() throws SQLException {
-		this.conn.close();		
-	}
-
-	@Override
-	public synchronized void update(String expression) throws SQLException {
+	public void update(String expression, Connection conn) throws SQLException {
         Statement st = null;
 
         st = conn.createStatement();    // statements
@@ -48,7 +29,7 @@ public class MySQLWrapper implements SQLWrapper{
         st.close();
 	}
 	@Override
-	public ResultSet query(String query) throws SQLException {
+	public ResultSet query(String query, Connection conn) throws SQLException {
         Statement st = null;
         ResultSet rs = null;
 
@@ -59,7 +40,7 @@ public class MySQLWrapper implements SQLWrapper{
         rs = st.executeQuery(query); 
         return rs;
 	}
-	public ResultSet updateWithGeneratedKeys(String query) throws SQLException {
+	public ResultSet updateWithGeneratedKeys(String query, Connection conn) throws SQLException {
         Statement st = null;
         ResultSet rs = null;
  
@@ -72,25 +53,19 @@ public class MySQLWrapper implements SQLWrapper{
 	}
 
 	@Override
-	public void setConnection(String connectionString, String user, String pass) {
-		this.connectionString=connectionString;
-		this.user=user;
-		this.pass=pass;
-	}
-
-	@Override
-	public void clearDB() throws SQLException {
+	public void clearDB(Connection conn) throws SQLException {
 		String[] queries= {
 				"DROP TABLE reference_model_objects;",
-				"DROP TABLE reference_model_object_versions;"
+				"DROP TABLE reference_model_object_versions;",
+				"DROP TABLE indexes;"
 		};
 		for(String query : queries) {
-			this.update(query);
+			this.update(query,conn);
 		}		
 	}
 
 	@Override
-	public void initializeDB() throws SQLException {
+	public void initializeDB(Connection conn) throws SQLException {
 		String[] queries={
 				"CREATE TABLE IF NOT EXISTS reference_model_objects ("+
 				"id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,"+
@@ -107,21 +82,37 @@ public class MySQLWrapper implements SQLWrapper{
 			"id INTEGER NOT NULL PRIMARY KEY,"+
 			"next INTEGER DEFAULT NULL"+
 			");",
+			"CREATE TABLE IF NOT EXISTS indexes ("+
+			"index_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,"+
+			"index_value INTEGER DEFAULT 0,"+
+			"index_name VARCHAR(100) NOT NULL"+
+			");",
 			"INSERT INTO reference_model_objects VALUES(1,'ehrsystem',NULL,NULL,'/1','/','/',1,'identifier=<reference_model_class_name = <\"II\">root = <\"org.sigaim.siie\">>');",
 			"INSERT INTO reference_model_object_versions VALUES(1,NULL);",
+			"INSERT INTO indexes VALUES(1,0,'all_ehrs');",
+			"INSERT INTO indexes VALUES(2,0,'all_subjects_of_care');",
+			"INSERT INTO indexes VALUES(3,0,'all_performers');",
+			"INSERT INTO indexes VALUES(4,0,'all_healthcare_facilities');"
 
 		};
 		for(String query :queries) {
 			try {
-				this.update(query);
+				this.update(query,conn);
 			} catch(Exception e) {
+				//e.printStackTrace();
 			}
 		}		
 	}
-
 	@Override
-	public void setConnection(Connection conn) {
-		this.conn=conn;
-	} 
+	public ResultSet updatePreparedStatementWithGeneratedKeys(
+			PreparedStatement statement) throws SQLException {
+		statement.executeUpdate();
+		return statement.getGeneratedKeys();
+	}
+	@Override
+	public void updatePreparedStatement(PreparedStatement statement)
+			throws SQLException {
+		statement.executeUpdate();
+	}
 
 }
