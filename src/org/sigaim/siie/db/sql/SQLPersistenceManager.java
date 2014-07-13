@@ -649,7 +649,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 			} catch(SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
-			System.out.println("Query: "+insertRMObjectStatement.toString());
+			//System.out.println("Query: "+insertRMObjectStatement.toString());
 			/*query= "INSERT INTO reference_model_objects VALUES (NULL,'"
 					+ objectClass + "'," + archetypeId + "," + nodeId
 					+ ",NULL,NULL,NULL,NULL,'');";*/
