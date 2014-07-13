@@ -55,7 +55,7 @@ public class SEQLModelListener extends SEQLBaseListener {
 			topIdentifiedVariable=ctx.IDENTIFIER().getText();
 		}
 		SEQLFromComponent ehrComponent=null;
-		if(ctx.SYSTEM()!=null && ctx.IDENTIFIER().getText()!=null) {
+		if(ctx.SYSTEM()!=null && ctx.SYSTEM().getText()!=null) {
 			ehrComponent=query.getFromCondition().createFromComponent("ehr_system",topIdentifiedVariable,null,false);
 		} else {
 			ehrComponent=query.getFromCondition().createFromComponent("ehr_extract",topIdentifiedVariable,null,false);

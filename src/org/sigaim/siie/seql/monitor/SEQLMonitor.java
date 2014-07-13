@@ -40,6 +40,8 @@ import org.sigaim.siie.seql.parser.SEQLModelListener;
 import org.sigaim.siie.seql.parser.generated.SEQLLexer;
 import org.sigaim.siie.seql.parser.generated.SEQLParser;
 
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+
 
 /* SENSIBLE QUERIES
  * RETRIEVE ALL SYMPTOMS FOR EACH SUBJECT OF CARE BY NAME
@@ -54,7 +56,18 @@ public class SEQLMonitor {
 		DADLManager dmng=new OpenEHRDADLManager();
 		ReflectorReferenceModelManager mng=new ReflectorReferenceModelManager(dmng);
 		InputStream is;
-		SQLPersistenceManager pmngr=new SQLPersistenceManager();
+		SQLPersistenceManager pmngr=null;
+		if(args.length==5) {
+			System.out.println("Using custom connection...");
+			MysqlDataSource basicDataSource = new MysqlDataSource();
+			basicDataSource.setUser(args[3]);
+			basicDataSource.setPassword(args[4]);
+			basicDataSource.setServerName(args[1]);
+			basicDataSource.setPort(Integer.parseInt(args[2]));
+			basicDataSource.setDatabaseName(args[5]);	
+		} else {
+			pmngr=new SQLPersistenceManager();
+		}
 		pmngr.setDADLManager(dmng);
 		pmngr.setReferenceModelManager(mng);
 		SEQLExecutionMemorySolverStage stage=new SEQLExecutionMemorySolverStage(pmngr,mng,dmng);
