@@ -630,14 +630,14 @@ public class SQLPersistenceManager implements PersistenceManager {
 			if (archetypeId == null) {
 				archetypeId = "NULL";
 			} else {
-				archetypeId = "'" + archetypeId + "'";
+				archetypeId = archetypeId;
 			}
 			String nodeId = this.referenceModelManager
 					.getArchetypeNodeIdForRMObject(block);
 			if (nodeId == null) {
 				nodeId = "NULL";
 			} else {
-				nodeId = "'" + nodeId + "'";
+				nodeId = nodeId ;
 			}
 			Map<SEQLPathComponent, SingleAttributeObjectBlock> childRMObjects = this.referenceModelManager
 					.splitForRMObjectVsDataObject(block);
@@ -649,6 +649,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 			} catch(SQLException e) {
 				throw new PersistenceException(e.getMessage());
 			}
+			System.out.println("Query: "+insertRMObjectStatement.toString());
 			/*query= "INSERT INTO reference_model_objects VALUES (NULL,'"
 					+ objectClass + "'," + archetypeId + "," + nodeId
 					+ ",NULL,NULL,NULL,NULL,'');";*/
