@@ -23,6 +23,7 @@ import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.sigaim.siie.archetypes.FileArchetypeManager;
 import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.dadl.OpenEHRDADLManager;
+import org.sigaim.siie.db.pool.SingleConnectionDataSource;
 import org.sigaim.siie.db.sql.SQLPersistenceManager;
 import org.sigaim.siie.iso13606.rm.BL;
 import org.sigaim.siie.iso13606.rm.Composition;
@@ -59,7 +60,7 @@ public class SEQLMonitor {
 		SQLPersistenceManager pmngr=null;
 		if(args.length==5) {
 			System.out.println("Using custom connection...");
-			MysqlDataSource basicDataSource = new MysqlDataSource();
+			SingleConnectionDataSource basicDataSource = new SingleConnectionDataSource();
 			basicDataSource.setUser(args[3]);
 			basicDataSource.setPassword(args[4]);
 			basicDataSource.setServerName(args[1]);

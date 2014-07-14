@@ -29,6 +29,7 @@ import org.sigaim.siie.db.DBSerializer;
 import org.sigaim.siie.db.PersistenceManager;
 import org.sigaim.siie.db.ReferenceModelObjectId;
 import org.sigaim.siie.db.exceptions.PersistenceException;
+import org.sigaim.siie.db.pool.SingleConnectionDataSource;
 import org.sigaim.siie.db.sql.mysql.MySQLWrapper;
 import org.sigaim.siie.rm.ReferenceModelManager;
 import org.sigaim.siie.rm.exceptions.ReferenceModelException;
@@ -80,7 +81,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 	}
 
 	public SQLPersistenceManager() throws PersistenceException {
-		MysqlDataSource basicDataSource = new MysqlDataSource();
+		SingleConnectionDataSource basicDataSource = new SingleConnectionDataSource();
 		basicDataSource.setUser("root");
 		basicDataSource.setPassword("root");
 		basicDataSource.setServerName("localhost");
@@ -748,7 +749,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 							childRMObjects.get(key),
 							new SQLReferenceModelObjectId(null, newPath,
 									newReferenceModelPath, archetypePath),
-							serializer);
+							serializer,conn,insertRMObjectStatement,updateRMObjectStatement,insertVersionsStatement);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

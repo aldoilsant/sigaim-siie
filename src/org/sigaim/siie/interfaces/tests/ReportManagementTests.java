@@ -81,7 +81,7 @@ public class ReportManagementTests {
 		HealthcareFacility newFacility=(HealthcareFacility)
 				referenceModelManager.bind(
 				dadlManager.parseDADL(new ByteArrayInputStream(rvhf.getSerialized().getBytes())));
-		/*ReturnValueCreateSubjectOfCare rvsc=this.reportManagementService.createSubjectOfCare("1");
+		ReturnValueCreateSubjectOfCare rvsc=this.reportManagementService.createSubjectOfCare("1");
 		EHRExtract newEHR=(EHRExtract)
 				referenceModelManager.bind(
 				dadlManager.parseDADL(new ByteArrayInputStream(rvsc.getSerialized().getBytes())));
@@ -101,6 +101,6 @@ public class ReportManagementTests {
 		//The root archetype id, we also do not set for now. Use the default
 		CDCV reportStatus= new CDCV();
 		reportStatus.setCode(ReportStatus.RSTA02.toString());
-		ReturnValueCreateReport result=this.reportManagementService.createReport("1", newEHR.getEhrId(), composer, null, "", reportStatus, null);*/
+		ReturnValueCreateReport result=this.reportManagementService.createReport("1", newEHR.getEhrId(), composer, null, "", reportStatus, null);
 	}
 }
