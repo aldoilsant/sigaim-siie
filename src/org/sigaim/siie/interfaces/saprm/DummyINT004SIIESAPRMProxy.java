@@ -9,7 +9,7 @@ public class DummyINT004SIIESAPRMProxy implements INT004SIIESAPRMProxy{
 
 	@Override
 	public InputStream analyzeText(String text, II rootArchetypeId) {
-		InputStream is=DummyINT004SIIESAPRMProxy.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_012.dadl");
+		InputStream is=DummyINT004SIIESAPRMProxy.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_013.dadl");
 	    return is;
 	    /*
 	    //Stupid scanner trick
