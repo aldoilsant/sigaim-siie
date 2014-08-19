@@ -1,6 +1,7 @@
 grammar SEQL;
 
 @header {
+package org.sigaim.siie.seql.parser.generated;
 import org.sigaim.siie.seql.model.SEQLFromComponent;
 import org.sigaim.siie.seql.model.SEQLOperation;
 import org.sigaim.siie.seql.model.SEQLEvaluable;
@@ -36,6 +37,7 @@ VERSIONS: 'VERSIONS';
 OF: 'OF';
 WITH: 'WITH';
 DESCENDANTS: 'DESCENDANTS';
+MERGED: 'MERGED';
 
 COMPARABLEOPERATOR
         :       '=' | '!=' | '>' | '>=' | '<' | '<='
@@ -66,7 +68,7 @@ OPENBRACKET :	'[';
 CLOSEBRACKET :	']'; 
 query : select from where? ';' ;
 
-select : SELECT top? selectExpr ;
+select : SELECT top? MERGED? selectExpr ;
 
 //top integer forward backward
 top : TOP INTEGER FORWARD? |

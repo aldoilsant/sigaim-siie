@@ -2,8 +2,10 @@ package org.sigaim.siie.seql.engine.execution;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.openehr.am.parser.AttributeValue;
@@ -303,27 +305,83 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 				mapping.put(rootComponent, rootId);
 				List<HashMap<SEQLFromComponent,ReferenceModelObjectId>> interpretations=this.createInterpretations(context, rootComponent, rootId,mapping);
 				log.debug("Number of interpretations: "+interpretations.size());
-				SEQLResultSet rs=new SEQLResultSet(query.getSelectConditions().size());
-				for(Map<SEQLFromComponent,ReferenceModelObjectId> interpretation : interpretations) {
-					log.debug("Interpretation: "+interpretation);
-					//Check if the interpretation is a model
-					if(this.interpretationMatchesEvaluable(interpretation, context, query, evaluable)) {
-						log.debug(">Interpretation is from clause model");
-						if(this.interpretationMatchesEvaluable(interpretation, context, query, query.getWhereCondition().getRoot())) {
-							//If we arrive here, now we can use the where clause to further eliminate interpretations
-							log.debug(">>Interpretation is where clause model. Appending to result");
-							rs.addRow();
-							for(SEQLSelectCondition scond : query.getSelectConditions()) {
-								ContentObject r=this.solveSelectConditionForInterpretation(query,scond,interpretation);
-								rs.appendToRow(r);
+				if(query.isMerged()) {
+					Set<ReferenceModelObjectId> matches=new HashSet<ReferenceModelObjectId>();
+					for(Map<SEQLFromComponent,ReferenceModelObjectId> interpretation : interpretations) {
+						log.debug("Interpretation: "+interpretation);
+						//Check if the interpretation is a model
+						if(this.interpretationMatchesEvaluable(interpretation, context, query, evaluable)) {
+							log.debug(">Interpretation is from clause model");
+							if(this.interpretationMatchesEvaluable(interpretation, context, query, query.getWhereCondition().getRoot())) {
+								//If we arrive here, now we can use the where clause to further eliminate interpretations
+								log.debug(">>Interpretation is where clause model. Appending to result");
+								for(SEQLSelectCondition scond : query.getSelectConditions()) {
+									for(SEQLFromComponent comp : interpretation.keySet()) {
+										String k1=comp.getIdentifiedVariable();
+										String k2=scond.getIdentifiedVariableId();
+										if(k1!= null && k2!= null && k1.equals(k2)) {
+											matches.add(interpretation.get(comp));
+										}
+									}
+								}
 							}
 						}
 					}
+					log.debug("Number of merged matching objects: "+matches.size());
+					//Now we have all the matching objects and no repetition
+					//Find the topmost parent
+					String topMost=null;
+					for(ReferenceModelObjectId id : matches) {
+						if(topMost==null) {
+							topMost=this.pmngr.getReferenceModelPathFoRMObject(id).getFullPath();
+						} else {
+							SEQLPath newPath=this.pmngr.getReferenceModelPathFoRMObject(id);
+							topMost=Utils.longestCommonPrefix(newPath.getFullPath(), topMost);
+						}
+					}
+					SEQLPath topmostPath;
+					if(topMost.endsWith("[")) {
+						topMost=topMost.substring(0, topMost.length()-1);
+						topmostPath= new SEQLPath(topMost).removeLastPathComponent();
+						
+					} else {
+						topmostPath= new SEQLPath(topMost);				
+					}
+					log.debug("Topmost string "+topMost);
+					log.debug("Topmost path: "+topmostPath);
+					//Solve the RM for the topmost object 
+					ReferenceModelObjectId ancestor=this.pmngr.getReferenceModelObjectIdFromReferenceModelPath(topmostPath);
+					log.debug("Topmost id: "+ancestor);
+					matches.add(ancestor);
+					//Now, we can select the descendants IF they are in the list 
+					ContentObject obj=this.pmngr.selectFromReferenceModelObjectId(ancestor,true,matches);
+					SEQLResultSet rs=new SEQLResultSet(1);
+					rs.addRow();
+					rs.appendToRow(obj);
+					rs.compile();
+					return rs;
+				} else {
+					SEQLResultSet rs=new SEQLResultSet(query.getSelectConditions().size());
+					for(Map<SEQLFromComponent,ReferenceModelObjectId> interpretation : interpretations) {
+						log.debug("Interpretation: "+interpretation);
+						//Check if the interpretation is a model
+						if(this.interpretationMatchesEvaluable(interpretation, context, query, evaluable)) {
+							log.debug(">Interpretation is from clause model");
+							if(this.interpretationMatchesEvaluable(interpretation, context, query, query.getWhereCondition().getRoot())) {
+								//If we arrive here, now we can use the where clause to further eliminate interpretations
+								log.debug(">>Interpretation is where clause model. Appending to result");
+								rs.addRow();
+								for(SEQLSelectCondition scond : query.getSelectConditions()) {
+									ContentObject r=this.solveSelectConditionForInterpretation(query,scond,interpretation);
+									rs.appendToRow(r);
+								}
+							}
+						}
+					}
+					//Finished. Compile the resultset
+					rs.compile();
+					return rs;
 				}
-				//Finished. Compile the resultset
-				rs.compile();
-				return rs;
-
 			} catch(PersistenceException e) {
 				e.printStackTrace();
 				throw new SEQLException(e.getMessage());

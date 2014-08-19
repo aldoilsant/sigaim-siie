@@ -1,6 +1,7 @@
 package org.sigaim.siie.db;
 
 import java.util.List;
+import java.util.Set;
 
 import org.openehr.am.parser.ContentObject;
 import org.openehr.am.parser.SingleAttributeObjectBlock;
@@ -35,10 +36,12 @@ public interface PersistenceManager {
 	 List<ReferenceModelObjectId> getDeepestRMObjectsForParentAndPath(ReferenceModelObjectId parent, List<SEQLPathComponent> components) throws PersistenceException;
 	 List<ReferenceModelObjectId> selectObjectsMatchingPathFromParent(ReferenceModelObjectId parent,SEQLPath subpath) throws PersistenceException;
 	 int countObjectsMatchingPathFromParent(ReferenceModelObjectId parent,SEQLPath subpath) throws PersistenceException;
-
+	 ReferenceModelObjectId getReferenceModelObjectIdFromReferenceModelPath(SEQLPath path) throws PersistenceException;
 	 //Retrieve actual content. 
 	 ContentObject selectFromReferenceModelObjectId(ReferenceModelObjectId id, Boolean deep) throws PersistenceException;
-
+	ContentObject selectFromReferenceModelObjectId(
+				ReferenceModelObjectId id, Boolean deep, Set<ReferenceModelObjectId> vertex)
+				throws PersistenceException;
 	 //Versions
 	 void setAsNextVersionOf(ReferenceModelObjectId newVersion, ReferenceModelObjectId lastVersion) throws PersistenceException;
 	 

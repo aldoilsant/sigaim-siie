@@ -1,6 +1,6 @@
-// Generated from SEQL.g4 by ANTLR 4.2
-package org.sigaim.siie.seql.parser.generated;
+// Generated from org/sigaim/siie/seql/parser/generated/SEQL.g4 by ANTLR 4.2
 
+package org.sigaim.siie.seql.parser.generated;
 import org.sigaim.siie.seql.model.SEQLFromComponent;
 import org.sigaim.siie.seql.model.SEQLOperation;
 import org.sigaim.siie.seql.model.SEQLEvaluable;

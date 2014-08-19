@@ -46,6 +46,16 @@ public class SQLReferenceModelObjectId implements ReferenceModelObjectId{
 	@Override public String toString() {
 		return this.objectClass+"::"+this.getUniqueIdPath()+"::"+this.getReferenceModelPath()+"::"+this.getArchetypePath();
 	}
+	@Override public boolean equals(Object a) {
+		if(!(a instanceof SQLReferenceModelObjectId)) return false;
+		if(a==this) return true;
+		SQLReferenceModelObjectId comp=(SQLReferenceModelObjectId) a;
+		return comp.getUniqueIdPath().toString().equals(this.getUniqueIdPath().toString());
+	}
+	@Override 
+	public int hashCode() {
+		return this.getUniqueIdPath().toString().hashCode();
+	}
 	public long getUniqueId() {
 		return Long.parseLong(this.getUniqueIdPath().getLastPathComponent().getPathIdentifier());
 	}

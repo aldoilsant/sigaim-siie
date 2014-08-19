@@ -26,6 +26,14 @@ public class SEQLModelListener extends SEQLBaseListener {
 	public SEQLModelListener() {
 		query =new SEQLQuery();
 	}
+	@Override public void exitSelect(@NotNull SEQLParser.SelectContext ctx) {
+		if(ctx.MERGED()!=null && ctx.MERGED().getText()!=null) {
+			query.setMerged(true);
+		} else {
+			query.setMerged(false);
+		}
+	}
+
 	@Override public void exitSelectExpr(@NotNull SEQLParser.SelectExprContext ctx) { 
 		//Retrieve the identified path sequence and build the query
 		IdentifiedPathSeqContext sctx=ctx.identifiedPathSeq();

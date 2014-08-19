@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -342,7 +343,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 	}
 
 	protected void appendChildToParent(SQLReferenceModelObjectId parentId,
-			ContentObject parsedParent, Boolean deep, Connection conn)
+			ContentObject parsedParent, Boolean deep, Connection conn, Set<ReferenceModelObjectId> vertex)
 			throws PersistenceException {
 		int childDepth = parentId.getUniqueIdPath().getPathComponents().size() + 1;
 		String query = "SELECT unique_id_path, reference_model_path, archetype_path, reference_model_class_name, serialized FROM reference_model_objects WHERE unique_id_path LIKE '"
@@ -356,6 +357,17 @@ public class SQLPersistenceManager implements PersistenceManager {
 			while (rs.next()) {
 				log.debug("Child: " + rs.getString(2));
 				SEQLPath referenceModelPath = new SEQLPath(rs.getString(2));
+				if(vertex!=null) {
+					boolean include=false;
+					for(ReferenceModelObjectId testId: vertex) {
+						SQLReferenceModelObjectId rid=(SQLReferenceModelObjectId)testId;
+						if(rid.getUniqueIdPath().getFullPath().startsWith(rs.getString(1))) {
+							include=true;
+							break;
+						}
+					}
+					if(!include) continue;
+				}
 				String dadl = "<" + rs.getString(5) + ">";
 				ContentObject parsedChild = this.dadlManager
 						.parseDADL(new ByteArrayInputStream(dadl.getBytes()));
@@ -369,7 +381,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 							.referenceModelClassFromString(Utils
 									.toUppercaseNotation(rs.getString(4))));
 					this.appendChildToParent(newObjectId, parsedChild, deep,
-							conn);
+							conn, vertex);
 				}
 				// Append the ContentObject to the construct
 				SEQLPathComponent childComponent = referenceModelPath
@@ -443,10 +455,15 @@ public class SQLPersistenceManager implements PersistenceManager {
 			throw new PersistenceException(e.getMessage());
 		}
 	}
-
 	@Override
 	public ContentObject selectFromReferenceModelObjectId(
 			ReferenceModelObjectId id, Boolean deep)
+			throws PersistenceException {
+		return this.selectFromReferenceModelObjectId(id, deep, null);
+	}
+	@Override
+	public ContentObject selectFromReferenceModelObjectId(
+			ReferenceModelObjectId id, Boolean deep, Set<ReferenceModelObjectId> vertex)
 			throws PersistenceException {
 		if (!(id instanceof SQLReferenceModelObjectId)) {
 			throw new PersistenceException(
@@ -464,7 +481,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 					ContentObject parsed = this.dadlManager
 							.parseDADL(new ByteArrayInputStream(dadl.getBytes()));
 					if (deep) {
-						this.appendChildToParent(sid, parsed, deep, conn);
+						this.appendChildToParent(sid, parsed, deep, conn, vertex);
 					}
 					return parsed;
 				}
@@ -855,7 +872,32 @@ public class SQLPersistenceManager implements PersistenceManager {
 		closeConnection(conn);
 		return toRet;
 	}
-
+	@Override
+	public ReferenceModelObjectId getReferenceModelObjectIdFromReferenceModelPath(SEQLPath path)
+			throws PersistenceException {
+		SQLReferenceModelObjectId toRet = null;
+		String query = "SELECT unique_id_path, reference_model_path, archetype_path, reference_model_class_name FROM reference_model_objects WHERE reference_model_path='"
+				+ path.getFullPath() + "';";
+		Connection conn = getConnection();
+		ResultSet rs = this.doQuery(query, conn);
+		try {
+			while (rs.next()) {
+				toRet = new SQLReferenceModelObjectId();
+				toRet.setUniqueIdPath(new SEQLPath(rs.getString(1)));
+				toRet.setReferenceModelPath(new SEQLPath(rs.getString(2)));
+				toRet.setArchetypePath(new SEQLPath(rs.getString(3)));
+				toRet.setObjectClass(this.referenceModelManager
+						.referenceModelClassFromString(Utils
+								.toUppercaseNotation(rs.getString(4))));
+				break;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new PersistenceException(e.getMessage());
+		}
+		closeConnection(conn);
+		return toRet;
+	}
 	@Override
 	public SEQLPath getReferenceModelPathFoRMObject(ReferenceModelObjectId id)
 			throws PersistenceException {
