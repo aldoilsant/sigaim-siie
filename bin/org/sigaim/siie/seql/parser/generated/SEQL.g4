@@ -18,6 +18,7 @@ FROM: 'FROM';
 CONTAINS: 'CONTAINS';
 SELECT: 'SELECT';
 WHERE: 'WHERE';
+HAVING: 'HAVING';
 EHR : 'EHR';
 SYSTEM: 'SYSTEM';
 COMMA   :       ',';
@@ -25,6 +26,9 @@ FORWARD : ('F'|'f')('O'|'o')('R'|'r')('W'|'w')('A'|'a')('R'|'r')('D'|'d') ;
 BACKWARD : ('B'|'b')('A'|'a')('C'|'c')('K'|'k')('W'|'w')('A'|'a')('R'|'r')('D'|'d') ;
 TOP : ('T'|'t')('O'|'o')('P'|'p') ;
 INTEGER :       '-'? DIGIT+;
+FLOAT: '-'? DIGIT+ '.' DIGIT+;
+//"2014-08-19T22:08:05.186+02:00"
+DATE    :       '\'' DIGIT DIGIT DIGIT DIGIT '-' DIGIT DIGIT '-' DIGIT DIGIT 'T' DIGIT DIGIT ':' DIGIT DIGIT ':' DIGIT DIGIT  '.' DIGIT DIGIT DIGIT '+' DIGIT DIGIT ':' DIGIT DIGIT '\'';
 BOOLEAN :       'true' | 'false' | 'TRUE' | 'FALSE' ;
 
 AND : ('A'|'a')('N'|'n')('D'|'d') ;
@@ -66,9 +70,11 @@ fragment
 HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ;
 OPENBRACKET :	'['; 
 CLOSEBRACKET :	']'; 
-query : select from where? ';' ;
+query : select from where? having? ';' ;
 
-select : SELECT top? MERGED? selectExpr ;
+select : SELECT top? merged? selectExpr ;
+
+merged: MERGED asIdentifier? ; 
 
 //top integer forward backward
 top : TOP INTEGER FORWARD? |
@@ -129,6 +135,7 @@ archetypePredicate
         : OPENBRACKET ARCHETYPEID CLOSEBRACKET;
         
 where : WHERE identifiedExpr;
+having: HAVING identifiedExpr;
 
 identifiedExpr locals[SEQLOperation operation]
         : identifiedExprAnd (orOp identifiedExprAnd)*;
@@ -147,6 +154,6 @@ identifiedEquality locals[SEQLOperation operation]
 identifiedOperand locals[SEQLEvaluable evaluable]
         : operand | identifiedPath;
         
-operand locals[SEQLPrimitive primitive]: STRING | INTEGER | BOOLEAN;
+operand locals[SEQLPrimitive primitive]: STRING | INTEGER | BOOLEAN | DATE | FLOAT ;
 
         

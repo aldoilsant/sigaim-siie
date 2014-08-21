@@ -66,7 +66,7 @@ public class EQLTests {
 	@Test
 	public void testSEQLService() throws Exception {
 		//Create a new query. All queries must end with ;
-		String query="SELECT e/items[at0008]/parts[at0009] WITH DESCENDANTS FROM EHR CONTAINS COMPOSITION c CONTAINS ENTRY e[CEN-EN13606-ENTRY.Informacion.v1] WHERE c/rc_id/extension=6;";
+		String query="SELECT e/items[at0008]/parts[at0009] WITH DESCENDANTS FROM EHR CONTAINS COMPOSITION c CONTAINS ENTRY e[CEN-EN13606-ENTRY.Informacion.v1] WHERE c/rc_id/extension=\"6\";";
 		ReturnValueEQL result=this.eqlService.query("1", query);
 		assert(result!=null);
 		String sres=result.getSerialized();

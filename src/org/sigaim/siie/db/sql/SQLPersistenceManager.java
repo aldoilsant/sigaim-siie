@@ -26,6 +26,7 @@ import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.openehr.am.parser.StringValue;
 import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.dadl.exceptions.SemanticDADLException;
+import org.sigaim.siie.db.DBDeserializer;
 import org.sigaim.siie.db.DBSerializer;
 import org.sigaim.siie.db.PersistenceManager;
 import org.sigaim.siie.db.ReferenceModelObjectId;
@@ -343,7 +344,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 	}
 
 	protected void appendChildToParent(SQLReferenceModelObjectId parentId,
-			ContentObject parsedParent, Boolean deep, Connection conn, Set<ReferenceModelObjectId> vertex)
+			ContentObject parsedParent, Boolean deep, Connection conn, DBDeserializer deserializer, Object context)
 			throws PersistenceException {
 		int childDepth = parentId.getUniqueIdPath().getPathComponents().size() + 1;
 		String query = "SELECT unique_id_path, reference_model_path, archetype_path, reference_model_class_name, serialized FROM reference_model_objects WHERE unique_id_path LIKE '"
@@ -357,31 +358,30 @@ public class SQLPersistenceManager implements PersistenceManager {
 			while (rs.next()) {
 				log.debug("Child: " + rs.getString(2));
 				SEQLPath referenceModelPath = new SEQLPath(rs.getString(2));
-				if(vertex!=null) {
+				SQLReferenceModelObjectId newObjectId = new SQLReferenceModelObjectId();
+				newObjectId.setUniqueIdPath(new SEQLPath(rs.getString(1)));
+				newObjectId.setReferenceModelPath(referenceModelPath);
+				newObjectId.setArchetypePath(new SEQLPath(rs.getString(3)));
+				newObjectId.setObjectClass(this.referenceModelManager
+						.referenceModelClassFromString(Utils
+								.toUppercaseNotation(rs.getString(4))));
+				if(deserializer!=null) {
 					boolean include=false;
-					for(ReferenceModelObjectId testId: vertex) {
-						SQLReferenceModelObjectId rid=(SQLReferenceModelObjectId)testId;
-						if(rid.getUniqueIdPath().getFullPath().startsWith(rs.getString(1))) {
-							include=true;
-							break;
-						}
-					}
+					include=deserializer.acceptRMID(this, newObjectId, context);
 					if(!include) continue;
 				}
 				String dadl = "<" + rs.getString(5) + ">";
 				ContentObject parsedChild = this.dadlManager
 						.parseDADL(new ByteArrayInputStream(dadl.getBytes()));
+				if(deserializer!=null) {
+					boolean include=false;
+					include=deserializer.acceptDeserializedObject(this, newObjectId, parsedChild, context);
+					if(!include) continue;
+				}
 				if (deep) {
 					// recurse
-					SQLReferenceModelObjectId newObjectId = new SQLReferenceModelObjectId();
-					newObjectId.setUniqueIdPath(new SEQLPath(rs.getString(1)));
-					newObjectId.setReferenceModelPath(referenceModelPath);
-					newObjectId.setArchetypePath(new SEQLPath(rs.getString(3)));
-					newObjectId.setObjectClass(this.referenceModelManager
-							.referenceModelClassFromString(Utils
-									.toUppercaseNotation(rs.getString(4))));
 					this.appendChildToParent(newObjectId, parsedChild, deep,
-							conn, vertex);
+							conn, deserializer,context);
 				}
 				// Append the ContentObject to the construct
 				SEQLPathComponent childComponent = referenceModelPath
@@ -407,15 +407,24 @@ public class SQLPersistenceManager implements PersistenceManager {
 					SingleAttributeObjectBlock parentBlock = this.referenceModelManager
 							.getSingleAttributeObjectBlockFromContentObject(parsedParent);
 					boolean exists = false;
-					MultipleAttributeObjectBlock mblock = null;
+					ComplexObjectBlock cblock = null;
+					AttributeValue foundAt=null;
 					for (AttributeValue at : parentBlock.getAttributeValues()) {
 						if (at.getId().equals(
 								childComponent.getPathIdentifier())) {
-							exists = true;
-							mblock = (MultipleAttributeObjectBlock) at
-									.getValue();
+								exists = true;
+								cblock = (ComplexObjectBlock) at
+										.getValue();
+								foundAt=at;
 							break;
 						}
+					}
+					MultipleAttributeObjectBlock mblock=null;
+					if(exists && cblock instanceof SingleAttributeObjectBlock) {
+						parentBlock.getAttributeValues().remove(foundAt);
+						exists=false;
+					} else if(exists) {
+						mblock=(MultipleAttributeObjectBlock) cblock;
 					}
 					if (!exists) {
 						ArrayList<KeyedObject> keyedObjects = new ArrayList<KeyedObject>();
@@ -459,11 +468,11 @@ public class SQLPersistenceManager implements PersistenceManager {
 	public ContentObject selectFromReferenceModelObjectId(
 			ReferenceModelObjectId id, Boolean deep)
 			throws PersistenceException {
-		return this.selectFromReferenceModelObjectId(id, deep, null);
+		return this.selectFromReferenceModelObjectId(id, deep, null,null);
 	}
 	@Override
 	public ContentObject selectFromReferenceModelObjectId(
-			ReferenceModelObjectId id, Boolean deep, Set<ReferenceModelObjectId> vertex)
+			ReferenceModelObjectId id, Boolean deep, DBDeserializer deserializer, Object context)
 			throws PersistenceException {
 		if (!(id instanceof SQLReferenceModelObjectId)) {
 			throw new PersistenceException(
@@ -481,7 +490,7 @@ public class SQLPersistenceManager implements PersistenceManager {
 					ContentObject parsed = this.dadlManager
 							.parseDADL(new ByteArrayInputStream(dadl.getBytes()));
 					if (deep) {
-						this.appendChildToParent(sid, parsed, deep, conn, vertex);
+						this.appendChildToParent(sid, parsed, deep, conn, deserializer,context);
 					}
 					return parsed;
 				}

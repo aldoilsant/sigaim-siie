@@ -429,6 +429,19 @@ public class SEQLBaseListener implements SEQLListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterHaving(@NotNull SEQLParser.HavingContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitHaving(@NotNull SEQLParser.HavingContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterIdentifiedPath(@NotNull SEQLParser.IdentifiedPathContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -436,6 +449,19 @@ public class SEQLBaseListener implements SEQLListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIdentifiedPath(@NotNull SEQLParser.IdentifiedPathContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterMerged(@NotNull SEQLParser.MergedContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMerged(@NotNull SEQLParser.MergedContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

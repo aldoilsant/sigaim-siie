@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.Map;
 
 import org.junit.Test;
 import org.openehr.am.parser.ContentObject;
@@ -23,6 +24,12 @@ public class TestCompositionRoundtripSerialization {
 	    java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
 	    return s.hasNext() ? s.next() : "";
 	}
+	public void printMap(Map<String,String> map) {
+		for(String key : map.keySet()) {
+			String value=map.get(key);
+			System.out.println(key+" = "+value);
+		}
+	}
 	@Test
 	public void testParse() throws Exception{
 		long start;
@@ -35,6 +42,8 @@ public class TestCompositionRoundtripSerialization {
 		ContentObject unbinded=dmng.parseDADL(is);
 		end=System.nanoTime();
 		System.out.println("Parse dadl time: "+this.millisecondsFromInterval(start, end));
+		Map<String,String> pathMap=mng.createPathMap(unbinded, true);
+		this.printMap(pathMap);
 		is=new BufferedInputStream(SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_013_packed.dadl"));
 		is=new ByteArrayInputStream(this.convertStreamToString(is).getBytes());
 		start=System.nanoTime();
@@ -60,6 +69,7 @@ public class TestCompositionRoundtripSerialization {
 		end=System.nanoTime();
 		System.out.println("Parse dadl time (3): "+this.millisecondsFromInterval(start, end));
 		comp=(Composition)mng.bind(unbinded);
+		//PathMap tests
 	}
 
 }

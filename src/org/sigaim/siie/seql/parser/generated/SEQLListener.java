@@ -359,6 +359,17 @@ public interface SEQLListener extends ParseTreeListener {
 	void exitOrOp(@NotNull SEQLParser.OrOpContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link SEQLParser#having}.
+	 * @param ctx the parse tree
+	 */
+	void enterHaving(@NotNull SEQLParser.HavingContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SEQLParser#having}.
+	 * @param ctx the parse tree
+	 */
+	void exitHaving(@NotNull SEQLParser.HavingContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link SEQLParser#identifiedPath}.
 	 * @param ctx the parse tree
 	 */
@@ -368,4 +379,15 @@ public interface SEQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIdentifiedPath(@NotNull SEQLParser.IdentifiedPathContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link SEQLParser#merged}.
+	 * @param ctx the parse tree
+	 */
+	void enterMerged(@NotNull SEQLParser.MergedContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SEQLParser#merged}.
+	 * @param ctx the parse tree
+	 */
+	void exitMerged(@NotNull SEQLParser.MergedContext ctx);
 }

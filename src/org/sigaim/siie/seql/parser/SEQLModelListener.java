@@ -9,6 +9,7 @@ import org.sigaim.siie.seql.model.SEQLPath;
 import org.sigaim.siie.seql.model.SEQLPathComponent;
 import org.sigaim.siie.seql.model.SEQLPathPredicate;
 import org.sigaim.siie.seql.model.SEQLPrimitive;
+import org.sigaim.siie.seql.model.SEQLPrimitive.SEQLPrimitiveType;
 import org.sigaim.siie.seql.model.SEQLQuery;
 import org.sigaim.siie.seql.model.SEQLOperation.SEQLBooleanOperator;
 import org.sigaim.siie.seql.parser.generated.SEQLBaseListener;
@@ -27,8 +28,12 @@ public class SEQLModelListener extends SEQLBaseListener {
 		query =new SEQLQuery();
 	}
 	@Override public void exitSelect(@NotNull SEQLParser.SelectContext ctx) {
-		if(ctx.MERGED()!=null && ctx.MERGED().getText()!=null) {
+		if(ctx.merged()!=null && ctx.merged().getText()!=null) {
 			query.setMerged(true);
+			if(ctx.merged().asIdentifier()!= null && ctx.merged().asIdentifier().getText()!=null) {
+				String mergedVariable=ctx.merged().asIdentifier().IDENTIFIER().getText();
+				query.setMergedVariable(mergedVariable);
+			}
 		} else {
 			query.setMerged(false);
 		}
@@ -151,7 +156,19 @@ public class SEQLModelListener extends SEQLBaseListener {
 		}
 	}
 	@Override public void exitOperand(@NotNull SEQLParser.OperandContext ctx) { 
-		ctx.primitive=new SEQLPrimitive(ctx.getText());
+		if(ctx.INTEGER()!=null && ctx.INTEGER().getText()!=null) {
+			ctx.primitive=new SEQLPrimitive(ctx.getText(),SEQLPrimitiveType.INTEGER);
+		} else if (ctx.STRING()!=null && ctx.STRING().getText()!=null) {
+			ctx.primitive=new SEQLPrimitive(ctx.getText(),SEQLPrimitiveType.STRING);
+		} else if (ctx.BOOLEAN()!=null && ctx.BOOLEAN().getText()!=null) {
+			ctx.primitive=new SEQLPrimitive(ctx.getText(),SEQLPrimitiveType.BOOLEAN);
+		} else if (ctx.FLOAT()!=null && ctx.FLOAT().getText()!=null) {
+			ctx.primitive=new SEQLPrimitive(ctx.getText(),SEQLPrimitiveType.FLOAT);
+		} else if (ctx.DATE()!=null && ctx.DATE().getText()!=null) {
+			ctx.primitive=new SEQLPrimitive(ctx.getText(),SEQLPrimitiveType.DATE);
+		} else {
+			throw new IllegalArgumentException("Unexpected primitive type");
+		}
 	}
 	@Override public void exitIdentifiedOperand(@NotNull SEQLParser.IdentifiedOperandContext ctx) { 
 		if(ctx.operand()!=null) {
@@ -251,6 +268,10 @@ public class SEQLModelListener extends SEQLBaseListener {
 	@Override public void exitWhere(@NotNull SEQLParser.WhereContext ctx) { 
 		query.getWhereCondition().setRoot(ctx.identifiedExpr().operation);
 	}
+	@Override public void exitHaving(@NotNull SEQLParser.HavingContext ctx) { 
+		query.getHavingCondition().setRoot(ctx.identifiedExpr().operation);
+	}
+
 	@Override public void exitNodePredicate(@NotNull SEQLParser.NodePredicateContext ctx) {
 		if(ctx.nodePredicateOr().evaluable instanceof SEQLPathPredicate) {
 			ctx.pathPredicate=(SEQLPathPredicate)ctx.nodePredicateOr().evaluable;

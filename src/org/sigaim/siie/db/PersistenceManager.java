@@ -39,8 +39,8 @@ public interface PersistenceManager {
 	 ReferenceModelObjectId getReferenceModelObjectIdFromReferenceModelPath(SEQLPath path) throws PersistenceException;
 	 //Retrieve actual content. 
 	 ContentObject selectFromReferenceModelObjectId(ReferenceModelObjectId id, Boolean deep) throws PersistenceException;
-	ContentObject selectFromReferenceModelObjectId(
-				ReferenceModelObjectId id, Boolean deep, Set<ReferenceModelObjectId> vertex)
+	 ContentObject selectFromReferenceModelObjectId(
+				ReferenceModelObjectId id, Boolean deep, DBDeserializer deserializer, Object context)
 				throws PersistenceException;
 	 //Versions
 	 void setAsNextVersionOf(ReferenceModelObjectId newVersion, ReferenceModelObjectId lastVersion) throws PersistenceException;

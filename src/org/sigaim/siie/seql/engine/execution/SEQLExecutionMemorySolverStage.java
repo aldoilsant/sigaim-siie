@@ -1,30 +1,45 @@
 package org.sigaim.siie.seql.engine.execution;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.apache.log4j.Logger;
 import org.openehr.am.parser.AttributeValue;
+import org.openehr.am.parser.BooleanValue;
+import org.openehr.am.parser.CharacterValue;
 import org.openehr.am.parser.ComplexObjectBlock;
 import org.openehr.am.parser.ContentObject;
+import org.openehr.am.parser.DateTimeValue;
+import org.openehr.am.parser.DateValue;
+import org.openehr.am.parser.DurationValue;
 import org.openehr.am.parser.IntegerValue;
 import org.openehr.am.parser.KeyedObject;
 import org.openehr.am.parser.MultipleAttributeObjectBlock;
 import org.openehr.am.parser.ObjectBlock;
 import org.openehr.am.parser.PrimitiveObjectBlock;
+import org.openehr.am.parser.RealValue;
 import org.openehr.am.parser.SimpleValue;
 import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.openehr.am.parser.StringValue;
+import org.openehr.am.parser.TimeValue;
+import org.openehr.am.parser.UriValue;
 import org.sigaim.siie.dadl.DADLManager;
+import org.sigaim.siie.db.DBDeserializer;
 import org.sigaim.siie.db.PersistenceManager;
 import org.sigaim.siie.db.ReferenceModelObjectId;
 import org.sigaim.siie.db.exceptions.PersistenceException;
+import org.sigaim.siie.db.sql.SQLReferenceModelObjectId;
 import org.sigaim.siie.rm.ReferenceModelManager;
 import org.sigaim.siie.rm.ReflectorReferenceModelManager;
+import org.sigaim.siie.rm.exceptions.ReferenceModelException;
 import org.sigaim.siie.seql.engine.SEQLQueryExecutionStage;
 import org.sigaim.siie.seql.model.SEQLEvaluable;
 import org.sigaim.siie.seql.model.SEQLException;
@@ -33,6 +48,7 @@ import org.sigaim.siie.seql.model.SEQLOperation;
 import org.sigaim.siie.seql.model.SEQLPath;
 import org.sigaim.siie.seql.model.SEQLPathComponent;
 import org.sigaim.siie.seql.model.SEQLPrimitive;
+import org.sigaim.siie.seql.model.SEQLPrimitive.SEQLPrimitiveType;
 import org.sigaim.siie.seql.model.SEQLQuery;
 import org.sigaim.siie.seql.model.SEQLResultSet;
 import org.sigaim.siie.seql.model.SEQLSelectCondition;
@@ -41,7 +57,7 @@ import org.sigaim.siie.utils.Utils;
 
 
 
-public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
+public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage, DBDeserializer {
 	private static org.apache.log4j.Logger log = Logger.getLogger(SEQLExecutionMemorySolverStage.class);
 	private PersistenceManager pmngr;
 	private ReferenceModelManager rmngr;
@@ -132,8 +148,110 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 			return mappings;
 		//For each of the expanded mappings, repeat the operation with the childs.
 	}
-	protected String solveOperandValue(SEQLEvaluable operand, SEQLQuery query, Map<SEQLFromComponent,ReferenceModelObjectId> interpretation ) throws PersistenceException{
+	protected Object coerceFromString(String stringValue, SEQLPrimitiveType type) throws Exception {
+		Object ret=null;
+		StringBuilder builder;
+		switch(type) {
+			case STRING:
+				builder= new StringBuilder(stringValue);
+				if(builder.charAt(0)=='\'' || builder.charAt(0)=='"') {
+					builder.deleteCharAt(0);
+					builder.deleteCharAt(builder.length()-1);
+				}
+				ret=builder.toString();
+				break;
+			case BOOLEAN:ret=Boolean.parseBoolean(stringValue);break;
+			case DATE:
+				builder= new StringBuilder(stringValue);
+				if(builder.charAt(0)=='\'' || builder.charAt(0)=='"') {
+					builder.deleteCharAt(0);
+					builder.deleteCharAt(builder.length()-1);
+				}
+				stringValue=builder.toString();
+				ret=DatatypeFactory.newInstance().newXMLGregorianCalendar(stringValue).toGregorianCalendar();
+				break;
+			case INTEGER:ret=Integer.parseInt(stringValue);break;
+			case FLOAT:ret=Double.parseDouble(stringValue);break;
+		}
+		return ret;
+	}
+	SEQLPrimitiveType convertOpenEHRTypeToSEQLType(Class<?> valueClass) {
+		SEQLPrimitiveType type=SEQLPrimitiveType.STRING;
+		if(valueClass.equals(BooleanValue.class)) {
+			type=SEQLPrimitiveType.BOOLEAN;
+		} else if (valueClass.equals(CharacterValue.class)) {
+			type=SEQLPrimitiveType.STRING;
+		} else if (valueClass.equals(DateTimeValue.class)) {
+			type=SEQLPrimitiveType.DATE;
+		} else if (valueClass.equals(DateValue.class)) {
+			type=SEQLPrimitiveType.DATE;
+		} else if (valueClass.equals(DurationValue.class)) {
+			type=SEQLPrimitiveType.STRING;
+		} else if (valueClass.equals(IntegerValue.class)) {
+			type=SEQLPrimitiveType.INTEGER;
+		} else if (valueClass.equals(RealValue.class)) {
+			type=SEQLPrimitiveType.FLOAT;
+		} else if (valueClass.equals(StringValue.class)) {
+			type=SEQLPrimitiveType.STRING;
+		} else if (valueClass.equals(TimeValue.class)) {
+			type=SEQLPrimitiveType.STRING;
+		} else if (valueClass.equals(UriValue.class)) {
+			type=SEQLPrimitiveType.STRING;
+		}
+		return type;
+	}
+	protected Object solveOperandValueFromContentObject(SEQLEvaluable operand, SingleAttributeObjectBlock obj) throws ReferenceModelException, PersistenceException {
 		if(operand==null) return null;
+		String stringValue=null;
+		SEQLPrimitiveType type=SEQLPrimitiveType.STRING;
+		if(operand instanceof SEQLPath) {
+			SEQLPath path=(SEQLPath) operand;
+			ObjectBlock match= this.rmngr.solveReferenceModelPath(obj, path.removeFirstPathComponent().getPathComponents());
+			if(match==null) return null;
+		    if(! (match instanceof PrimitiveObjectBlock)) {
+				throw new PersistenceException("Comparison of non-primitive values is not supported");
+			} else {
+				PrimitiveObjectBlock pblock=(PrimitiveObjectBlock)match;
+				stringValue= pblock.getSimpleValue().getValue().toString();
+				Class<?> valueClass=pblock.getSimpleValue().getClass();
+				/*BooleanValue
+				CharacterValue  
+				DateTimeValue
+				DateValue
+				DurationValue
+				IntegerValue
+				RealValue
+				StringValue
+				TimeValue
+				UriValue*/
+				type=this.convertOpenEHRTypeToSEQLType(valueClass);
+			}
+		} else {
+			SEQLPrimitive primitive=(SEQLPrimitive) operand;
+			/*StringBuilder builder= new StringBuilder(primitive.getValue());
+			if(builder.charAt(0)=='\'' || builder.charAt(0)=='"') {
+				builder.deleteCharAt(0);
+				builder.deleteCharAt(builder.length()-1);
+			}*/
+			stringValue= primitive.getValue();
+			type=primitive.getType();
+		}
+		Object ret=null;
+		if(stringValue!=null) {
+			//Create the objects!
+			try {
+				ret=this.coerceFromString(stringValue, type);
+			} catch(Exception e) {
+				e.printStackTrace();
+				throw new PersistenceException("Invalid value coercion");
+			}
+		}
+		return ret;
+	}
+	protected Object solveOperandValue(SEQLEvaluable operand, SEQLQuery query, Map<SEQLFromComponent,ReferenceModelObjectId> interpretation ) throws PersistenceException{
+		if(operand==null) return null;
+		String stringValue=null;
+		SEQLPrimitiveType type=SEQLPrimitiveType.STRING;
 		if(operand instanceof SEQLPath) {
 			SEQLPath path=(SEQLPath) operand;
 			List<Object> matches=this.solveObjectMatchesForPath(query, path.getFirstStringPathComponent(),path, interpretation);
@@ -145,12 +263,41 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 				throw new PersistenceException("Comparison of non-primitive values is not supported");
 			} else {
 				PrimitiveObjectBlock pblock=(PrimitiveObjectBlock)matches.get(0);
-				return pblock.getSimpleValue().getValue().toString();
+				stringValue= pblock.getSimpleValue().getValue().toString();
+				Class<?> valueClass=pblock.getSimpleValue().getClass();
+				/*BooleanValue
+				CharacterValue  
+				DateTimeValue
+				DateValue
+				DurationValue
+				IntegerValue
+				RealValue
+				StringValue
+				TimeValue
+				UriValue*/
+				type=this.convertOpenEHRTypeToSEQLType(valueClass);
 			}
 		} else {
 			SEQLPrimitive primitive=(SEQLPrimitive) operand;
-			return primitive.getValue();
+			/*StringBuilder builder= new StringBuilder(primitive.getValue());
+			if(builder.charAt(0)=='\'' || builder.charAt(0)=='"') {
+				builder.deleteCharAt(0);
+				builder.deleteCharAt(builder.length()-1);
+			}*/
+			stringValue= primitive.getValue();
+			type=primitive.getType();
 		}
+		Object ret=null;
+		if(stringValue!=null) {
+			//Create the objects!
+			try {
+				ret=this.coerceFromString(stringValue, type);
+			} catch(Exception e) {
+				e.printStackTrace();
+				throw new PersistenceException("Invalid value coercion");
+			}
+		}
+		return ret;
 	}
 	protected boolean interpretationMatchesEvaluable(Map<SEQLFromComponent,ReferenceModelObjectId> interpretation, SEQLExecutionMemorySolverAssignationContext context, SEQLQuery query, SEQLEvaluable evaluable) throws PersistenceException{
 		if(evaluable instanceof SEQLOperation) {
@@ -174,6 +321,22 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 					default:
 						Object left=this.solveOperandValue(op.getLeftOperand(),query,interpretation);
 						Object right=this.solveOperandValue(op.getRightOperand(),query,interpretation);
+						if(right!=null && !left.getClass().equals(right.getClass())) {
+							//Attempt to coerce a string left value to the right operator
+							try {
+								if(left.getClass().equals(String.class)) {
+									if(right.getClass().equals(GregorianCalendar.class)) {
+										left=this.coerceFromString((String) left, SEQLPrimitiveType.DATE);
+									}  else {
+										throw new PersistenceException("Unable to perform type coercion");
+									}
+								} else {
+								throw new PersistenceException(" Type mismatch when using comparison operator");
+								}
+							} catch(Exception e) {
+								throw new PersistenceException(" Error while attempting type coercion");
+							}
+						}
 						switch(op.getOperator()) {
 						case EXISTS: 
 							return left!=null;
@@ -181,8 +344,27 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 							return (left==null && right==null) || (left!=null && left.equals(right));
 						case INEQUALITY: 
 							return (left!=null || right!=null) && !left.equals(right);
+							//For comparison, we NEED typed objects
 						default: 
-							throw new IllegalArgumentException("Comparison operators not yet implemented");
+							Comparable cl,cr;
+							if(!(left instanceof Comparable) || !(right instanceof Comparable)) {
+								throw new PersistenceException("Values "+left+" and "+right+ " are not comparable");
+							}
+							cl=(Comparable)left;
+							cr=(Comparable)right;
+							int comparison=cl.compareTo(cr);
+							switch(op.getOperator()) {
+								case GE:
+									return comparison>=0;
+								case GT:
+									return comparison>0;
+								case LE:
+									return comparison<=0;
+								case LT:
+									return comparison<0;
+								default: 
+									throw new PersistenceException("Invalid comparison operator");
+							}
 						}
 				}
 			}  else {
@@ -328,6 +510,11 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 						}
 					}
 					log.debug("Number of merged matching objects: "+matches.size());
+					if(matches.size()==0) {
+						SEQLResultSet rs=new SEQLResultSet(1);
+						rs.compile();
+						return rs;
+					}
 					//Now we have all the matching objects and no repetition
 					//Find the topmost parent
 					String topMost=null;
@@ -353,8 +540,13 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 					ReferenceModelObjectId ancestor=this.pmngr.getReferenceModelObjectIdFromReferenceModelPath(topmostPath);
 					log.debug("Topmost id: "+ancestor);
 					matches.add(ancestor);
+					List deserializerContext=new ArrayList();
+					deserializerContext.add(matches);
+					if(query.getMergedVariable()!=null) {
+						deserializerContext.add(query);
+					}
 					//Now, we can select the descendants IF they are in the list 
-					ContentObject obj=this.pmngr.selectFromReferenceModelObjectId(ancestor,true,matches);
+					ContentObject obj=this.pmngr.selectFromReferenceModelObjectId(ancestor,true,this,deserializerContext);
 					SEQLResultSet rs=new SEQLResultSet(1);
 					rs.addRow();
 					rs.appendToRow(obj);
@@ -441,5 +633,107 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage {
 			this.assignations.put(from, this.assignations.get(to));
 		}
 	}
-	
+
+	@Override
+	public boolean acceptRMID(PersistenceManager persistenceManager,
+			ReferenceModelObjectId id, Object context) throws PersistenceException {
+		SEQLPath testPath=persistenceManager.getReferenceModelPathFoRMObject(id);
+		Set<ReferenceModelObjectId> matches=(Set<ReferenceModelObjectId>)((List)context).get(0);
+		for(ReferenceModelObjectId testId: matches) {
+			if(persistenceManager.getReferenceModelPathFoRMObject(testId).getFullPath().startsWith(persistenceManager.getReferenceModelPathFoRMObject(id).getFullPath())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	@Override
+	public boolean acceptDeserializedObject(
+			PersistenceManager persistenceManager, ReferenceModelObjectId id,
+			ContentObject deserialized, Object context) throws PersistenceException{
+		List contextArray=(List) context;
+		if(contextArray.size()>1) {
+			SEQLQuery query=(SEQLQuery)contextArray.get(1);
+			if(query.getHavingCondition().getRoot()!=null) {
+				return this.contentObjectMatchesEvaluable(deserialized, query.getHavingCondition().getRoot());
+			}
+		}
+		return true;
+	}
+	protected boolean contentObjectMatchesEvaluable(ContentObject obj, SEQLEvaluable evaluable) throws PersistenceException{
+		if(evaluable instanceof SEQLOperation) {
+			SEQLOperation op=(SEQLOperation) evaluable;
+			if(op.getOperator()!=SEQLBooleanOperator.CONTAINS) {
+				//Evaluate the operators. AND, OR XOR. 
+				switch(op.getOperator()) {
+					case AND:
+						//Then recurse 
+						return this.contentObjectMatchesEvaluable(obj, op.getLeftOperand())
+								&& this.contentObjectMatchesEvaluable(obj, op.getRightOperand());
+					case OR:
+						//Then recurse 
+						return this.contentObjectMatchesEvaluable(obj, op.getLeftOperand())
+								|| this.contentObjectMatchesEvaluable(obj, op.getRightOperand());
+					case XOR: 
+						return this.contentObjectMatchesEvaluable(obj, op.getLeftOperand())
+								^ this.contentObjectMatchesEvaluable(obj, op.getRightOperand());
+					case NOT: 
+						return !this.contentObjectMatchesEvaluable(obj, op.getLeftOperand());
+					default:
+						Object left=null;
+						Object right=null;
+						try {
+							left=this.solveOperandValueFromContentObject(op.getLeftOperand(),this.rmngr.getSingleAttributeObjectBlockFromContentObject(obj));
+							right=this.solveOperandValueFromContentObject(op.getRightOperand(),this.rmngr.getSingleAttributeObjectBlockFromContentObject(obj));
+							if(left != null && right!=null && !left.getClass().equals(right.getClass())) {
+								//Attempt to coerce a string left value to the right operator
+									if(left.getClass().equals(String.class)) {
+										if(right.getClass().equals(GregorianCalendar.class)) {
+											left=this.coerceFromString((String) left, SEQLPrimitiveType.DATE);
+										}  else {
+											throw new PersistenceException("Unable to perform type coercion");
+										}
+									} else {
+									throw new PersistenceException(" Type mismatch when using comparison operator");
+									}
+								} 
+							}
+						catch(Exception e) {
+							throw new PersistenceException(" Error while attempting type coercion");
+						}
+						switch(op.getOperator()) {
+						case EXISTS: 
+							return left!=null;
+						case EQUALITY: 
+							return (left==null && right==null) || (left!=null && left.equals(right));
+						case INEQUALITY: 
+							return (left!=null || right!=null) && !left.equals(right);
+							//For comparison, we NEED typed objects
+						default: 
+							Comparable cl,cr;
+							if(!(left instanceof Comparable) || !(right instanceof Comparable)) {
+								throw new PersistenceException("Values "+left+" and "+right+ " are not comparable");
+							}
+							cl=(Comparable)left;
+							cr=(Comparable)right;
+							int comparison=cl.compareTo(cr);
+							switch(op.getOperator()) {
+								case GE:
+									return comparison>=0;
+								case GT:
+									return comparison>0;
+								case LE:
+									return comparison<=0;
+								case LT:
+									return comparison<0;
+								default: 
+									throw new PersistenceException("Invalid comparison operator");
+							}
+						}
+				}
+			}  else {
+				return this.contentObjectMatchesEvaluable(obj, op.getLeftOperand())
+						&& this.contentObjectMatchesEvaluable(obj, op.getRightOperand());
+			}
+		}  else return true;
+	}
 }
