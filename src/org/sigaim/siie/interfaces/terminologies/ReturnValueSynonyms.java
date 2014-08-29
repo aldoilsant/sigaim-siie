@@ -1,24 +1,27 @@
 package org.sigaim.siie.interfaces.terminologies;
 
+ 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.sigaim.siie.interfaces.IdentifiedReturnValue;
-import org.sigaim.siie.iso13606.rm.CDCV;
 
 public class ReturnValueSynonyms extends IdentifiedReturnValue {
-	private Set<CDCV> synonyms;
+	private  Map<String,Set<String>> synonyms;
 	
 	public ReturnValueSynonyms() {
 		
 	}
-	public ReturnValueSynonyms(String requestId, Set<CDCV> synonyms) {
+	public ReturnValueSynonyms(String requestId,  Map<String,Set<String>>  synonyms) {
 		super(requestId);
 		this.synonyms=synonyms;
 	}
-	public Set<CDCV> getSynonyms() {
+	public Map<String,Set<String>> getSynonyms( ) {
 		return synonyms;
 	}
-	public void setSynonyms(Set<CDCV> synonyms) {
+	public void setSynonyms(Map<String,Set<String>> synonyms) {
 		this.synonyms = synonyms;
 	}
 }

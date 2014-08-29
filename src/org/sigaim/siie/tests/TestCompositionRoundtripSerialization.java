@@ -35,6 +35,7 @@ public class TestCompositionRoundtripSerialization {
 		long start;
 		long end;
 		DADLManager dmng=new OpenEHRDADLManager();
+		dmng.parseDADL(null);
 		ReflectorReferenceModelManager mng=new ReflectorReferenceModelManager(dmng);
 		InputStream is;
 		is=new BufferedInputStream(SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_013_packed.dadl"));
@@ -42,7 +43,7 @@ public class TestCompositionRoundtripSerialization {
 		ContentObject unbinded=dmng.parseDADL(is);
 		end=System.nanoTime();
 		System.out.println("Parse dadl time: "+this.millisecondsFromInterval(start, end));
-		Map<String,String> pathMap=mng.createPathMap(unbinded, true);
+		Map<String,String> pathMap=mng.createPathMap(unbinded, true,true,null);
 		this.printMap(pathMap);
 		is=new BufferedInputStream(SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_013_packed.dadl"));
 		is=new ByteArrayInputStream(this.convertStreamToString(is).getBytes());

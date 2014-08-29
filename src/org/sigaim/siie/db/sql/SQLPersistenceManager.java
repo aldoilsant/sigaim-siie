@@ -31,7 +31,6 @@ import org.sigaim.siie.db.DBSerializer;
 import org.sigaim.siie.db.PersistenceManager;
 import org.sigaim.siie.db.ReferenceModelObjectId;
 import org.sigaim.siie.db.exceptions.PersistenceException;
-import org.sigaim.siie.db.pool.SingleConnectionDataSource;
 import org.sigaim.siie.db.sql.mysql.MySQLWrapper;
 import org.sigaim.siie.rm.ReferenceModelManager;
 import org.sigaim.siie.rm.exceptions.ReferenceModelException;
@@ -39,6 +38,7 @@ import org.sigaim.siie.seql.model.SEQLException;
 import org.sigaim.siie.seql.model.SEQLPath;
 import org.sigaim.siie.seql.model.SEQLPathComponent;
 import org.sigaim.siie.utils.Utils;
+import org.sigaim.siie.utils.pool.SingleConnectionDataSource;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 

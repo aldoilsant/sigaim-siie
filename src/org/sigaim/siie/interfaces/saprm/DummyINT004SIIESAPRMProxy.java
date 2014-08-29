@@ -2,13 +2,14 @@ package org.sigaim.siie.interfaces.saprm;
 
 import java.io.InputStream;
 
+import org.sigaim.saprm.exception.UnhandledSAPRMException;
 import org.sigaim.siie.iso13606.rm.II;
 import org.sigaim.siie.seql.monitor.SEQLMonitor;
 
 public class DummyINT004SIIESAPRMProxy implements INT004SIIESAPRMProxy{
 
 	@Override
-	public InputStream analyzeText(String text, II rootArchetypeId) {
+	public InputStream analyzeText(String text, II rootArchetypeId, String updateConcepts) throws UnhandledSAPRMException  {
 		InputStream is=DummyINT004SIIESAPRMProxy.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_013.dadl");
 	    return is;
 	    /*

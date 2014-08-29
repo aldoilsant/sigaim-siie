@@ -12,6 +12,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.apache.log4j.Logger;
 import org.openehr.am.parser.AttributeValue;
 import org.openehr.am.parser.ComplexObjectBlock;
 import org.openehr.am.parser.ContentObject;
@@ -44,6 +45,7 @@ import org.sigaim.siie.rm.ReferenceModelManager;
 import org.sigaim.siie.rm.exceptions.CSReason;
 import org.sigaim.siie.rm.exceptions.RejectException;
 import org.sigaim.siie.seql.engine.SEQLEngine;
+import org.sigaim.siie.seql.engine.execution.SEQLExecutionMemorySolverStage;
 import org.sigaim.siie.seql.model.SEQLPath;
 import org.sigaim.siie.seql.model.SEQLPathComponent;
 import org.sigaim.siie.seql.model.SEQLPathPredicate;
@@ -61,6 +63,8 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 	private DADLManager dmngr;
 	private INT004SIIESAPRMProxy saprm;
 	private SEQLEngine engine;
+	private static org.apache.log4j.Logger log = Logger.getLogger(SigaimIntSIIE004ReportManagement.class);
+
 
 	public SigaimIntSIIE004ReportManagement(PersistenceManager pmngr, ReferenceModelManager rmngr, DADLManager dmngr, INT004SIIESAPRMProxy saprm, SEQLEngine engine) {
 		this.pmngr=pmngr;
@@ -99,6 +103,7 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 			throws RejectException {
 		// TODO Auto-generated method stub
 		try {
+			
 				//Get the number of healthcare facilities
 				ReferenceModelObjectId root=pmngr.getReferenceModelRoot();
 				long id=pmngr.readAtomicIndex("all_subjects_of_care");
@@ -164,7 +169,8 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 				textTranscription="";
 			}
 			//Use the SAPRM to get an analyzed DADL
-			InputStream dadl=saprm.analyzeText(textTranscription, rootArchetypeId);
+			log.debug("INVOKE SAPRM");
+			InputStream dadl=saprm.analyzeText(textTranscription, rootArchetypeId,null);
 			//The SAPRM gives us a composition object. Parse it
 			ContentObject reportCompositionCo=dmngr.parseDADL(dadl);
 			//We no longer bind the composition for performance. Just unbind the properties and assign directly to the contentobject

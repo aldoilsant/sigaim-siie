@@ -1,5 +1,7 @@
 package org.sigaim.siie.interfaces.eql;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.sigaim.siie.interfaces.IdentifiedReturnValue;
 
 public class ReturnValueEQL extends IdentifiedReturnValue{

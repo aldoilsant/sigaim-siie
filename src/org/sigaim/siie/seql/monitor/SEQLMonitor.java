@@ -23,7 +23,6 @@ import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.sigaim.siie.archetypes.FileArchetypeManager;
 import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.dadl.OpenEHRDADLManager;
-import org.sigaim.siie.db.pool.SingleConnectionDataSource;
 import org.sigaim.siie.db.sql.SQLPersistenceManager;
 import org.sigaim.siie.iso13606.rm.BL;
 import org.sigaim.siie.iso13606.rm.Composition;
@@ -40,6 +39,7 @@ import org.sigaim.siie.seql.parser.SEQLErrorListener;
 import org.sigaim.siie.seql.parser.SEQLModelListener;
 import org.sigaim.siie.seql.parser.generated.SEQLLexer;
 import org.sigaim.siie.seql.parser.generated.SEQLParser;
+import org.sigaim.siie.utils.pool.SingleConnectionDataSource;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 

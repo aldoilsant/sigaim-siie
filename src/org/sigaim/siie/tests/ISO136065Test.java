@@ -225,6 +225,7 @@ public class ISO136065Test {
 		queryBuilder.append(";");
 		System.out.println("Query: "+queryBuilder);
 		ReturnValueEQL ret=this.eqlService.query(requestId, queryBuilder.toString());
+		System.out.println("Query complete: "+queryBuilder);
 		if(ret.getReasonCode()!=null) {
 			throw new RejectException(requestId,CSReason.valueOf(ret.getReasonCode()));
 		} else {
@@ -254,7 +255,9 @@ public class ISO136065Test {
 				    crit.setMaxSensitivity(BigInteger.valueOf(max_sensitivity));
 				    crit.setMultimediaIncluded(multimedia_included);
 				    crit.setTimePeriod(time_period);
-				    crit.getArchetypeIds().addAll(archetype_ids);
+				    if(archetype_ids!=null) {
+				    	crit.getArchetypeIds().addAll(archetype_ids);
+				    }
 				    SingleAttributeObjectBlock critBlock=this.referenceModelManager.getSingleAttributeObjectBlockFromContentObject(this.referenceModelManager.unbind(crit));
 				    KeyedObject kCrit=new KeyedObject(new StringValue("1"),critBlock);
 				    List<KeyedObject> kCritList=new ArrayList<KeyedObject>();
@@ -304,14 +307,19 @@ public class ISO136065Test {
 		
 		IVLTS time_period= new IVLTS();
 		TS low=new TS();
-		low.setValue("2014-08-22T04:50:29.923+02:00");
+		low.setValue("2014-08-21T04:50:29.923+02:00");
 		time_period.setLow(low);
 		time_period.setLowClosed(true);
 		
 		
-		ContentObject ret=this.requestEhrExtract("", subjectOfCareId, null, rc_ids, time_period, 0, true, false, archetypeIds, null);
+		ContentObject ret=this.requestEhrExtract("", subjectOfCareId, null, null, null, 0, true, false, null, null);
+		System.out.println("Query completed");
 		System.out.println(this.dadlManager.serialize(ret, false));
-		Map<String,String> retMap=this.referenceModelManager.createPathMap(ret, true);
+		List<String> exclusions=new ArrayList<String>();
+		exclusions.add("archetype_id");
+		exclusions.add("meaning");
+		exclusions.add("/reference_model_class_name");
+		Map<String,String> retMap=this.referenceModelManager.createPathMap(ret, true,true,exclusions);
 		printMap(retMap);
 		System.out.println("Path Count: "+retMap.size());
 	}
