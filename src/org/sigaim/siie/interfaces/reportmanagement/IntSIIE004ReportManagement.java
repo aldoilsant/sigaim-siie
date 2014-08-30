@@ -10,22 +10,18 @@ public interface IntSIIE004ReportManagement {
 	public ReturnValueCreateHealthcareFacility createHealthcareFacility(String requestId) throws RejectException;
 	public ReturnValueCreateSubjectOfCare createSubjectOfCare(String requestId) throws RejectException;
 	public ReturnValueCreatePerformer createPerformer(String requestId) throws RejectException;
-	public ReturnValueCreateReport createReport(
-			String requestId,
-			II ehrId,
-			FunctionalRole composerId,
-			String audioData,
-			String textTranscription,
-			CDCV reportStatus,
-			II rootArchetypeId
-			) throws RejectException;
+	public ReturnValueCreateReport createReport(String requestId,
+			II ehrId, FunctionalRole composerId, 
+			String textTranscription, boolean dictated, II rootArchetypeId)
+			throws RejectException;
 	public ReturnValueUpdateReport updateReport(
 			String requestId,
-			II reportId,
-			String audioData,
+			II ehrId, //the id of the previous version
+			II previousVersionId, 
+			FunctionalRole composerId,
 			String textTranscription,
-			CDCV reportStatus,
+			ReportStatus rstatus,
 			II rootArchetypeId,
-			VersionStatus reason
+			String encodedConcepts
 			) throws RejectException;
 }

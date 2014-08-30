@@ -124,6 +124,9 @@ public class SEQLMonitor {
 								}
 								nrow++;
 							}
+				    		System.out.println("Number of rows: "+rs.getNumberOfRows());
+			    		} else {
+			    			System.out.println("No rows matched the search criteria");
 			    		}
 			    	} catch(SEQLException e) {
 			    		System.out.println("ERROR: "+e.getMessage());

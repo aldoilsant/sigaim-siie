@@ -60,7 +60,11 @@ public class MySQLWrapper implements SQLWrapper{
 				"DROP TABLE indexes;"
 		};
 		for(String query : queries) {
-			this.update(query,conn);
+			try {
+				this.update(query,conn);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}		
 		}		
 	}
 
@@ -68,7 +72,7 @@ public class MySQLWrapper implements SQLWrapper{
 	public void initializeDB(Connection conn) throws SQLException {
 		String[] queries={
 				"CREATE TABLE IF NOT EXISTS reference_model_objects ("+
-				"id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,"+
+				"id BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,"+
 				"reference_model_class_name VARCHAR(100) NOT NULL,"+
 				"archetype_id VARCHAR(100),"+
 				"node_id VARCHAR(100),"+
@@ -79,12 +83,12 @@ public class MySQLWrapper implements SQLWrapper{
 				"serialized VARCHAR(10000)"+
 			");",
 			"CREATE TABLE IF NOT EXISTS reference_model_object_versions ("+
-			"id INTEGER NOT NULL PRIMARY KEY,"+
-			"next INTEGER DEFAULT NULL"+
+			"id  BIGINT UNSIGNED NOT NULL PRIMARY KEY,"+
+			"next  BIGINT UNSIGNED DEFAULT NULL"+
 			");",
 			"CREATE TABLE IF NOT EXISTS indexes ("+
-			"index_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,"+
-			"index_value INTEGER DEFAULT 0,"+
+			"index_id  BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,"+
+			"index_value  BIGINT UNSIGNED  DEFAULT 0,"+
 			"index_name VARCHAR(100) NOT NULL"+
 			");",
 			"INSERT INTO reference_model_objects VALUES(1,'ehrsystem',NULL,NULL,'/1','/','/',1,'identifier=<reference_model_class_name = <\"II\">root = <\"org.sigaim.siie\">>');",

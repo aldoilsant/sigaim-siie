@@ -15,6 +15,7 @@ import org.sigaim.siie.utils.Utils;
 public class IDDBSerializer implements DBSerializer {
 	private ReferenceModelManager referenceModelManager;
 	private DADLManager dadlManager;
+ 	
 	  private static org.apache.log4j.Logger log = Logger.getLogger(IDDBSerializer.class);
 	public IDDBSerializer(ReferenceModelManager referenceModelManager, DADLManager dadlManager) {
 		this.referenceModelManager=referenceModelManager;
@@ -46,7 +47,28 @@ public class IDDBSerializer implements DBSerializer {
 				ii.setRoot("org.sigaim");
 				ii.setExtension(uniqueIdentifier+"");
 				AttributeValue av=new AttributeValue("rc_id", this.referenceModelManager.unbindGeneric(ii));
-				block.getAttributeValues().add(av);		
+				block.getAttributeValues().add(av);	
+				if(Utils.classNameEquals(referenceModelClassName, "Composition")) {
+					//Search for audit info
+					for(AttributeValue attr : block.getAttributeValues()) {
+						if(attr.getId().equals("committal")) {
+							SingleAttributeObjectBlock auditInfoBlock=(SingleAttributeObjectBlock)attr.getValue();
+							boolean hasPreviousVersion=false;
+							for(AttributeValue attr2 : auditInfoBlock.getAttributeValues()) {
+								if(attr2.getId().equals("previous_version")) {
+									hasPreviousVersion=true;
+									break;
+								}
+							}
+							if(!hasPreviousVersion) {
+								//Then set the version set id
+								AttributeValue av2=new AttributeValue("version_set_id", this.referenceModelManager.unbindGeneric(ii));
+								auditInfoBlock.getAttributeValues().add(av2);
+							}
+							break;
+						}
+					}
+				}
 			} else {
 				log.info("Class "+referenceModelClassName+" is not being assigned unique ids");
 			}

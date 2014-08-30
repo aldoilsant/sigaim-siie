@@ -37,42 +37,42 @@ definition
                 parts existence matches {0..1} cardinality matches {1..4; ordered; unique} matches {
                     ELEMENT[at0003] occurrences matches {1..1} matches {  -- Subjetivo
                         value existence matches {0..1} matches {
-                            ST occurrences matches {0..1} matches {  -- ST
+                            ST occurrences matches {0..1} matches {
                                 value existence matches {0..1} matches {*}
                             }
                         }
                     }
                     ELEMENT[at0004] occurrences matches {0..1} matches {  -- Objetivo
                         value existence matches {0..1} matches {
-                            ST occurrences matches {0..1} matches {  -- ST
+                            ST occurrences matches {0..1} matches {
                                 value existence matches {0..1} matches {*}
                             }
                         }
                     }
                     ELEMENT[at0005] occurrences matches {0..1} matches {  -- Impresión médica
                         value existence matches {0..1} matches {
-                            ST occurrences matches {0..1} matches {  -- ST
+                            ST occurrences matches {0..1} matches {
                                 value existence matches {0..1} matches {*}
                             }
                         }
                     }
                     ELEMENT[at0006] occurrences matches {0..1} matches {  -- Plan terapéutico
                         value existence matches {0..1} matches {
-                            ST occurrences matches {0..1} matches {  -- ST
+                            ST occurrences matches {0..1} matches {
                                 value existence matches {0..1} matches {*}
                             }
                         }
                     }
                 }
                 structure_type existence matches {1..1} matches {
-                    STRUCTURE_TYPE occurrences matches {1..1} matches {  -- 
+                    STRUCTURE_TYPE occurrences matches {1..1} matches {
                         value existence matches {0..1} matches {"list"}
                     }
                 }
             }
             ELEMENT[at0007] occurrences matches {0..1} matches {  -- Audio
                 value existence matches {0..1} matches {
-                    ST occurrences matches {0..1} matches {  -- ST
+                    ST occurrences matches {0..1} matches {
                         value existence matches {0..1} matches {*}
                     }
                 }
@@ -80,12 +80,19 @@ definition
 			CLUSTER[at0008] occurrences matches {0..1} matches {  -- Lista de elementos
                 parts existence matches {0..1} cardinality matches {0..*; ordered} matches {
                     CLUSTER[at0009] occurrences matches {0..*} matches {  -- Elemento
-                        parts existence matches {0..1} cardinality matches {0..5; ordered; unique} matches {
+                        parts existence matches {0..1} cardinality matches {0..6; ordered; unique} matches {
                             ELEMENT[at0010] occurrences matches {0..1} matches {  -- Código
                                 value existence matches {0..1} matches {
-                                    ST occurrences matches {0..1} matches {  
-                                        value existence matches {0..1} matches {*}
-                                    }
+									CV occurrences matches {1..1} matches {
+										code existence matches {0..1} matches {*}
+										displayName existence matches {1..1} matches {
+											ST occurrences matches {1..1} matches { 
+												value existence matches {0..1} matches {*}
+											}
+										}
+										codeSystemName existence matches {0..1} matches {*}
+										codeSystemVersion existence matches {0..1} matches {*}
+									}
                                 }
                             }
                             ELEMENT[at0011] occurrences matches {0..1} matches {  -- Inicio
@@ -104,7 +111,7 @@ definition
                             }
                             ELEMENT[at0013] occurrences matches {0..1} matches {  -- Path
                                 value existence matches {0..1} matches {
-                                    ST occurrences matches {0..1} matches {  -- ST
+                                    ST occurrences matches {0..1} matches {
                                         value existence matches {0..1} matches {*}
                                     }
                                 }
@@ -116,10 +123,10 @@ definition
                                     }
                                 }
                             }
-                            ELEMENT[at0015] occurrences matches {0..1} matches {  -- Terminología
+                            ELEMENT[at0015] occurrences matches {0..1} matches {  -- Estado
                                 value existence matches {0..1} matches {
-                                    ST occurrences matches {0..1} matches {  
-                                        value existence matches {0..1} matches {*}
+                                    ST occurrences matches {0..1} matches {
+                                    	value existence matches {0..1} matches {"válido", "preferido", "error"}
                                     }
                                 }
                             }
@@ -137,6 +144,82 @@ definition
                     }
                 }
             }
+            CLUSTER[at0016] occurrences matches {0..1} matches {  -- Excepciones
+                parts existence matches {0..1} cardinality matches {0..*; ordered} matches {
+                    CLUSTER[at0017] occurrences matches {0..*} matches {  -- Excepción
+                        parts existence matches {0..1} cardinality matches {0..*; ordered; unique} matches {
+                            ELEMENT[at0018] occurrences matches {0..1} matches {  -- Path
+                                value existence matches {0..1} matches {
+                                    ST occurrences matches {0..1} matches {
+                                        value existence matches {0..1} matches {*}
+                                    }
+                                }
+                            }
+                            ELEMENT[at0019] occurrences matches {0..1} matches {  -- Valor
+                                value existence matches {0..1} matches {
+                                    ST occurrences matches {0..1} matches {
+                                        value existence matches {0..1} matches {*}
+                                    }
+                                }
+                            }
+                        }
+                        structure_type existence matches {1..1} matches {
+                            STRUCTURE_TYPE occurrences matches {1..1} matches {
+                                value existence matches {0..1} matches {"list"}
+                            }
+                        }
+                    }
+                }
+                structure_type existence matches {1..1} matches {
+                    STRUCTURE_TYPE occurrences matches {1..1} matches {
+                        value existence matches {0..1} matches {"list"}
+                    }
+                }
+            }			
+            CLUSTER[at0020] occurrences matches {0..1} matches {  -- Estado del informe
+                parts existence matches {0..1} cardinality matches {5..5; ordered; unique} matches {
+                    ELEMENT[at0021] occurrences matches {1..1} matches {  -- Dictado
+                        value existence matches {0..1} matches {
+                            BL occurrences matches {0..1} matches {
+                                value existence matches {1..1} matches {true, false ; false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0022] occurrences matches {1..1} matches {  -- Firmado
+                        value existence matches {0..1} matches {
+                            BL occurrences matches {0..1} matches {
+                                value existence matches {1..1} matches {true, false ; false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0023] occurrences matches {1..1} matches {  -- Analizado
+                        value existence matches {0..1} matches {
+                            BL occurrences matches {0..1} matches {
+                                value existence matches {1..1} matches {true, false ; false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0024] occurrences matches {1..1} matches {  -- Valido
+                        value existence matches {0..1} matches {
+                            BL occurrences matches {0..1} matches {
+                                value existence matches {1..1} matches {true, false ; false}
+                            }
+                        }
+                    }
+                    ELEMENT[at0025] occurrences matches {1..1} matches {  -- Confirmado
+                        value existence matches {0..1} matches {
+                            BL occurrences matches {0..1} matches {
+                                value existence matches {1..1} matches {true, false ; false}
+                            }
+                        }
+                    }
+                }
+                structure_type existence matches {1..1} matches {
+                    STRUCTURE_TYPE occurrences matches {1..1} matches {
+                        value existence matches {0..1} matches {"list"}
+                    }
+                }
+            }						
         }
     }
 
@@ -205,7 +288,47 @@ ontology
                     description = <"">
                 >
                 ["at0015"] = <
-                    text = <"Terminología">
+                    text = <"Estado del concepto">
+                    description = <"">
+                >
+                ["at0016"] = <
+                    text = <"Excepciones">
+                    description = <"">
+                >
+                ["at0017"] = <
+                    text = <"Excepción">
+                    description = <"">
+                >
+                ["at0018"] = <
+                    text = <"Path">
+                    description = <"">
+                >
+                ["at0019"] = <
+                    text = <"Valor">
+                    description = <"">
+                >
+                ["at0020"] = <
+                    text = <"Estado del informe">
+                    description = <"">
+                >
+                ["at0021"] = <
+                    text = <"Dictado">
+                    description = <"">
+                >
+                ["at0022"] = <
+                    text = <"Firmado">
+                    description = <"">
+                >
+                ["at0023"] = <
+                    text = <"Analizado">
+                    description = <"">
+                >
+                ["at0024"] = <
+                    text = <"Valido">
+                    description = <"">
+                >
+                ["at0025"] = <
+                    text = <"Confirmado">
                     description = <"">
                 >
             >

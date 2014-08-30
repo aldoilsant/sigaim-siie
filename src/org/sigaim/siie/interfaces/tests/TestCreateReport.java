@@ -35,7 +35,7 @@ import org.sigaim.siie.seql.engine.SEQLPipeEngine;
 import org.sigaim.siie.seql.engine.execution.SEQLExecutionMemorySolverStage;
 import org.sigaim.siie.seql.engine.preprocessing.SEQLPreprocessingValidateIdentifiedVariablesStage;
 
-public class ReportManagementTests {
+public class TestCreateReport {
 	IntSIIE001EQL eqlService;
 	IntSIIE004ReportManagement reportManagementService;
 	private DADLManager dadlManager;
@@ -99,8 +99,8 @@ public class ReportManagementTests {
 		//Create the report. It does not matter which text we use as we will always get the same result
 		//given that we are using a dummy SAPRM
 		//The root archetype id, we also do not set for now. Use the default
-		CDCV reportStatus= new CDCV();
-		reportStatus.setCode(ReportStatus.RSTA02.toString());
-		ReturnValueCreateReport result=this.reportManagementService.createReport("1", newEHR.getEhrId(), composer, null, "", reportStatus, null);
+ 
+		ReturnValueCreateReport result=this.reportManagementService.createReport("1", newEHR.getEhrId(), composer, "", true, null);
+				
 	}
 }
