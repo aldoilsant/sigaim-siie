@@ -18,7 +18,7 @@ public class DelegatingSigaimIntSIIE004SAPRM implements INT004SIIESAPRMProxy {
 	@Override
 	public InputStream analyzeText(String text, II rootArchetypeId, String updateConcepts) throws UnhandledSAPRMException {
 			
-		String result=new SAPRM().ANALYZE_TEXT("InformeClinicoNotaSOIP", text);
+		String result=new SAPRM().ANALYZE_TEXT("InformeClinicoNotaSOIP", text,updateConcepts);
 			if(result!=null) {
 				log.debug("SAPRM RETURNS: "+result);
 				return new ByteArrayInputStream(result.getBytes());
