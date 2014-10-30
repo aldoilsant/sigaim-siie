@@ -265,6 +265,9 @@ public class SQLPersistenceManager implements PersistenceManager {
 					"Incompatible reference model object id: " + parent);
 		} else {
 			SQLReferenceModelObjectId sparent = (SQLReferenceModelObjectId) parent;
+			Class<?> pathClass=this.referenceModelManager.getPathType(sparent.getObjectClass(),subpath,false);
+			String targetReferenceModelClass=this.referenceModelManager.getReferenceModelClassName(pathClass);
+			List<String> targetReferenceModelClasses=this.referenceModelManager.getSubclassesOrSelf(targetReferenceModelClass);
 			SEQLPath referenceModelPath = (SEQLPath) sparent
 					.getReferenceModelPath().clone();
 			int depth = sparent.getUniqueIdPath().getPathComponents().size();
@@ -331,7 +334,18 @@ public class SQLPersistenceManager implements PersistenceManager {
 						+ archetypePathBuilder.toString() +"'"
 						+ " AND unique_id_path LIKE '"
 						+ sparent.getUniqueIdPath().toString()+"%"
-						+ "' AND depth=" + depth;
+						+ "' AND depth=" + depth
+						+ " AND reference_model_class_name IN(";
+				int i;
+				for(i=0;i<targetReferenceModelClasses.size();i++) {
+					query+="'";
+					query+=targetReferenceModelClasses.get(i);
+					query+="'";
+					if(i<targetReferenceModelClasses.size()-1) {
+						query+=",";
+					}
+				}
+				query+=")";
 				query += ";";
 			}
 			log.debug(query);
@@ -968,5 +982,14 @@ public class SQLPersistenceManager implements PersistenceManager {
 		this.doUpdate(
 				"INSERT INTO indexes VALUES(NULL,0,'" + indexName + "');", conn);
 		closeConnection(conn);
+	}
+	public long getUniqueIdFromReferenceModelObjectId(ReferenceModelObjectId oid) throws PersistenceException {
+		if (!(oid instanceof SQLReferenceModelObjectId)) {
+			throw new PersistenceException(
+					"Incompatible reference model object id: " + oid);
+		} else {
+			SQLReferenceModelObjectId sid = (SQLReferenceModelObjectId) oid;
+			return sid.getUniqueId();
+		}	
 	}
 }

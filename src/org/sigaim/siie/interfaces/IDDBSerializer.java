@@ -1,18 +1,24 @@
 package org.sigaim.siie.interfaces;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.openehr.am.parser.AttributeValue;
 import org.openehr.am.parser.ContentObject;
 import org.openehr.am.parser.SingleAttributeObjectBlock;
 import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.db.DBSerializer;
+import org.sigaim.siie.db.ReferenceModelObjectId;
 import org.sigaim.siie.iso13606.rm.II;
 import org.sigaim.siie.iso13606.rm.RecordComponent;
 import org.sigaim.siie.rm.ReferenceModelManager;
 import org.sigaim.siie.rm.exceptions.ReferenceModelException;
+import org.sigaim.siie.seql.engine.QueryDomainHelper;
+import org.sigaim.siie.seql.model.SEQLPath;
+import org.sigaim.siie.seql.model.SEQLPathComponent;
 import org.sigaim.siie.utils.Utils;
 
-public class IDDBSerializer implements DBSerializer {
+public class IDDBSerializer implements DBSerializer, QueryDomainHelper {
 	private ReferenceModelManager referenceModelManager;
 	private DADLManager dadlManager;
  	
@@ -74,6 +80,28 @@ public class IDDBSerializer implements DBSerializer {
 			}
 		}
 		return this.dadlManager.serialize(block);
+	}
+
+	@Override
+	public boolean pathIsObjectId(String referenceModelClassName, SEQLPath path) {
+		List<SEQLPathComponent> components=path.getPathComponents();
+		path=new SEQLPath(components);
+		String test=path.toString();
+		if(Utils.classNameEquals(referenceModelClassName, "HealthcareFacility") ||
+				Utils.classNameEquals(referenceModelClassName, "Performer") ||
+				Utils.classNameEquals(referenceModelClassName, "SubjectOfCare")) {
+			return test.equals("identifier/extension/");
+		} else if(Utils.classNameEquals(referenceModelClassName, "EhrExtract")) {
+			return test.equals("ehr_id/extension/");
+
+		} else {
+		 	Class<?> rmClass=this.referenceModelManager.referenceModelClassFromString(referenceModelClassName);
+			if(this.referenceModelManager.isRMObjectClass(rmClass) && RecordComponent.class.isAssignableFrom(rmClass)) {
+				return test.equals("rc_id/extension/");
+			} else {
+				return false;
+			}
+		}
 	}
 
 }

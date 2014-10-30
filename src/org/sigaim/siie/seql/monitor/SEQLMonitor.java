@@ -114,7 +114,9 @@ public class SEQLMonitor {
 			    	SEQLQuery query=listener.getQuery();
 			    	System.out.println("Sintactically valid query accepted:"+query.toString());
 			    	try {
+			    		long start=System.currentTimeMillis();
 			    		SEQLResultSet rs=engine.runQuery(query);
+			    		long end=System.currentTimeMillis();
 			    		if(rs!=null) {
 			    			int nrow=0;
 							while(rs.nextRow()) {
@@ -128,6 +130,7 @@ public class SEQLMonitor {
 			    		} else {
 			    			System.out.println("No rows matched the search criteria");
 			    		}
+			    		System.out.println("Time taken: "+(end-start)+" ms");
 			    	} catch(SEQLException e) {
 			    		System.out.println("ERROR: "+e.getMessage());
 			    	}

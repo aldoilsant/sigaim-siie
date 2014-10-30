@@ -28,6 +28,7 @@ public interface PersistenceManager {
 	 //Helpers
 	 ReferenceModelObjectId getReferenceModelRoot();
 	 Object solvePathFromObjectId(ReferenceModelObjectId oid) throws PersistenceException;
+	 long getUniqueIdFromReferenceModelObjectId(ReferenceModelObjectId oid) throws PersistenceException;
 	 ReferenceModelObjectId getReferenceModelObjectIdFromUniqueId(long oid) throws PersistenceException;
 	 SEQLPath getReferenceModelPathFoRMObject(ReferenceModelObjectId id) throws PersistenceException;
 	 Class<?> getClassFromRMID(ReferenceModelObjectId id) throws PersistenceException;

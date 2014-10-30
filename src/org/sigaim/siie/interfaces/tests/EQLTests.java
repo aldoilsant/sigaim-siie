@@ -98,6 +98,7 @@ public class EQLTests {
 	public void testSEQLService() throws Exception {
 		//All queries for the client
 		String[] queries= {
+		"SELECT c FROM EHR CONTAINS COMPOSITION c WHERE EXISTS c/rc_id/extension;",
 		"SELECT e/all_healthcare_facilities FROM EHR SYSTEM e;",		
 		"SELECT e/all_performers FROM EHR SYSTEM e;",
 		"SELECT e/all_subjects_of_care FROM EHR SYSTEM e;",
@@ -108,7 +109,7 @@ public class EQLTests {
 		"SELECT e/items[at0008]/parts[at0009] FROM EHR CONTAINS COMPOSITION c CONTAINS ENTRY e[CEN-EN13606-ENTRY.Informacion.v1] WHERE c/rc_id/extension=\"6\";",
 		};
 		for(String query : queries) {
-			//query="SELECT e,  c, c/committal, c/composer FROM EHR e CONTAINS COMPOSITION c[CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1];";
+			//query=		"SELECT e/items[at0008] WITH DESCENDANTS FROM EHR CONTAINS COMPOSITION c CONTAINS ENTRY e[CEN-EN13606-ENTRY.Informacion.v1] WHERE c/rc_id/extension=\"479526\";";
 			System.out.println("Running query: "+query);
 			long start=System.currentTimeMillis();
 			ReturnValueEQL result=this.eqlService.query("1", query);
@@ -120,7 +121,7 @@ public class EQLTests {
 			//System.out.println("Result: "+sres);
 			//System.out.println("Rows: "+result.getSerialized().)
 			assert(result!=null);
-			//break;
+			break;
 		}
 
 	}
