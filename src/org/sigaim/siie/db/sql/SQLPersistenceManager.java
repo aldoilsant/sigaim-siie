@@ -111,7 +111,11 @@ public class SQLPersistenceManager implements PersistenceManager {
 	protected ResultSet doQuery(String query, Connection conn)
 			throws PersistenceException {
 		try {
-			return wrapper.query(query, conn);
+			long start=System.currentTimeMillis();
+			ResultSet result=wrapper.query(query, conn);
+			long end=System.currentTimeMillis();
+			log.debug("doQuery "+query+", Time taken "+(end-start));
+			return result;
 		} catch (SQLException e) {
 			throw new PersistenceException(e.getMessage());
 		}
@@ -313,11 +317,23 @@ public class SQLPersistenceManager implements PersistenceManager {
 					.deleteCharAt(archetypePathBuilder.length() - 1);
 			archetypePathBuilder.append("(.+)?");
 			String query = null;
-			query = "SELECT unique_id_path, reference_model_path, archetype_path, reference_model_class_name FROM reference_model_objects WHERE reference_model_path RLIKE'"
-					+ referenceModelPathBuilder.toString()
-					+ "' AND archetype_path RLIKE '"
-					+ archetypePathBuilder.toString() + "' AND depth=" + depth;
-			query += ";";
+			boolean useUniqueIdPathOptimization=true;
+			if(!useUniqueIdPathOptimization) {
+				query = "SELECT unique_id_path, reference_model_path, archetype_path, reference_model_class_name FROM reference_model_objects WHERE reference_model_path RLIKE '"
+						+ referenceModelPathBuilder.toString()
+						+ "' AND archetype_path RLIKE '"
+						+ archetypePathBuilder.toString() + "' AND depth=" + depth;
+				query += ";";
+			} else {
+				query = "SELECT unique_id_path, reference_model_path, archetype_path, reference_model_class_name FROM reference_model_objects WHERE reference_model_path RLIKE'"
+						+ referenceModelPathBuilder.toString()
+						+ "' AND archetype_path RLIKE '"
+						+ archetypePathBuilder.toString() +"'"
+						+ " AND unique_id_path LIKE '"
+						+ sparent.getUniqueIdPath().toString()+"%"
+						+ "' AND depth=" + depth;
+				query += ";";
+			}
 			log.debug(query);
 			Connection conn = getConnection();
 			ResultSet rs = this.doQuery(query, conn);

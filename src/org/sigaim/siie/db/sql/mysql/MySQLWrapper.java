@@ -96,8 +96,9 @@ public class MySQLWrapper implements SQLWrapper{
 			"INSERT INTO indexes VALUES(1,0,'all_ehrs');",
 			"INSERT INTO indexes VALUES(2,0,'all_subjects_of_care');",
 			"INSERT INTO indexes VALUES(3,0,'all_performers');",
-			"INSERT INTO indexes VALUES(4,0,'all_healthcare_facilities');"
-
+			"INSERT INTO indexes VALUES(4,0,'all_healthcare_facilities');",
+			"CREATE INDEX unique_id_path_index ON reference_model_objects(unique_id_path) USING BTREE;",
+			"CREATE INDEX class_name_index ON reference_model_objects(reference_model_class_name) USING BTREE"
 		};
 		for(String query :queries) {
 			try {

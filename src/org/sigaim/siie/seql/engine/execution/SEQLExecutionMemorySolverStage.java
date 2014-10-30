@@ -468,7 +468,10 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage, 
 			}
 		}
 		return null;
-
+	}
+	protected long timeTaken(long start,String message) {
+		log.debug("Time taken for "+message+": "+(System.currentTimeMillis()-start));
+		return System.currentTimeMillis();
 	}
 	@Override
 	public SEQLResultSet runQuery(SEQLQuery query) throws SEQLException {
@@ -480,14 +483,19 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage, 
 			this.evaluateContext(context);*/
 			//Build the component hierarchy
 			SEQLFromComponent rootComponent=new SEQLFromComponent(null,null,null);
+			long start=System.currentTimeMillis();
 			this.buildSEQLFromComponentHierarchy(evaluable, context, rootComponent);
+			start=timeTaken(start, "SEQLFromComponentHierarchy");
 			try {
 				this.populateFromComponents(context,rootComponent,rootId);
+				start=timeTaken(start,"populateFromComponents");
 				HashMap<SEQLFromComponent,ReferenceModelObjectId> mapping=new HashMap<SEQLFromComponent,ReferenceModelObjectId> ();
 				mapping.put(rootComponent, rootId);
 				List<HashMap<SEQLFromComponent,ReferenceModelObjectId>> interpretations=this.createInterpretations(context, rootComponent, rootId,mapping);
+				start=timeTaken(start,"createInterpretations");
 				log.debug("Number of interpretations: "+interpretations.size());
 				if(query.isMerged()) {
+					log.debug("Merged query");
 					Set<ReferenceModelObjectId> matches=new HashSet<ReferenceModelObjectId>();
 					for(Map<SEQLFromComponent,ReferenceModelObjectId> interpretation : interpretations) {
 						log.debug("Interpretation: "+interpretation);
@@ -553,11 +561,14 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage, 
 					rs.compile();
 					return rs;
 				} else {
+					log.debug("Regular query");
 					SEQLResultSet rs=new SEQLResultSet(query.getSelectConditions().size());
 					for(Map<SEQLFromComponent,ReferenceModelObjectId> interpretation : interpretations) {
 						log.debug("Interpretation: "+interpretation);
 						//Check if the interpretation is a model
-						if(this.interpretationMatchesEvaluable(interpretation, context, query, evaluable)) {
+						boolean matches=this.interpretationMatchesEvaluable(interpretation, context, query, evaluable);
+						start=timeTaken(start,"interpretationMatchesEvaluable");
+						if(matches) {
 							log.debug(">Interpretation is from clause model");
 							if(this.interpretationMatchesEvaluable(interpretation, context, query, query.getWhereCondition().getRoot())) {
 								//If we arrive here, now we can use the where clause to further eliminate interpretations
@@ -565,6 +576,7 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage, 
 								rs.addRow();
 								for(SEQLSelectCondition scond : query.getSelectConditions()) {
 									ContentObject r=this.solveSelectConditionForInterpretation(query,scond,interpretation);
+									start=timeTaken(start,"solveSelectConditionForInterpretation");
 									rs.appendToRow(r);
 								}
 							}
@@ -572,6 +584,7 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage, 
 					}
 					//Finished. Compile the resultset
 					rs.compile();
+					log.info("Done query");
 					return rs;
 				}
 			} catch(PersistenceException e) {

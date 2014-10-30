@@ -319,6 +319,7 @@ public class ISO136065Test {
 		exclusions.add("archetype_id");
 		exclusions.add("meaning");
 		exclusions.add("/reference_model_class_name");
+		exclusions.add("/name");
 		Map<String,String> retMap=this.referenceModelManager.createPathMap(ret, true,true,exclusions);
 		printMap(retMap);
 		System.out.println("Path Count: "+retMap.size());

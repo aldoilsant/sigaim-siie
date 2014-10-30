@@ -60,24 +60,36 @@ public class SigaimIntSIIE001EQL implements IntSIIE001EQL {
 				throw new RejectException(requestId,CSReason.REAS04);
 		    } else {
 		    	SEQLQuery query=listener.getQuery();
+		    	long start=System.currentTimeMillis();
 		    	log.info("Sintactically valid query accepted:"+query.toString());
 		    	SEQLResultSet rs=engine.runQuery(query);
+		    	long end=System.currentTimeMillis();
+		    	log.info("Actual query took "+(end-start)+" miliseconds");
 		    	if(rs==null) throw new RejectException(requestId,CSReason.REAS04);
 		    	else {
 		    		int nrow=0;
-		    		String result="<";
+		    		start=System.currentTimeMillis();
+		    		StringBuilder result=new StringBuilder("<");
 		    		while(rs.nextRow()) {
 		    			int i;
 		    			//Create the DADL
-		    			result+="["+nrow+"]=<";
+		    			result.append("[");result.append(nrow); result.append("]=<");
 		    			for(i=0;i<rs.getNumberOfColumns();i++) {
-		    				result+="["+i+"]="+this.dadlManager.serialize(rs.getColumn(i),false);
+		    				long sstart=System.currentTimeMillis();
+		    				result.append("[");
+		    				result.append(i);
+		    				result.append("]=");
+		    				this.dadlManager.serialize(rs.getColumn(i),true,result);
+		    				long send=System.currentTimeMillis();
+		    				log.debug("Serializing column: time taken :"+(send-sstart));
 		    			}
-		    			result+=">";
+		    			result.append(">");
 		    			nrow++;
 		    		}
-		    		result+=">";
-			    	return new ReturnValueEQL(requestId,result);
+		    		result.append(">");
+		    		end=System.currentTimeMillis();
+		    		log.info("Serialization took "+(end-start)+" milliseconds");
+			    	return new ReturnValueEQL(requestId,result.toString());
 		    	}
 		    }
 		}
