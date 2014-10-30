@@ -121,7 +121,6 @@ public class EQLTests {
 			//System.out.println("Result: "+sres);
 			//System.out.println("Rows: "+result.getSerialized().)
 			assert(result!=null);
-			break;
 		}
 
 	}

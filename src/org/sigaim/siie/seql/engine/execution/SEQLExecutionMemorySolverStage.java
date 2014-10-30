@@ -501,7 +501,7 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage,
 							pathComponents);
 			List<Object> finalMatches = new ArrayList<Object>();
 			for (ReferenceModelObjectId match : matches) {
-				boolean useIdentifierOptimization=false;
+				boolean useIdentifierOptimization=true;
 				if(useIdentifierOptimization) {
 					//Check if the path components actually lead to 
 					//the unique id of the object. If so, use it to return
@@ -883,7 +883,7 @@ public class SEQLExecutionMemorySolverStage implements SEQLQueryExecutionStage,
 			}
 			List<ReferenceModelObjectId> newMatches = new ArrayList<ReferenceModelObjectId>();
 			for (ReferenceModelObjectId match : matches) {
-				boolean useLookAhead = false;
+				boolean useLookAhead = true;
 				if (useLookAhead) {
 					HashMap<SEQLFromComponent, ReferenceModelObjectId> mapping = new HashMap<SEQLFromComponent, ReferenceModelObjectId>();
 					ReferenceModelObjectId rootId = SEQLExecutionMemorySolverStage.this.pmngr
