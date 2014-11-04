@@ -297,7 +297,7 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 			//Use the SAPRM to get an analyzed DADL
 			 //dictated) { Talk to charo about SAPRM, non-dicated, single report
 			log.debug("INVOKE SAPRM");
-			InputStream dadl=saprm.analyzeText(textTranscription, rootArchetypeId,null);
+			InputStream dadl=saprm.analyzeText(textTranscription, rootArchetypeId,null,true);
 			//The SAPRM gives us a composition object. Parse it
 			ContentObject reportCompositionCo=dmngr.parseDADL(dadl);
 			//We no longer bind the composition for performance. Just unbind the properties and assign directly to the contentobject
@@ -337,7 +337,7 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 			textTranscription="";
 		}
 		try {
-			InputStream dadl=saprm.analyzeText(textTranscription, rootArchetypeId,encodedConcepts);
+			InputStream dadl=saprm.analyzeText(textTranscription, rootArchetypeId,encodedConcepts,true);
 			ContentObject reportCompositionCo=dmngr.parseDADL(dadl);
 			//We now need to extend the audit info to include the previous_version and version_set_id
 			//Note that the previous composition might already be an update, so we need to get the version_set_id from it

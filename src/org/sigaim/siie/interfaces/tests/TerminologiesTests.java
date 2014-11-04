@@ -13,7 +13,6 @@ import java.util.Set;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.sigaim.sgm.GlossaryQuery;
 import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.dadl.OpenEHRDADLManager;
 import org.sigaim.siie.db.PersistenceManager;
@@ -36,8 +35,6 @@ import org.sigaim.siie.seql.engine.SEQLEngine;
 import org.sigaim.siie.seql.engine.SEQLPipeEngine;
 import org.sigaim.siie.seql.engine.execution.SEQLExecutionMemorySolverStage;
 import org.sigaim.siie.seql.engine.preprocessing.SEQLPreprocessingValidateIdentifiedVariablesStage;
-import org.sigaim.siie.utils.pool.SingleConnectionDataSource;
-import org.sigaim.utils.accesoBD.AccesoSIGAIM;
 
 public class TerminologiesTests {
 	IntSIIE001EQL eqlService;
@@ -65,14 +62,7 @@ public class TerminologiesTests {
 		this.saprm=new DummyINT004SIIESAPRMProxy();
 		this.eqlService= new SigaimIntSIIE001EQL(engine,dadlManager);
 		this.reportManagementService=new SigaimIntSIIE004ReportManagement(persistenceManager, referenceModelManager, dadlManager, saprm, seqlEngine);
-		SingleConnectionDataSource basicDataSource= new SingleConnectionDataSource();
-		basicDataSource.setUser("root");
-		basicDataSource.setPassword("root");
-		basicDataSource.setServerName("localhost");
-		basicDataSource.setPort(8889);
-		basicDataSource.setDatabaseName("saprm");
-		AccesoSIGAIM.setDataSource(basicDataSource);
-		this.terminologiesService=new SIGAIMIntSIIE003Terminologies(new GlossaryQuery(),this.referenceModelManager,this.dadlManager);
+		this.terminologiesService=new SIGAIMIntSIIE003Terminologies("http://sigaim.saprm.cesga.es:8080/SIGAIM-SGM-WS/services/INT003SGMImpl",this.referenceModelManager,this.dadlManager);
 	}
 	@Test
 	public void test() throws Exception {
@@ -80,10 +70,12 @@ public class TerminologiesTests {
 		CDCV concept= new CDCV();
 		concept.setCode("394715003");
 		concept.setCodeSystemName("SNOMED-CT");
+		concept.setCodeSystemVersion("20140430");
 		concepts.add(this.dadlManager.serialize(this.referenceModelManager.unbind(concept),false));
 		concept= new CDCV();
 		concept.setCode("S0000001");
 		concept.setCodeSystemName("SIGAIM");
+		concept.setCodeSystemVersion("2014");
 		concepts.add(this.dadlManager.serialize(this.referenceModelManager.unbind(concept),false));	
 		ReturnValueSynonyms ret=this.terminologiesService.requestSynonyms("1",concepts);
 		if(ret.getReasonCode()!=null) {
