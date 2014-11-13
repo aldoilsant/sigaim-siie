@@ -32,6 +32,7 @@ public class WebServiceSigaimSIIE004SAPRM implements INT004SIIESAPRMProxy{
 
 		try {
 			INT004SIIESAPRMImplStub.AnalyzeTextResponse resp= proxy.analyzeText(atext);
+			System.out.println(resp.get_return());
 			return new ByteArrayInputStream(resp.get_return().getBytes());
 		} catch(Exception e) {
 			e.printStackTrace();

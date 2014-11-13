@@ -9,7 +9,7 @@ public class DummyINT004SIIESAPRMProxy implements INT004SIIESAPRMProxy{
 
 	@Override
 	public InputStream analyzeText(String text, II rootArchetypeId, String updateConcepts, boolean execute) throws UnhandledSAPRMException  {
-		InputStream is=DummyINT004SIIESAPRMProxy.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_014_wrongtemp.dadl");
+		InputStream is=DummyINT004SIIESAPRMProxy.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_015.dadl");
 	    return is;
 	    /*
 	    //Stupid scanner trick

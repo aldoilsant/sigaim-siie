@@ -3,10 +3,12 @@ package org.sigaim.siie.interfaces.tests;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openehr.am.parser.ContentObject;
 import org.sigaim.siie.dadl.DADLManager;
 import org.sigaim.siie.dadl.OpenEHRDADLManager;
 import org.sigaim.siie.db.PersistenceManager;
@@ -21,6 +23,7 @@ import org.sigaim.siie.interfaces.reportmanagement.ReturnValueCreateSubjectOfCar
 import org.sigaim.siie.interfaces.reportmanagement.sigaim.SigaimIntSIIE004ReportManagement;
 import org.sigaim.siie.interfaces.saprm.DummyINT004SIIESAPRMProxy;
 import org.sigaim.siie.interfaces.saprm.INT004SIIESAPRMProxy;
+import org.sigaim.siie.interfaces.saprm.WebServiceSigaimSIIE004SAPRM;
 import org.sigaim.siie.iso13606.rm.CDCV;
 import org.sigaim.siie.iso13606.rm.EHRExtract;
 import org.sigaim.siie.iso13606.rm.FunctionalRole;
@@ -57,7 +60,7 @@ public class TestCreateReport {
 		engine.addPreprocessStage(new SEQLPreprocessingValidateIdentifiedVariablesStage());
 		engine.addExecutionStage(stage);
 		this.seqlEngine=engine;
-		this.saprm=new DummyINT004SIIESAPRMProxy();
+		this.saprm=new WebServiceSigaimSIIE004SAPRM("http://sigaim.saprm.cesga.es:8080/SIGAIM-SAPRM-WS/services/INT004SIIESAPRMImpl");
 		this.eqlService= new SigaimIntSIIE001EQL(engine,dadlManager);
 		this.reportManagementService=new SigaimIntSIIE004ReportManagement(persistenceManager, referenceModelManager, dadlManager, saprm, seqlEngine);
 	}
@@ -100,7 +103,11 @@ public class TestCreateReport {
 		//given that we are using a dummy SAPRM
 		//The root archetype id, we also do not set for now. Use the default
  
-		ReturnValueCreateReport result=this.reportManagementService.createReport("1", newEHR.getEhrId(), composer, "", true, null);
-				
+		InputStream dadl=DummyINT004SIIESAPRMProxy.class.getResourceAsStream("/org/sigaim/siie/data/dadl/saprm_input/sample_input.dadl");
+		ContentObject input=dadlManager.parseDADL(dadl);
+		String serialized=dadlManager.serialize(input,true);
+		
+		ReturnValueCreateReport result=this.reportManagementService.createReport("1", newEHR.getEhrId(), composer, serialized, true, null);
+		System.out.println(result.getSerialized());
 	}
 }
