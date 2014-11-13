@@ -88,11 +88,12 @@ public class SIGAIMIntSIIE003Terminologies implements IntSIIE003Terminologies {
 			//Call the SMG
 			//Translate back into the expected norm format
 			HashMap<String,Set<String>> retMap=new HashMap<String,Set<String>>();
-			int i,j;
 			for(ConceptResult entry : result) {
 				HashSet<String> seralizedSynonyms= new HashSet<String>();
-				for(Concept syn : entry.getLista()) {
-					seralizedSynonyms.add(this.dmngr.serialize(this.rmngr.unbind(this.codedValueFromConcept(syn)),true));
+				if(entry.getLista()!=null) {
+					for(Concept syn : entry.getLista()) {
+						seralizedSynonyms.add(this.dmngr.serialize(this.rmngr.unbind(this.codedValueFromConcept(syn)),true));
+					}
 				}
 				retMap.put(this.dmngr.serialize(this.rmngr.unbind(this.codedValueFromConcept(entry.getConcepto())),true), seralizedSynonyms);
 			}
