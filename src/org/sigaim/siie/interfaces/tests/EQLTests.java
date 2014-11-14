@@ -112,6 +112,8 @@ public class EQLTests {
 		 "SELECT p/identifier FROM EHR SYSTEM e CONTAINS PERFORMER p WHERE p/identifier/extension=\"6\";",
 		 "SELECT  r/items[at0002]/parts[at0003], r/items[at0002]/parts[at0004], r/items[at0002]/parts[at0005], r/items[at0002]/parts[at0006] FROM EHR e CONTAINS COMPOSITION c[CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1] CONTAINS ENTRY r[CEN-EN13606-ENTRY.Informacion.v1] WHERE c/rc_id/extension=\"6\";",
 		 "SELECT e/items[at0008]/parts[at0009] FROM EHR CONTAINS COMPOSITION c CONTAINS ENTRY e[CEN-EN13606-ENTRY.Informacion.v1] WHERE c/rc_id/extension=\"6\";",
+		 "SELECT e,  c, c/committal, c/composer FROM EHR e CONTAINS ALL VERSIONS OF COMPOSITION c[CEN-EN13606-COMPOSITION.InformeClinicoNotaSOIP.v1] WHERE c/committal/version_set_id/extension=\"6\";",
+
 		};
 		for (String query : queries) {
 			// query=
