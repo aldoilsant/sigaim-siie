@@ -170,7 +170,6 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 		AuditInfo auditInfo=new AuditInfo();
 		//Set the ehr_system, commiter, version_status, reason_for_revision, version_set_id
 		auditInfo.setEhrSystem(this.ehrSystemId);
-		//Version status is always draft, given that the report has not been reviewed by the composer
 		auditInfo.setVersionStatus(rstatus.getVersionStatus());
 		//Regarding the information archetype, the SAPRM takes care of that
 		//We only need to check signed and confirmed, but this goes in updatereport

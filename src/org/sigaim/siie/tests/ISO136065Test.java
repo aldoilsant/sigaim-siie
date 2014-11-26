@@ -273,10 +273,10 @@ public class ISO136065Test {
 			
 		}
 	}
-	public void printMap(Map<String,String> map) {
+	public void printMap(Map<String,Object> map) {
 		for(String key : map.keySet()) {
-			String value=map.get(key);
-			System.out.println(key+" : "+value);
+			Object value=map.get(key);
+			System.out.println(key+" : "+value.toString());
 		}
 	}
 	@Test
@@ -320,7 +320,7 @@ public class ISO136065Test {
 		exclusions.add("meaning");
 		exclusions.add("/reference_model_class_name");
 		exclusions.add("/name");
-		Map<String,String> retMap=this.referenceModelManager.createPathMap(ret, true,true,exclusions);
+		Map<String,Object> retMap=this.referenceModelManager.createPathMap(ret, true,true,exclusions);
 		printMap(retMap);
 		System.out.println("Path Count: "+retMap.size());
 	}

@@ -43,7 +43,7 @@ public class TestCompositionRoundtripSerialization {
 		ContentObject unbinded=dmng.parseDADL(is);
 		end=System.nanoTime();
 		System.out.println("Parse dadl time: "+this.millisecondsFromInterval(start, end));
-		Map<String,String> pathMap=mng.createPathMap(unbinded, true,true,null);
+		Map<String,Object> pathMap=mng.createPathMap(unbinded, true,true,null);
 		//this.printMap(pathMap);
 		is=new BufferedInputStream(SEQLMonitor.class.getResourceAsStream("/org/sigaim/siie/data/dadl/nota19_013_packed.dadl"));
 		is=new ByteArrayInputStream(this.convertStreamToString(is).getBytes());
