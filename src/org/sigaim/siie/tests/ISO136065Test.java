@@ -315,12 +315,15 @@ public class ISO136065Test {
 		ContentObject ret=this.requestEhrExtract("", subjectOfCareId, null, null, null, 0, true, false, null, null);
 		System.out.println("Query completed");
 		System.out.println(this.dadlManager.serialize(ret, false));
-		List<String> exclusions=new ArrayList<String>();
-		exclusions.add("archetype_id");
-		exclusions.add("meaning");
-		exclusions.add("/reference_model_class_name");
-		exclusions.add("/name");
-		Map<String,Object> retMap=this.referenceModelManager.createPathMap(ret, true,true,exclusions);
+		List<String> startExclusions=new ArrayList<String>();
+		startExclusions.add("/all_compositions[at0000]/content[at0012]/");
+		startExclusions.add("/all_compositions/content[at0012]/");
+		List<String> endExclusions=new ArrayList<String>();
+		endExclusions.add("archetype_id");
+		endExclusions.add("meaning");
+		endExclusions.add("/reference_model_class_name");
+		endExclusions.add("/name");
+		Map<String,Object> retMap=this.referenceModelManager.createPathMap(ret, true,true,startExclusions,endExclusions);
 		printMap(retMap);
 		System.out.println("Path Count: "+retMap.size());
 	}
