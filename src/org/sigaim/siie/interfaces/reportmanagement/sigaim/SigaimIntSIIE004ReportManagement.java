@@ -166,11 +166,12 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 			throw new RejectException(requestId,CSReason.REAS02);
 		}
 	}
-	protected AuditInfo createAuditInfo(ReportStatus rstatus, II previousVersionId, II versionSetId) throws DatatypeConfigurationException {
+	protected AuditInfo createAuditInfo(ReportStatus rstatus, II previousVersionId, II versionSetId, II composerId) throws DatatypeConfigurationException {
 		AuditInfo auditInfo=new AuditInfo();
 		//Set the ehr_system, commiter, version_status, reason_for_revision, version_set_id
 		auditInfo.setEhrSystem(this.ehrSystemId);
 		auditInfo.setVersionStatus(rstatus.getVersionStatus());
+		auditInfo.setCommitter(composerId);
 		//Regarding the information archetype, the SAPRM takes care of that
 		//We only need to check signed and confirmed, but this goes in updatereport
 		GregorianCalendar gregorianCalendar = new GregorianCalendar();
@@ -299,8 +300,9 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 			InputStream dadl=saprm.analyzeText(textTranscription, rootArchetypeId,null,true);
 			//The SAPRM gives us a composition object. Parse it
 			ContentObject reportCompositionCo=dmngr.parseDADL(dadl);
+			II performerId=composerId.getPerformer();
 			//We no longer bind the composition for performance. Just unbind the properties and assign directly to the contentobject
-			AuditInfo auditInfo=createAuditInfo(rstatus,null,null);
+			AuditInfo auditInfo=createAuditInfo(rstatus,null,null,performerId);
 
 			SingleAttributeObjectBlock auditInfoUnbinded=this.rmngr.getSingleAttributeObjectBlockFromContentObject(this.rmngr.unbind(auditInfo));
 			SingleAttributeObjectBlock composerUnbinded=this.rmngr.getSingleAttributeObjectBlockFromContentObject(this.rmngr.unbind(composerId));
@@ -345,7 +347,8 @@ public class SigaimIntSIIE004ReportManagement implements IntSIIE004ReportManagem
 			Composition previousComposition=(Composition)this.rmngr.bind(previousCompositionObject);
 			II versionSetId=previousComposition.getCommittal().getVersionSetId();
 			//Now create the audit info
-			AuditInfo auditInfo=createAuditInfo(rstatus,previousVersionId,versionSetId);
+			II commiterId=composerId.getPerformer();
+			AuditInfo auditInfo=createAuditInfo(rstatus,previousVersionId,versionSetId,commiterId);
 			SingleAttributeObjectBlock auditInfoUnbinded=this.rmngr.getSingleAttributeObjectBlockFromContentObject(this.rmngr.unbind(auditInfo));
 			SingleAttributeObjectBlock composerUnbinded=this.rmngr.getSingleAttributeObjectBlockFromContentObject(this.rmngr.unbind(composerId));
 			SingleAttributeObjectBlock compositionBlock=this.rmngr.getSingleAttributeObjectBlockFromContentObject(reportCompositionCo);
